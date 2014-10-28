@@ -22,7 +22,7 @@ public abstract class DomainAwareBase extends AbstractJUnit4SpringContextTests {
     private SimpleJdbcTemplate jdbcTemplate;
  
     @Before
-    public void deleteAllDomainEntities() {
+    public void deleteAllDomainEntities() {   
         SimpleJdbcTestUtils.executeSqlScript(jdbcTemplate,
                 new FileSystemResource(deleteScript), false);
     }

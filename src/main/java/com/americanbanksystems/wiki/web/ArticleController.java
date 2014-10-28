@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
+import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.Article;
+import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.ArticleDeleteException;
 
 @Controller
@@ -21,7 +23,14 @@ import com.americanbanksystems.wiki.exception.ArticleDeleteException;
 public class ArticleController {
 	
 	private ArticleDao articleDao;
-	 
+	
+	private UserDao userDao;
+	
+	@Autowired
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	@Autowired
 	public void setArticleDao(ArticleDao articleDao) {
 	    this.articleDao = articleDao;
@@ -38,7 +47,7 @@ public class ArticleController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String getArticle(@PathVariable("id") long id, Model model) {
 	    Article article = articleDao.findArticle(id);
-	    model.addAttribute("article", article);
+	    model.addAttribute("art", article);
 	 
 	    return "articles/view";
 	}
@@ -46,7 +55,7 @@ public class ArticleController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public String updateArticle(@PathVariable("id") long id, Article article) {
 		article.setId(id);
-		articleDao.updateArticle(article);
+		articleDao.updateEntity(article);
 	 
 	    return "redirect:/articles";
 	}
@@ -57,7 +66,7 @@ public class ArticleController {
 	        throws ArticleDeleteException {
 	 
 	    Article toDelete = articleDao.findArticle(id);
-	    boolean wasDeleted = articleDao.removeArticle(toDelete);
+	    boolean wasDeleted = articleDao.removeEntity(toDelete);
 	 
 	    if (!wasDeleted) {
 	        throw new ArticleDeleteException(toDelete);
@@ -70,12 +79,15 @@ public class ArticleController {
 	@RequestMapping(params = "new", method = RequestMethod.GET)
 	public String createArticleForm(Model model) {
 	    model.addAttribute("article", new Article());
-	    return "articles/new";
+	    return "articles/createArticle";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String addArticle(Article article) {
-		articleDao.addArticle(article);
+		
+		User loggedInUser = userDao.findUser(18l);
+		article.setCreatedByUser(loggedInUser);		
+		articleDao.addEntity(article);
 	 
 	    return "redirect:/articles";
 	}

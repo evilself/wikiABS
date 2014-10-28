@@ -1,23 +1,31 @@
 package com.americanbanksystems.wiki.service.implementation;
 
+/*
+ * 
+ *  @author BorisM 
+ *  @date   10.18.2014
+ * 
+ */
+
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
- 
 
 import com.americanbanksystems.wiki.service.GenericDAO;
-
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
  
 /**
  * Basic DAO operations dependent with Hibernate's specific classes
  * @see SessionFactory
  */
-@Transactional(propagation= Propagation.REQUIRED, readOnly=false) //Transactional means HibernateDao will be transactional. Add sessionFactory bean in persistence-beans.xml
+
+//Transactional means HibernateDao will be @Transactional. Add sessionFactory bean in persistence-beans.xml. 
+@Transactional(propagation= Propagation.REQUIRED, readOnly=false) 
 public class HibernateDao<E, K extends Serializable> implements GenericDAO<E, K> {
  
     private SessionFactory sessionFactory;
@@ -41,16 +49,19 @@ public class HibernateDao<E, K extends Serializable> implements GenericDAO<E, K>
 		 return currentSession().createCriteria(daoType).list();
 	}
 
-	public void addEntity(E entity) {
-		currentSession().save(entity);		
+	public boolean addEntity(E entity) {
+		currentSession().save(entity);
+		return true;
 	}
 
-	public void updateEntity(E entity) {
+	public boolean updateEntity(E entity) {
 		currentSession().saveOrUpdate(entity);
+		return true;
 	}
 
-	public void removeEntity(E entity) {
+	public boolean removeEntity(E entity) {
 		currentSession().delete(entity);
+		return true;
 		
 	} 
     

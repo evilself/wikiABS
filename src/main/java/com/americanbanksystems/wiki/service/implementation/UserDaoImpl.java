@@ -1,5 +1,12 @@
 package com.americanbanksystems.wiki.service.implementation;
 
+/*
+ * 
+ *  @author BorisM 
+ *  @date   10.18.2014
+ * 
+ */
+
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +18,16 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 
 	
 	public boolean removeUser(User user) {
-		
-		removeEntity(user);
-        return true;
+		if(user != null) {			
+			if (user.getCreatedArticles().size() > 0) {
+				System.out.println("User has associated articles! Cannot delete!");
+				return false;
+			} else {
+				removeEntity(user);	
+				return true;
+			}
+		}		
+        return false;
 	}
 	
 	public boolean addUser(User user) {

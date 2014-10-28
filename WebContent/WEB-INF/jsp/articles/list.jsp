@@ -1,21 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
-<!DOCTYPE html">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+ 
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Welcome to the Wiki!</title>
+    <title>Articles</title>
+    <!-- link rel="stylesheet" href="/timesheet-app/resources/style.css" type="text/css"-->
 </head>
 <body>
-	<h1>Welcome to the Wiki App!</h1>
+    <h1>List of articles</h1>
+    <a href="articles?new">Add new article</a>
+    <table cellspacing="5" >
+        <tr>
+            <th>Title</th>
+            
+        </tr>
+        <c:forEach items="#{articles}" var="art">
+            <tr>
+                <td>${art.title}</td>                
+                <td>
+                    <a href="articles/${art.id}">Read</a>
+                </td>
+                <td>
+                    <sf:form action="articles/${art.id}" method="delete" >
+                        <input type="submit" value="" >Delete</input>
+                    </sf:form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
  
-    <ul>
-        <li><a href="users">List users</a></li>
-        <li><a href="articles">List articles</a></li>        
-    </ul>
-    
-    Today is: <fmt:formatDate value="${today}" pattern="dd-MM-yyyy" />
+    <br />
+    <a href="/">Home</a>
 </body>
 </html>

@@ -22,11 +22,13 @@
     </servlet>
     
     <!-- I dont want my dispatcher servlet to handle static resources so add a default mapping here -->
+    <!-- 
     <servlet-mapping>
 	    <servlet-name>default</servlet-name>
 	    <url-pattern>/resources/*</url-pattern>
 	</servlet-mapping>
- 
+ 	 -->
+ 	 
     <servlet-mapping>
         <servlet-name>wiki</servlet-name>
         <url-pattern>/</url-pattern>

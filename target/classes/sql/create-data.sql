@@ -1,6 +1,8 @@
 -- delete old data
-delete from Article;
-delete from User;
+delete from attachment;
+delete from article;
+delete from user;
+delete from user_roles;
  
 -- add few Users
 insert into employee values(1, 'management', 'Steve Jobs');

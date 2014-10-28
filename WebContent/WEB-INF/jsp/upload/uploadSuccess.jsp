@@ -7,9 +7,9 @@
     <h1>Spring Multiple File Upload example</h1>
     <p>Following files are uploaded successfully.</p>
     <ol>
-        <c:forEach items="${files}" var="file">
-            <li>${file}</li>
-        </c:forEach>
+        
+            <li><a target="blank" href="display/${files.id}" >${files.actualFilename}</a></li>
+       
     </ol>
 </body>
 </html>

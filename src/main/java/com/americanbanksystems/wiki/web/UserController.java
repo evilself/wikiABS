@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.UserDao;
-import com.americanbanksystems.wiki.domain.Article;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
 
@@ -47,7 +46,7 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public String updateEmployee(@PathVariable("id") long id, User user) {
 		user.setId(id);
-		userDao.updateUser(user);
+		userDao.updateEntity(user);
 	 
 	    return "redirect:/users";
 	}
@@ -57,7 +56,7 @@ public class UserController {
 	        throws UserDeleteException {
 	 
 	    User toDelete = userDao.findUser(id);
-	    boolean wasDeleted = userDao.removeUser(toDelete);
+	    boolean wasDeleted = userDao.removeEntity(toDelete);
 	 
 	    if (!wasDeleted) {
 	        throw new UserDeleteException(toDelete);
@@ -75,7 +74,7 @@ public class UserController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String addUser(User user) {
-		userDao.addUser(user);
+		userDao.addEntity(user);
 	 
 	    return "redirect:/users";
 	}

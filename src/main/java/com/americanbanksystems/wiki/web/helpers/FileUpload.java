@@ -2,8 +2,10 @@ package com.americanbanksystems.wiki.web.helpers;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Service //NOTE SERVICE here
 public class FileUpload {
  
 	protected MultipartFile file;

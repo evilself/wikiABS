@@ -32,8 +32,12 @@
         <property name="dataSource" ref="dataSource" />
         <property name="annotatedClasses" >
             <list>
-                <value>com.americanbanksystems.wiki.domain.User</value>
+            	<value>com.americanbanksystems.wiki.domain.BaseEntity</value>
+            	<value>com.americanbanksystems.wiki.domain.UserRole</value>
+            	<value>com.americanbanksystems.wiki.domain.User</value>
+            	<value>com.americanbanksystems.wiki.domain.Product</value>
                 <value>com.americanbanksystems.wiki.domain.Article</value>                
+                <value>com.americanbanksystems.wiki.domain.Attachment</value>                
             </list>
         </property>
         <property name="hibernateProperties">

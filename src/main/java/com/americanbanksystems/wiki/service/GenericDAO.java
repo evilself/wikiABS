@@ -1,14 +1,21 @@
 package com.americanbanksystems.wiki.service;
 
+/*
+ * 
+ *  @author BorisM 
+ *  @date   10.18.2014
+ * 
+ */
+
 import java.util.List;
 
 public interface GenericDAO<E, K> {
 
-	void addEntity(E entity);
+	boolean addEntity(E entity);
 
-	void updateEntity(E entity);
+	boolean updateEntity(E entity);
 
-	void removeEntity(E entity);
+	boolean removeEntity(E entity);
 
 	List<E> list();
 
