@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name="user")
 public class User extends BaseEntity implements Serializable {	
@@ -42,6 +44,7 @@ public class User extends BaseEntity implements Serializable {
 	protected String userName;
 	protected String password;
 	protected String email;
+	protected boolean enabled = true;	
 	protected UserRole role;
 	protected List<Article> createdArticles;	
 
@@ -109,6 +112,16 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	@Column(name="ENABLED", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	public boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 	
 	@OneToOne(fetch=FetchType.LAZY)

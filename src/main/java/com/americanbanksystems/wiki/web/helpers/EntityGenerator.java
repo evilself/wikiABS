@@ -41,6 +41,9 @@ public final class EntityGenerator {
         //Article itArticle = new Article("how to do IT", "it stuff stuff stuff stuff");
         //Article sportArticle = new Article("Arsenal champions", "Arsenal Arsenal Coyg Arsenal Arsenal Coyg Arsenal Arsenal Coyg");
  
+        admin.setUserName("bm");
+        user.setUserName("sw");
+                
         addAll(userRoleDao, admin, user);
         addAll(userDao, steve, kenny, boris);
        // addAll(articleDao, itArticle, sportArticle);

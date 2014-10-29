@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,9 +42,24 @@ public class WelcomeController {
         return "index";
     }
     
+    @RequestMapping(value="/login")
+    public String login(HttpServletRequest request, Model model){
+        return "login";
+    }
+     
+    @RequestMapping(value="/logout")
+    public String logout(){
+        return "logout";
+    }
+     
+    @RequestMapping(value="/denied")
+    public String denied(){
+        return "denied";
+    }
+    
     @PostConstruct
     public void prepareFakeDomain() {
-       // entityGenerator.deleteDomain();
-       // entityGenerator.generateDomain();
+        entityGenerator.deleteDomain();
+        entityGenerator.generateDomain();
     }
 }

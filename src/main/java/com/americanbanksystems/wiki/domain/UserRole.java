@@ -23,6 +23,9 @@ public class UserRole implements Serializable {
 	
 	protected Long id;
 	protected String role;	
+	protected String userName;
+
+	
 
 	public UserRole() {
 		
@@ -52,13 +55,23 @@ public class UserRole implements Serializable {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	@Column(name="USERNAME")
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result
+				+ ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
 
@@ -71,22 +84,22 @@ public class UserRole implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		UserRole other = (UserRole) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
 		if (role == null) {
 			if (other.role != null)
 				return false;
 		} else if (!role.equals(other.role))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "UserRole [role=" + role + "]";
-	}
+		return "UserRole [role=" + role + ", userName=" + userName + "]";
+	}	
 
 }
