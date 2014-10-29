@@ -108,7 +108,7 @@
 
     <!-- Page Content -->
 
-    <div class="content-section-a">
+    <div class="content-section-b">
 
         <div class="container">
 
@@ -137,7 +137,7 @@
                     </p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="<spring:url value="/resources/img/ReportHeader.png"/>" alt="">
+                    <img class="img-responsive" src="<spring:url value="/resources/img/bm_work.png"/>" alt="">
                 </div>
             </div>
 
@@ -147,12 +147,56 @@
     </div>
     <!-- /.content-section-a -->
 
-    <div class="content-section-b">
+    <div class="content-section-a">
 
         <div class="container">
 
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">CompliancePro Loans and Deposits</h2>
+                    <p class="lead">
+                    	<table cellspacing="5" >
+					        <tr>
+					            <th>Latest articles</th>					            
+					        </tr>
+					        <c:forEach items="#{users}" var="usr">
+					            <tr>
+					                <td>${usr.firstName}</td>
+					                <td>${usr.lastName}</td>
+					                <td>${usr.userName}</td>
+					                <td>${usr.password}</td>
+					                <td>
+					                    <a href="users/${usr.id}">Go to page</a>
+					                </td>
+					                <td>
+					                    <sf:form action="users/${usr.id}" method="delete" >
+					                        <input type="submit" value="" >Delete</input>
+					                    </sf:form>
+					                </td>
+					            </tr>
+					        </c:forEach>
+					    </table>
+                    </p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="<spring:url value="/resources/img/ABSlogo.jpg"/>" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">CompliancePro</h2>
@@ -180,52 +224,8 @@
 					    </table>
                     </p>
                 </div>
-                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                    <img class="img-responsive" src="<spring:url value="/resources/img/left_logo.jpg"/>" alt="">
-                </div>
-            </div>
-
-        </div>
-        <!-- /.container -->
-
-    </div>
-    <!-- /.content-section-b -->
-
-    <div class="content-section-a">
-
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-5 col-sm-6">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">CompliancePro Loans</h2>
-                    <p class="lead">
-                    	<table cellspacing="5" >
-					        <tr>
-					            <th>Latest articles</th>					            
-					        </tr>
-					        <c:forEach items="#{users}" var="usr">
-					            <tr>
-					                <td>${usr.firstName}</td>
-					                <td>${usr.lastName}</td>
-					                <td>${usr.userName}</td>
-					                <td>${usr.password}</td>
-					                <td>
-					                    <a href="users/${usr.id}">Go to page</a>
-					                </td>
-					                <td>
-					                    <sf:form action="users/${usr.id}" method="delete" >
-					                        <input type="submit" value="" >Delete</input>
-					                    </sf:form>
-					                </td>
-					            </tr>
-					        </c:forEach>
-					    </table>
-                    </p>
-                </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="<spring:url value="/resources/img/ABSlogo.jpg"/>" alt="">
+                    <img class="img-responsive" src="<spring:url value="/resources/img/masthead.jpg"/>" alt="">
                 </div>
             </div>
 
@@ -271,7 +271,7 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="#home">Home</a>
+                            <a href="/">Home</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
