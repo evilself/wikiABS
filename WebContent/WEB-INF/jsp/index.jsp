@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+
     
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +34,13 @@
 </head>
 
 <body>
+	<div class="modal fade" id="loginModal" style="height:500px;weight:500px" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="height:500px;weight:500px">
+           
+    	</div>
+    </div>
+	</div>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -56,9 +64,16 @@
                     <li>
                         <a href="articles">Articles</a>
                     </li>
+                    <c:if test="${loggedUser == null}">
                     <li>
-                        <a href="users">Login</a>
+                        <a href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
                     </li>
+                    </c:if>
+                    <c:if test="${loggedUser != null}">
+                     <li>
+                        <a href="<c:url value="/j_spring_security_logout" />">Logout <c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></a>
+                    </li>
+                    </c:if>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -80,8 +95,9 @@
 		                       <button type="submit" style="margin:5px;" class="btn btn-default btn-lg">Search</button>
 		                    </sf:form>                  
 		                   
-		                    <a href="articles?new" class="btn btn-default btn-lg">Create Article</a>
-		                 
+		                    <c:if test="${loggedUser != null}">
+		                    	<a href="articles?new" class="btn btn-default btn-lg">Create Article</a>
+		                 	 </c:if>
                         	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">

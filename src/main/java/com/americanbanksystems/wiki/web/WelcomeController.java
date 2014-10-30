@@ -1,5 +1,6 @@
 package com.americanbanksystems.wiki.web;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.web.helpers.EntityGenerator;
  
 @Controller
-@RequestMapping("/")
+@RequestMapping(value={"/", "/welcome"})
 public class WelcomeController {
 	
 	@Autowired
@@ -32,10 +33,19 @@ public class WelcomeController {
  
  
     @RequestMapping(method = RequestMethod.GET)
-    public String showMenu(Model model) {
+    public String showMenu(Model model, Principal principal) {
     	
     	List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	
+    	
         model.addAttribute("users", users);
+        model.addAttribute("loggedUser", loggedInUser);
         model.addAttribute("searchCriteria","");
     	
         model.addAttribute("today", new Date());
