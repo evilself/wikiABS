@@ -1,8 +1,10 @@
 package com.americanbanksystems.wiki.web;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
@@ -82,10 +85,21 @@ public class ArticleController {
 	    return "articles/createArticle";
 	}
 	
+	@RequestMapping(params = "searchCriteria", method = RequestMethod.GET)
+	public String getArticlesFromSearch(@RequestParam("searchCriteria")String tag, Model model) {
+		 List<Article> articles = articleDao.findArticlesByTag(tag);
+	        model.addAttribute("articles", articles);
+	        System.out.println("searchCriteriea");
+	        return "articles/list";
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
-	public String addArticle(Article article) {
+	public String addArticle(Article article, Principal principal) {
 		
-		User loggedInUser = userDao.findUser(18l);
+		String username = principal.getName();
+		System.out.println(username);		
+		
+		User loggedInUser = userDao.findUserByUsername(username);
 		article.setCreatedByUser(loggedInUser);		
 		articleDao.addEntity(article);
 	 

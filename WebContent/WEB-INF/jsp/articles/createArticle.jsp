@@ -27,7 +27,7 @@
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->   
+    <![endif]-->     
 </head>
 
 <body>
@@ -144,9 +144,49 @@
 
     <!-- jQuery Version 1.11.0 -->
     <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>
+    
+    <!-- jQuery Form plugin -->
+    <script src="<spring:url value="/resources/js/jquery.form.min.js"/> "></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <script>
+  //using jquery.form.js
+    function uploadJqueryForm(){
+        $('#result').html('');
+     	
+       $("#myForm").ajaxForm({
+        success:function(data) {
+              $('#result').html(data);
+         },
+         dataType:"text"
+       }).submit();       
+    }
+  
+  
+  
+  //using FormData() object
+    function uploadFormData(){
+        $('#result').html('');
+     
+      var oMyForm = new FormData();
+      oMyForm.append("file", file.files[0]);
+     
+      $.ajax({
+        url: 'upload/ajax',
+        data: oMyForm,
+        dataType: 'text',
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data){
+          $('#result').html(data);
+        }
+      });
+    }
+    
+    </script>
 
 </body>
 

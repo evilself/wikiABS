@@ -79,6 +79,17 @@
 					                    <label class="pull-left" for="title">Title</label>
 						                <input class="form-control" name="title" id="title" value="${art.title}" disabled="true"/>
 					                </div>
+					                 <div class="form-group">
+					                	<div class="row">
+					                    <label class="col-lg-6 pull-left" for="description">Description</label> <label class="col-lg-6 pull-right">
+					                    <a class="btn btn-lg btn-default" href="upload/${art.id}"
+										   data-toggle="modal"
+										   data-target="#largeModal">Attachments
+										 </a>
+					                    </label></div>
+					                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
+					                	<textarea id="description" name="description" value="${article.description}" style="height:400px" class="form-control"></textarea>
+					                </div>
 					                <div class="form-group">
 					                   <label class="pull-left" for="description">Description</label>
 						               <textarea class="form-control" style="height:550px" name="description" id="description" disabled="true">${art.description}</textarea>

@@ -53,5 +53,20 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 			return null;
 		}
 	}
+
+	@Override
+	public User findUserByUsername(String username) {
+		Query userQuery = currentSession().createQuery(
+                "from User a where a.userName = :un");
+		userQuery.setParameter("un", username); 
+		
+		if (userQuery.list().size() > 0) {
+			return (User) userQuery.list().get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
 	
 }
