@@ -1,10 +1,11 @@
 package com.americanbanksystems.wiki.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
+import com.americanbanksystems.wiki.dao.AttachmentDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.Article;
+import com.americanbanksystems.wiki.domain.Attachment;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.ArticleDeleteException;
 
@@ -28,6 +31,14 @@ public class ArticleController {
 	private ArticleDao articleDao;
 	
 	private UserDao userDao;
+	
+	private AttachmentDao attachmentDao;
+	
+	
+	@Autowired
+	public void setattachmentDao(AttachmentDao attachmentDao) {
+		this.attachmentDao = attachmentDao;
+	}
 	
 	@Autowired
 	public void setUserDao(UserDao userDao) {
@@ -40,7 +51,16 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-    public String showArticles(Model model) {
+    public String showArticles(Model model, Principal principal) {
+    	
+    	List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	model.addAttribute("loggedUser", loggedInUser);
         List<Article> articles = articleDao.list();
         model.addAttribute("articles", articles);
  
@@ -51,6 +71,18 @@ public class ArticleController {
 	public String getArticle(@PathVariable("id") long id, Model model) {
 	    Article article = articleDao.findArticle(id);
 	    model.addAttribute("art", article);
+	    
+	   	//Hibernate.initialize(article.getAttachments());
+	    List<Attachment> listAttachment = article.getAttachments();
+	    System.out.println(listAttachment.size()+" is what i retrieved");
+	    
+	    List<String> fileNames = new ArrayList<String>();
+	    
+	    for(Attachment a: listAttachment) {
+	    	fileNames.add(a.getActualFilename());
+	    }
+	    
+	    model.addAttribute("attachments", fileNames);
 	 
 	    return "articles/view";
 	}
@@ -59,7 +91,7 @@ public class ArticleController {
 	public String updateArticle(@PathVariable("id") long id, Article article) {
 		article.setId(id);
 		articleDao.updateEntity(article);
-	 
+	 	
 	    return "redirect:/articles";
 	}
 	
@@ -69,6 +101,13 @@ public class ArticleController {
 	        throws ArticleDeleteException {
 	 
 	    Article toDelete = articleDao.findArticle(id);
+	    
+	    List<Attachment> listAttachment = toDelete.getAttachments();
+	    	    
+	    for(Attachment a: listAttachment) {
+	    	attachmentDao.removeEntity(a);
+	    }
+	    
 	    boolean wasDeleted = articleDao.removeEntity(toDelete);
 	 
 	    if (!wasDeleted) {
@@ -97,11 +136,23 @@ public class ArticleController {
 	public String addArticle(Article article, Principal principal) {
 		
 		String username = principal.getName();
-		System.out.println(username);		
+		System.out.println(username);	
+		
+		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
+		System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
 		
 		User loggedInUser = userDao.findUserByUsername(username);
 		article.setCreatedByUser(loggedInUser);		
 		articleDao.addEntity(article);
+		
+		for(Attachment att:attachmentListToBeSaved) {
+			
+			att.setArticle(article);
+			attachmentDao.addEntity(att);
+			
+		}
+		
+		attachmentListToBeSaved.clear();
 	 
 	    return "redirect:/articles";
 	}

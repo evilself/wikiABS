@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.americanbanksystems.wiki.dao.ArticleDaoTestCase
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 2.978 sec <<< FAILURE!
-testAdd(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 2.049 sec  <<< ERROR!
+Tests run: 5, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 3.383 sec <<< FAILURE!
+testFind(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 2.367 sec  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.TestContext.getApplicationContext(TestContext.java:157)
 	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:109)
@@ -60,7 +60,7 @@ Caused by: java.lang.IllegalArgumentException: A universal match pattern ('/**')
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1452)
 	... 44 more
 
-testFind(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.249 sec  <<< ERROR!
+testAdd(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.263 sec  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.TestContext.getApplicationContext(TestContext.java:157)
 	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:109)
@@ -118,7 +118,7 @@ Caused by: java.lang.IllegalArgumentException: A universal match pattern ('/**')
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1452)
 	... 44 more
 
-testList(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.224 sec  <<< ERROR!
+testList(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.231 sec  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.TestContext.getApplicationContext(TestContext.java:157)
 	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:109)
@@ -176,7 +176,7 @@ Caused by: java.lang.IllegalArgumentException: A universal match pattern ('/**')
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1452)
 	... 44 more
 
-testRemove(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.18 sec  <<< ERROR!
+testUpdate(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.199 sec  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.TestContext.getApplicationContext(TestContext.java:157)
 	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:109)
@@ -234,7 +234,7 @@ Caused by: java.lang.IllegalArgumentException: A universal match pattern ('/**')
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1452)
 	... 44 more
 
-testUpdate(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.189 sec  <<< ERROR!
+testRemove(com.americanbanksystems.wiki.dao.ArticleDaoTestCase)  Time elapsed: 0.207 sec  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.TestContext.getApplicationContext(TestContext.java:157)
 	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:109)

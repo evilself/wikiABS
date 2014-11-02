@@ -10,7 +10,9 @@ package com.americanbanksystems.wiki.service.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.springframework.orm.hibernate3.HibernateInterceptor;
 import org.springframework.stereotype.Repository;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
@@ -20,8 +22,7 @@ import com.americanbanksystems.wiki.domain.User;
 
 @Repository("articleDao") //Component in persistance layer for IoC
 public class ArticleDaoImpl extends HibernateDao<Article, Long> implements ArticleDao{
-	
-	
+		
 	public boolean removeArticle(Article article) {
 		Query articleQuery = currentSession().createQuery(
                 "from Article a where a = :art");
@@ -48,12 +49,15 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
                 "from Article a where a.id = :art");
 		articleQuery.setParameter("art", id); 
 		
-		if (articleQuery.list().size() > 0) {
-			return (Article) articleQuery.list().get(0);
-		} else {
-			return null;
-		}		
+		Article a = null;
 		
+		if (articleQuery.list().size() > 0) {
+			a = (Article) articleQuery.list().get(0);
+			Hibernate.initialize(a.getAttachments());
+		} else {
+			
+		}		
+		return a;
 	}
 
 	@Override

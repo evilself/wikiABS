@@ -68,7 +68,7 @@
     <bean id="roleVoter"
         class="org.springframework.security.access.vote.RoleVoter">
         <property name="rolePrefix" value=""></property>
-    </bean>
+    </bean>  
  
     <bean id="accessDecisionManager"
         class="org.springframework.security.access.vote.AffirmativeBased">
@@ -77,17 +77,23 @@
     </bean>
  
     <sec:http request-matcher="regex" authentication-manager-ref="jdbc-auth"
-        access-decision-manager-ref="accessDecisionManager">        
-        <sec:intercept-url pattern="\A/articles\?new*\Z" access="ADMIN" />
-        <sec:form-login login-page="/login" authentication-failure-url="/denied"
+        access-decision-manager-ref="accessDecisionManager">                
+        <sec:intercept-url pattern="\A/articles\?new*\Z" access="USER,ADMIN" />
+        <sec:intercept-url pattern="/users*" access="ADMIN" />
+        <sec:intercept-url pattern="/users/\d*" access="ADMIN" />
+        <sec:intercept-url pattern="\A/users\?new*\Z" access="ADMIN" />
+        <sec:intercept-url pattern="/products*" access="ADMIN" />
+        <sec:intercept-url pattern="/products/\d*" access="ADMIN" />
+        <sec:intercept-url pattern="\A/products\?new*\Z" access="ADMIN" />
+        <sec:form-login login-page="/loginFull" authentication-failure-url="/denied"
             username-parameter="username" password-parameter="password"
             default-target-url="/" />
-        <sec:logout invalidate-session="true" logout-success-url="/login"
+        <sec:logout invalidate-session="true" logout-success-url="/loginFull"
             logout-url="/j_spring_security_logout" />
         <sec:access-denied-handler error-page="/denied"/>
-        <sec:session-management invalid-session-url="/">
+        <sec:session-management invalid-session-url="/welcome">
             <sec:concurrency-control max-sessions="50"
-                expired-url="/login" />
+                expired-url="/loginFull" />
         </sec:session-management>
     </sec:http>
  
@@ -107,7 +113,7 @@
     <bean id="userDetailsService"
         class="com.americanbanksystems.wiki.security.dao.implementation.UserDetailsServiceImpl" />
  
-    <sec:authentication-manager id="jdbc-auth">
+    <sec:authentication-manager id="jdbc-auth" alias="authenticationManager">
         <sec:authentication-provider>
             <sec:jdbc-user-service data-source-ref="dataSource"
                 users-by-username-query="select username,password, enabled from user where username=?"

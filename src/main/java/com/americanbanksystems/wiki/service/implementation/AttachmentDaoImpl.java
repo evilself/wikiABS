@@ -7,6 +7,8 @@ package com.americanbanksystems.wiki.service.implementation;
  * 
  */
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +16,8 @@ import com.americanbanksystems.wiki.dao.AttachmentDao;
 import com.americanbanksystems.wiki.domain.Attachment;
 
 @Repository("attachmentDao") //Component in persistance layer for IoC
-public class AttachmentDaoImpl extends HibernateDao<Attachment, Long> implements AttachmentDao{
-	
-	
+public class AttachmentDaoImpl extends HibernateDao<Attachment, Long> implements AttachmentDao{	
+
 	public boolean removeAttachment(Attachment attachment) {
 		Query attachmentQuery = currentSession().createQuery(
                 "from Attachment a where a = :art");
@@ -50,4 +51,17 @@ public class AttachmentDaoImpl extends HibernateDao<Attachment, Long> implements
 		}		
 		
 	}
+
+	@Override
+	public boolean saveInMemory(Attachment att) {
+		getSavedAttachments().add(att);
+		System.out.println(getSavedAttachments().size() + " is the size of our in-memory attachemnt list");
+		return true;
+	}
+
+	@Override
+	public List<Attachment> getSavedAttachments() {
+		return this.savedAttachments;
+	}
+	
 }

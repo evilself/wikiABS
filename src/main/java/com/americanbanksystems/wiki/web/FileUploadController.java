@@ -135,7 +135,8 @@ public class FileUploadController {
 	  	newatt.setAttachmentTitle("new attachment");
 	  	newatt.setAttachmentType("type");
 	  	
-	  	attDao.addEntity(newatt);
+	  	//attDao.addEntity(newatt);
+	  	attDao.saveInMemory(newatt);
 	  	
 	      
 	     /* System.out.println(files.size() + " is the size of files");

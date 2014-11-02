@@ -3,7 +3,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
-
     
 <!DOCTYPE html>
 <html lang="en">
@@ -11,14 +10,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Wiki page/Knowledge base">
+    <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
-    <title>Wiki</title>
+    <title>ABS Wiki</title>
+    
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -34,9 +33,9 @@
 </head>
 
 <body>
-	<div class="modal fade" id="loginModal" style="height:500px;weight:500px" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="height:500px;weight:500px">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:350px;">
            
     	</div>
     </div>
@@ -59,19 +58,27 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">About</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
                         <a href="articles">Articles</a>
-                    </li>
+                    </li> 
+                    <c:if test="${admin == 'true'}">                   
+					    <li>
+	                        <a href="products">Products</a>
+	                    </li>
+	                    <li>
+	                        <a href="users">Users</a>
+	                    </li>
+					</c:if>                  
                     <c:if test="${loggedUser == null}">
-                    <li>
-                        <a href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
-                    </li>
+	                    <li>
+	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a href="<c:url value="/j_spring_security_logout" />">Logout <c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></a>
+                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -91,7 +98,7 @@
                     <div class="intro-message">                    	
                         
                         	<sf:form action="articles" method="get" >
-                        	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control" style="font-height:120%;height:45px;border-radius:10px; " placeholder="What are you looking for?"/>
+                        	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control" style="color:blue;font-height:120%;height:45px;border-radius:10px; " placeholder="What are you looking for?"/>
 		                       <button type="submit" style="margin:5px;" class="btn btn-default btn-lg">Search</button>
 		                    </sf:form>                  
 		                   
@@ -100,17 +107,7 @@
 		                 	 </c:if>
                         	
                         <!-- h3>What are you looking for?</h3 -->
-                        <hr class="intro-divider">
-                        <!--<ul class="list-inline intro-social-buttons">
-                            <li>
-                                <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
-                            </li> -->
+                        <hr class="intro-divider">                       
                         </ul>
                     </div>
                 </div>
@@ -138,14 +135,11 @@
 					        <tr>
 					            <th>Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="#{users}" var="usr">
+					        <c:forEach items="#{eliteArticles}" var="art">
 					            <tr>
-					                <td>${usr.firstName}</td>
-					                <td>${usr.lastName}</td>
-					                <td>${usr.userName}</td>
-					                <td>${usr.password}</td>
+					                <td>${art.title}</td>					                
 					                <td>
-					                    <a href="users/${usr.id}">Go to page</a>
+					                    <a href="articles/${art.id}">Read</a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -177,20 +171,12 @@
 					        <tr>
 					            <th>Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="#{users}" var="usr">
+					        <c:forEach items="#{cplArticles}" var="art">
 					            <tr>
-					                <td>${usr.firstName}</td>
-					                <td>${usr.lastName}</td>
-					                <td>${usr.userName}</td>
-					                <td>${usr.password}</td>
+					                <td>${art.title}</td>					                
 					                <td>
-					                    <a href="users/${usr.id}">Go to page</a>
-					                </td>
-					                <td>
-					                    <sf:form action="users/${usr.id}" method="delete" >
-					                        <input type="submit" value="" >Delete</input>
-					                    </sf:form>
-					                </td>
+					                    <a href="articles/${art.id}">Read</a>
+					                </td>					                
 					            </tr>
 					        </c:forEach>
 					    </table>
@@ -221,20 +207,12 @@
 					        <tr>
 					            <th>Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="#{users}" var="usr">
+					        <c:forEach items="#{cproArticles}" var="art">
 					            <tr>
-					                <td>${usr.firstName}</td>
-					                <td>${usr.lastName}</td>
-					                <td>${usr.userName}</td>
-					                <td>${usr.password}</td>
+					                <td>${art.title}</td>
 					                <td>
-					                    <a href="users/${usr.id}">Go to page</a>
-					                </td>
-					                <td>
-					                    <sf:form action="users/${usr.id}" method="delete" >
-					                        <input type="submit" value="" >Delete</input>
-					                    </sf:form>
-					                </td>
+					                    <a href="articles/${art.id}">Read</a>
+					                </td>					                
 					            </tr>
 					        </c:forEach>
 					    </table>
@@ -265,7 +243,7 @@
                             <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
                         </li>
                         <li>
-                            <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                            <a target="_blank" href="https://github.com/evilself/wikiABS" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
                         </li>
                         <li>
                             <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
@@ -288,18 +266,14 @@
                     <ul class="list-inline">
                         <li>
                             <a href="/">Home</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
+                        </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
                             <a href="articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="users">Login</a>
+                            <a href="#about">About</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>

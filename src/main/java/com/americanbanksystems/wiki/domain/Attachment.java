@@ -79,7 +79,7 @@ public class Attachment extends BaseEntity implements Serializable{
 		this.attachmentType = attachmentType;
 	}
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "ARTICLE_ID")
 	public Article getArticle() {
 		return article;

@@ -100,6 +100,9 @@ public class UserRole implements Serializable {
 	@Override
 	public String toString() {
 		return "UserRole [role=" + role + ", userName=" + userName + "]";
-	}	
+	}
+
+
+	
 
 }
