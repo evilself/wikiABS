@@ -31,9 +31,9 @@
 </head>
 
 <body>
-	<div class="modal fade" id="largeModal" style="height:500px;weight:500px" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="height:500px;weight:500px">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
            
     	</div>
     </div>
@@ -88,7 +88,7 @@
 				                    <label class="col-lg-6 pull-left" for="description">Description</label> <label class="col-lg-6 pull-right">
 				                    <a class="btn btn-lg btn-default" href="upload"
 									   data-toggle="modal"
-									   data-target="#largeModal">Attachments
+									   data-target="#uploadModal">Attachments
 									 </a>
 				                    </label></div>
 				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
@@ -143,50 +143,11 @@
     </footer>
 
     <!-- jQuery Version 1.11.0 -->
-    <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>
-    
-    <!-- jQuery Form plugin -->
-    <script src="<spring:url value="/resources/js/jquery.form.min.js"/> "></script>
+    <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>    
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>   
     
-    <script>
-  //using jquery.form.js
-    function uploadJqueryForm(){
-        $('#result').html('');
-     	
-       $("#myForm").ajaxForm({
-        success:function(data) {
-              $('#result').html(data);
-         },
-         dataType:"text"
-       }).submit();       
-    }
-  
-  
-  
-  //using FormData() object
-    function uploadFormData(){
-        $('#result').html('');
-     
-      var oMyForm = new FormData();
-      oMyForm.append("file", file.files[0]);
-     
-      $.ajax({
-        url: 'upload/ajax',
-        data: oMyForm,
-        dataType: 'text',
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function(data){
-          $('#result').html(data);
-        }
-      });
-    }
-    
-    </script>
 
 </body>
 

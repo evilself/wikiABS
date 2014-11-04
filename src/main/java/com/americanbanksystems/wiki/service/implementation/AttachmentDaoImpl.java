@@ -63,5 +63,17 @@ public class AttachmentDaoImpl extends HibernateDao<Attachment, Long> implements
 	public List<Attachment> getSavedAttachments() {
 		return this.savedAttachments;
 	}
+
+	@Override
+	public boolean removeFromMemory(Attachment att) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean clearMemoryStore() {
+		getSavedAttachments().clear();
+		return true;
+	}	
 	
 }

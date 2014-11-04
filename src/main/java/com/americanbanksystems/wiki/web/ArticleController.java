@@ -121,6 +121,7 @@ public class ArticleController {
 	@RequestMapping(params = "new", method = RequestMethod.GET)
 	public String createArticleForm(Model model) {
 	    model.addAttribute("article", new Article());
+	    attachmentDao.clearMemoryStore();
 	    return "articles/createArticle";
 	}
 	

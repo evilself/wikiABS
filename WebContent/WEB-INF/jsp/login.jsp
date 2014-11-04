@@ -50,7 +50,7 @@
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
           		</div-->
 	       </form>
-	       <button class="btn btn-default pull-right" id="ajaxSubmitBtn" style="margin-right:17%;" onclick="ajaxLogin()">Login</button>	        
+	       <button class="btn btn-default pull-right" id="ajaxSubmitBtn" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;margin-right:17%;" onclick="ajaxLogin()">Login</button>	        
 	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
@@ -112,7 +112,7 @@
 			        success: function(data){
 			        	
 			        	if (data.indexOf("Success") < 0) {
-			        		$('#result').html("Login failed, please try again").css({"color":"red", "font-size":"1.5em"});
+			        		$('#result').html("Login failed, please try again!").css({"color":"red", "font-size":"1.5em"});
 			        		$('#username, #password').val("").css({"border-color":"red"});		        		
 			        		
 			            } else {		            	

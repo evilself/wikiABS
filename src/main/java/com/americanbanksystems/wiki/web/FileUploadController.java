@@ -171,7 +171,7 @@ public class FileUploadController {
       //we are using getTimeInMillis to avoid server cached image
   
       //return "<img src='http://localhost:8080/spring-mvc-file-upload/rest/cont/get/"+Calendar.getInstance().getTimeInMillis()+"' />";
-      return mpf.getOriginalFilename() +" uploaded!";
+      return mpf.getOriginalFilename();
   
    }
     

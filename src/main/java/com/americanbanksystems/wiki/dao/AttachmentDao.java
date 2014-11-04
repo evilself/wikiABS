@@ -23,4 +23,6 @@ public interface AttachmentDao extends GenericDAO<Attachment, Long> {
 	
 	Attachment findAttachment(Long id);
 	boolean saveInMemory(Attachment att);
+	boolean removeFromMemory(Attachment att);
+	boolean clearMemoryStore();
 }
