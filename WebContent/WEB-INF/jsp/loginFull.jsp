@@ -30,6 +30,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style> .invalid { color: red; }</style>
 </head>
 
 <body>	
@@ -76,7 +77,7 @@
 								
 							        	
 							        <c:url var="loginUrl" value="/j_spring_security_check"></c:url>
-							 		<form action="${loginUrl}" method="POST">
+							 		<form action="${loginUrl}" id="loginForm" method="POST" novalidate="novalidate">
 							 			<div class="form-group">
 								        	<label>Username</label>
 								            <input class="form-control" style="width:50%" type='text' placeholder="Username" name='username' />
@@ -134,6 +135,42 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- jQuery Validation -->    
+    <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
+
+	<script>
+		$(document).keypress(function(event){			 
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				$("#loginForm").submit();
+			}		 
+		});
+		
+		// When the browser is ready...
+		$(function() {  
+		  
+		    // Setup form validation on the #register-form element
+		    $("#loginForm").validate({
+		    	errorClass: 'invalid',
+		        // Specify the validation rules
+		        rules: {
+		            username: "required",
+		            password: "required"		            
+		        },
+		        
+		        // Specify the validation error messages
+		        messages: {
+		            username: "Username is missing",
+		            password: "Password is missing"		            
+		        },
+		        
+		        submitHandler: function(form) {
+		        	form.submit();
+		        }
+		    });
+		  });		
+	</script>
 
 </body>
 

@@ -4,7 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
     
 <!DOCTYPE html>
 <html lang="en">
@@ -12,14 +11,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Wiki page/Knowledge base">
+    <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
-    <title>Wiki</title>
+    <title>ABS Wiki</title>
+    
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -35,9 +34,9 @@
 </head>
 
 <body>
-	<div class="modal fade" id="loginModal" style="height:500px;weight:500px" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="height:500px;weight:500px">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
            
     	</div>
     </div>
@@ -60,19 +59,27 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">About</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
                         <a href="articles">Articles</a>
-                    </li>
+                    </li> 
+                    <c:if test="${admin == 'true'}">                   
+					    <li>
+	                        <a href="products">Products</a>
+	                    </li>
+	                    <li>
+	                        <a href="users">Users</a>
+	                    </li>
+					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a href="<c:url value="/j_spring_security_logout" />">Logout <c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></a>
+                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -82,7 +89,7 @@
         <!-- /.container -->
     </nav>
 
-    <!-- Header -->
+   <!-- Header -->
     <div class="intro-header">
 
         <div class="container">
@@ -90,31 +97,37 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
-                        <h1>Articles</h1>
+                        <h2>Articles</h2>
                           <c:if test="${loggedUser != null}">
 					   		 <a href="articles?new">Add new article</a>
 					      </c:if>
 					      <c:if test="${fn:length(articles) gt 0}">
-					    <table cellspacing="5" >
-					        <tr>
-					            <th>Title</th>
-					            
-					        </tr>
-					        <c:forEach items="#{articles}" var="art">
-					            <tr>
-					                <td>${art.title}</td>                
-					                <td>
-					                    <a href="articles/${art.id}">Read</a>
-					                </td>
-					                <td>
-					                    <sf:form action="articles/${art.id}" method="delete" >
-					                        <input type="submit" value="" >Delete</input>
-					                    </sf:form>
-					                </td>
-					            </tr>
-					        </c:forEach>
-					    </table> 
-					    </c:if>
+							    <table class="table" >
+							        <tr style="font-weigth:bold;font-size: 1.1em;">
+							            <th class="text-left" style="width:60%">Title</th>
+							            <th class="text-left" style="width:20%">Tags</th>
+							            <th class="text-center" style="width:5%">Product</th>
+							            <th class="text-center" style="width:10%">Created By</th>
+							            <th class="text-center" style="width:5%"></th>
+							        </tr>
+							        <c:forEach items="#{articles}" var="art">
+						            <tr style="color:#0066CC;">
+						                <td class="text-left" style="width:60%;">${art.title}</td>
+						                <td class="text-left" style="width:20%">${art.tag}</td>
+						                <td class="text-center" style="width:5%">${art.product.name}</td>
+						                <td class="text-center" style="width:10%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
+						                <td class="text-center" style="width:5%">
+						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
+						                </td>
+						                <!-- td>
+						                    <sf:form action="articles/${art.id}" method="delete" >
+						                        <input type="submit" value="" >Delete</input>
+						                    </sf:form>
+						                </td-->
+						            </tr>
+							        </c:forEach>
+							    </table> 
+					     </c:if>
 					     <c:if test="${fn:length(articles) eq 0}"> 
 					      <h2>No articles present</h2> 
 					     </c:if>                     	
@@ -139,18 +152,14 @@
                     <ul class="list-inline">
                         <li>
                             <a href="/">Home</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
+                        </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
                             <a href="articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="users">Login</a>
+                            <a href="#about">About</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
@@ -168,4 +177,3 @@
 </body>
 
 </html>
-    

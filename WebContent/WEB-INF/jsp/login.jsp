@@ -50,7 +50,7 @@
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
           		</div-->
 	       </form>
-	       <button class="btn btn-default pull-right"onclick="ajaxLogin()">Ajax Login</button>	        
+	       <button class="btn btn-default pull-right" id="ajaxSubmitBtn" style="margin-right:17%;" onclick="ajaxLogin()">Login</button>	        
 	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
@@ -60,6 +60,10 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- jQuery Validation -->    
+    <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
+    
 	<script>
 		$('#loginModal').on('hidden.bs.modal', function() {
 			//$(this).removeData('bs.modal')
@@ -67,29 +71,61 @@
 	</script>
 	
 	<script>
+		$('#loginForm').keypress(function(event){			 
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				$('#ajaxSubmitBtn').click();
+			}		 
+		});
+		
+		// When the browser is ready...
+		$(function() {  
+		  
+		    // Setup form validation on the #register-form element
+		    $("#loginForm").validate({
+		    
+		        // Specify the validation rules
+		        rules: {
+		            username: "required",
+		            password: "required"		            
+		        },
+		        
+		        // Specify the validation error messages
+		        messages: {
+		            username: "Username is missing",
+		            password: "Password is missing"		            
+		        },
+		        
+		        submitHandler: function(form) {
+		        	$('#ajaxSubmitBtn').click();
+		        }
+		    });
+		  });
 	
 		function ajaxLogin(){
 	        $('#result').html('');
-	          
-	        $.ajax({
-	        	url:  "ajaxLogin",
-		        type: "POST",
-		        data: $("#loginForm").serialize(),
-		        success: function(data){
-		        	
-		        	if (data.indexOf("Success") < 0) {
-		        		$('#result').html("Login failed, please try again").css({"color":"red", "font-size":"1.5em"});
-		        		$('#username, #password').val("").css({"border-color":"red"});		        		
-		        		
-		            } else {		            	
-		            	$('#result').html("Login successful!").css({"color":"green", "font-size":"1.5em"});
-		            	$('#username, #password').css({"border-color":""});
-		            	window.location.reload(true);
-		            }		                       
-		        }		       
-		    });	       
-	    }
-		
+	        if(($('#username').val() != "") && ($('#password').val() != "")) {	          
+		        $.ajax({
+		        	url:  "ajaxLogin",
+			        type: "POST",
+			        data: $("#loginForm").serialize(),
+			        success: function(data){
+			        	
+			        	if (data.indexOf("Success") < 0) {
+			        		$('#result').html("Login failed, please try again").css({"color":"red", "font-size":"1.5em"});
+			        		$('#username, #password').val("").css({"border-color":"red"});		        		
+			        		
+			            } else {		            	
+			            	$('#result').html("Login successful!").css({"color":"green", "font-size":"1.5em"});
+			            	$('#username, #password').css({"border-color":""});
+			            	setTimeout(function() { window.location.reload(true); }, 1000);
+			            }		                       
+			        }		       
+			    });	
+	        } else {	        	
+	        	 $('#result').html('Please provide both username and password!').css({"color":"red", "font-size":"1.2em"});	        	
+	        }
+	    }		
 	</script>
 </body>
 </html>

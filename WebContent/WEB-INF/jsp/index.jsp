@@ -35,7 +35,7 @@
 <body>
 	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:350px;">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
            
     	</div>
     </div>
@@ -131,13 +131,13 @@
                     <div class="clearfix"></div>
                     <h2 class="section-heading">BankManagerElite</h2>
                     <p class="lead">
-                    	<table cellspacing="5" >
+                    	<table class="table" >
 					        <tr>
-					            <th>Latest articles</th>					            
+					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>					            
 					        </tr>
 					        <c:forEach items="#{eliteArticles}" var="art">
 					            <tr>
-					                <td>${art.title}</td>					                
+					                <td><li>${art.title}</li></td>					                
 					                <td>
 					                    <a href="articles/${art.id}">Read</a>
 					                </td>					                
@@ -167,13 +167,13 @@
                     <div class="clearfix"></div>
                     <h2 class="section-heading">CompliancePro Loans and Deposits</h2>
                     <p class="lead">
-                    	<table cellspacing="5" >
+                    	<table class="table" >
 					        <tr>
-					            <th>Latest articles</th>					            
+					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
 					        <c:forEach items="#{cplArticles}" var="art">
 					            <tr>
-					                <td>${art.title}</td>					                
+					                <td><li>${art.title}</li></td>						                
 					                <td>
 					                    <a href="articles/${art.id}">Read</a>
 					                </td>					                
@@ -203,13 +203,13 @@
                     <div class="clearfix"></div>
                     <h2 class="section-heading">CompliancePro</h2>
                     <p class="lead">
-                    	<table cellspacing="5" >
+                    	<table class="table" >
 					        <tr>
-					            <th>Latest articles</th>					            
+					           <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
 					        <c:forEach items="#{cproArticles}" var="art">
 					            <tr>
-					                <td>${art.title}</td>
+					                <td><li>${art.title}</li></td>	
 					                <td>
 					                    <a href="articles/${art.id}">Read</a>
 					                </td>					                

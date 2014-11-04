@@ -65,9 +65,13 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
 		String query = "from Article art where art.tag like :tag";
 		Query articleQuery = currentSession().createQuery(query);
 								 articleQuery.setParameter("tag", "%"+tag+"%"); 
-		List<Article> articleList = new ArrayList<Article>(); 
+		List<Article> articleList = new ArrayList<Article>();
+		
 		articleList =articleQuery.list();
-								 
+		for(Article a: articleList)		{
+			Hibernate.initialize(a.getCreatedByUser());
+			Hibernate.initialize(a.getProduct());
+		}
 		
 			return articleList;
 		

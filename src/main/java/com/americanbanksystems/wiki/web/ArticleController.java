@@ -61,7 +61,7 @@ public class ArticleController {
     		loggedInUser = null;
     	}
     	model.addAttribute("loggedUser", loggedInUser);
-        List<Article> articles = articleDao.list();
+        List<Article> articles = articleDao.findArticlesByTag(""); //change this later on TODO FIX ME!
         model.addAttribute("articles", articles);
  
         return "articles/list";
