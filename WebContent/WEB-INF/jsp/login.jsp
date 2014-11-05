@@ -106,7 +106,7 @@
 	        $('#result').html('');
 	        if(($('#username').val() != "") && ($('#password').val() != "")) {	          
 		        $.ajax({
-		        	url:  "ajaxLogin",
+		        	url:  "/wikiABS/ajaxLogin",
 			        type: "POST",
 			        data: $("#loginForm").serialize(),
 			        success: function(data){

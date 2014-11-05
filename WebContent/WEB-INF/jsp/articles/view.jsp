@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +11,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Wiki page/Knowledge base">
+    <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
-    <title>Wiki</title>
+    <title>ABS Wiki</title>
+    
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -31,6 +34,13 @@
 </head>
 
 <body>
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
+           
+    	</div>
+    </div>
+	</div>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -42,20 +52,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
                 <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">About</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
                         <a href="../articles">Articles</a>
+                    </li> 
+                    <c:if test="${admin == 'true'}">                   
+					    <li>
+	                        <a href="products">Products</a>
+	                    </li>
+	                    <li>
+	                        <a href="users">Users</a>
+	                    </li>
+					</c:if>                  
+                    <c:if test="${loggedUser == null}">
+	                    <li>
+	                        <a style="color:red;" href="../login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                    </li>
+                    </c:if>
+                    <c:if test="${loggedUser != null}">
+                     <li>
+                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
                     </li>
-                    <li>
-                        <a href="../users">Login</a>
-                    </li>
+                    </c:if>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -63,55 +89,52 @@
         <!-- /.container -->
     </nav>
 
-    <!-- Header -->
+   <!-- Header -->
     <div class="intro-header">
 
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-12">               
-                    <div class="intro-message">                    	
-                        <h2>Article</h2>
-						    <div id="list">
-						        <sf:form method="post">
-						         <div class="col-lg-12 col-sm-12">
-					           		<div class="form-group">
-					                    <label class="pull-left" for="title">Title</label>
-						                <input class="form-control" name="title" id="title" value="${art.title}" disabled="true"/>
-					                </div>
+                <div class="col-lg-12">
+                	 <div class="intro-message">                    	
+                        <h2>${art.title}</h2>
+						    <div id="list">						      
+						         <div class="col-lg-12 col-sm-12">					           		
 					                <div class="form-group">
 					                   <label class="pull-left" for="description">Description</label>
-						               <textarea class="form-control" style="height:550px" name="description" id="description" disabled="true">${art.description}</textarea>
+						               <textarea class="form-control" style="opacity:0.5;height:550px" name="description" id="description" disabled="true">${art.description}</textarea>
 					                </div>
 					                <div class="form-group">
-					                   <label class="pull-left" for="tag">Tags:</label>
-						               <input class="form-control" name="tag" id="tag" value="${art.tag}" disabled="true"/>
+					                   <label class="pull-left" for="tag">Tags</label>
+						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
 					                </div>
-					                <c:forEach items="${attachments}" var="att">
+					                <div class="form-group">
+					                   <label class="pull-left" for="tag">Attachments</label>
+					                   <c:forEach items="${attachments}" var="att">
 							            <tr>
-							                <td>${att}</td>							                
+							                <td>${att.name}</td>							                
 							                <td>
-							                    <a href="users/${att}">Go to page</a>
+							                    <a target="_blank" href="../upload/display/${att.id}">View</a>
 							                </td>
-							                <td>
+							                <!-- td>
 							                    <sf:form action="users/${att}" method="delete" >
 							                        <input type="submit" value="" >Delete</input>
 							                    </sf:form>
-							                </td>
+							                </td-->
 							            </tr>
-							        </c:forEach>
-					                <input class="btn btn-default btn-lg hidden" type="submit" value="Save" id="save"/>				                
-					             </div>						            
-						        </sf:form>
-						    </div>
-						 
-						    <br /><br />
-						    <a href="../articles">Go Back to Articles</a> 
-                          	
-                        	
+							        	</c:forEach>					              
+					                </div>
+					                					                			                
+					             </div>						    
+						    </div>						 
+						    <br />
+						    <div class="col-lg-12 col-sm-12">
+							    <a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles">Back to Articles</a> 
+	                          	<a class="btn btn-info pull-right" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles/${art.id}">Edit</a>
+                        	</div>
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
-                    </div>
+                    </div>                    
                 </div>
             </div>
 
@@ -119,7 +142,7 @@
         <!-- /.container -->
 
     </div>
-    <!-- /.intro-header -->   
+    <!-- /.intro-header -->
 
     <!-- Footer -->
     <footer>
@@ -129,18 +152,14 @@
                     <ul class="list-inline">
                         <li>
                             <a href="/">Home</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
+                        </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
                             <a href="articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="users">Login</a>
+                            <a href="#about">About</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
@@ -157,4 +176,4 @@
 
 </body>
 
-</html>    
+</html>

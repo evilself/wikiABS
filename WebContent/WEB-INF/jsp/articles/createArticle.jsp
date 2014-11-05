@@ -10,13 +10,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Wiki page/Knowledge base">
+    <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
-    <title>Wiki</title>
+    <title>ABS Wiki</title>
+    
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -27,10 +29,17 @@
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->     
+    <![endif]-->
 </head>
 
 <body>
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
+           
+    	</div>
+    </div>
+	</div>
 	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
@@ -49,20 +58,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
                 <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">About</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
                         <a href="articles">Articles</a>
+                    </li> 
+                    <c:if test="${admin == 'true'}">                   
+					    <li>
+	                        <a href="products">Products</a>
+	                    </li>
+	                    <li>
+	                        <a href="users">Users</a>
+	                    </li>
+					</c:if>                  
+                    <c:if test="${loggedUser == null}">
+	                    <li>
+	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                    </li>
+                    </c:if>
+                    <c:if test="${loggedUser != null}">
+                     <li>
+                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
                     </li>
-                    <li>
-                        <a href="users">Login</a>
-                    </li>
+                    </c:if>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -122,18 +147,14 @@
                     <ul class="list-inline">
                         <li>
                             <a href="/">Home</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
+                        </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
                             <a href="articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="users">Login</a>
+                            <a href="#about">About</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
@@ -143,12 +164,11 @@
     </footer>
 
     <!-- jQuery Version 1.11.0 -->
-    <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>    
+    <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>   
-    
+    <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
 
 </body>
 
-</html>    
+</html> 

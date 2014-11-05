@@ -83,7 +83,8 @@
 	        if ($('#file').val() != "") {
 		        $("#uploadForm").ajaxForm({
 		        success:function(data) {
-		              $('#result').html(data+' uploaded!').css({"color":"green","font-size":"1.2em"});
+		        	  $('#file').val('');
+		              $('#result').html('['+data+']'+' uploaded!').css({"color":"green","font-size":"1.2em"});
 		         },
 		         dataType:"text"
 		        }).submit();     

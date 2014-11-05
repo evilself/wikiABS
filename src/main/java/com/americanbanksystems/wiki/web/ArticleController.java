@@ -2,6 +2,7 @@ package com.americanbanksystems.wiki.web;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -68,27 +69,51 @@ public class ArticleController {
     }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String getArticle(@PathVariable("id") long id, Model model) {
+	public String getArticle(@PathVariable("id") long id, Model model, Principal principal) {
+		
+		List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	model.addAttribute("loggedUser", loggedInUser);
+		
 	    Article article = articleDao.findArticle(id);
 	    model.addAttribute("art", article);
 	    
 	   	//Hibernate.initialize(article.getAttachments());
 	    List<Attachment> listAttachment = article.getAttachments();
-	    System.out.println(listAttachment.size()+" is what i retrieved");
+	    //System.out.println(listAttachment.size()+" is what i retrieved");
 	    
-	    List<String> fileNames = new ArrayList<String>();
-	    
+	    //List<String> fileNames = new ArrayList<String>();
+	    List<HashMap<String, String>> atts = new ArrayList<HashMap<String, String>>();
+	    	    
 	    for(Attachment a: listAttachment) {
-	    	fileNames.add(a.getActualFilename());
+	    	HashMap<String, String> map = new HashMap<String, String>();
+	    	map.put("name", a.getActualFilename());
+	    	map.put("id", ""+a.getId());
+	    	atts.add(map);
 	    }
 	    
-	    model.addAttribute("attachments", fileNames);
+	    model.addAttribute("attachments", atts);
 	 
 	    return "articles/view";
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String updateArticle(@PathVariable("id") long id, Article article) {
+	public String updateArticle(@PathVariable("id") long id, Article article, Principal principal) {
+		
+		List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	//model.addAttribute("loggedUser", loggedInUser);
+		
 		article.setId(id);
 		articleDao.updateEntity(article);
 	 	
@@ -119,14 +144,33 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(params = "new", method = RequestMethod.GET)
-	public String createArticleForm(Model model) {
+	public String createArticleForm(Model model, Principal principal) {
+		List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	model.addAttribute("loggedUser", loggedInUser);
+		
 	    model.addAttribute("article", new Article());
 	    attachmentDao.clearMemoryStore();
 	    return "articles/createArticle";
 	}
 	
 	@RequestMapping(params = "searchCriteria", method = RequestMethod.GET)
-	public String getArticlesFromSearch(@RequestParam("searchCriteria")String tag, Model model) {
+	public String getArticlesFromSearch(@RequestParam("searchCriteria")String tag, Model model, Principal principal) {
+		
+		List<User> users = userDao.list();
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	model.addAttribute("loggedUser", loggedInUser);
+		
 		 List<Article> articles = articleDao.findArticlesByTag(tag);
 	        model.addAttribute("articles", articles);
 	        System.out.println("searchCriteriea");
