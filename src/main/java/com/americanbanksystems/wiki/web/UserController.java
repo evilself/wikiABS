@@ -1,9 +1,13 @@
 package com.americanbanksystems.wiki.web;
 
+import java.security.Principal;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,8 +33,22 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-    public String showUsers(Model model) {
-        List<User> users = userDao.list();
+    public String showUsers(Model model, Principal principal) {
+        List<User> users = userDao.list();       
+        model.addAttribute("admin","false");
+    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    	for(GrantedAuthority ga: authorities) {
+    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
+    	} 
+    	
+    	
+    	User loggedInUser;
+    	if  (null != principal) {
+    		loggedInUser = userDao.findUserByUsername(principal.getName());
+    	} else {
+    		loggedInUser = null;
+    	}
+    	model.addAttribute("loggedUser", loggedInUser);
         model.addAttribute("users", users);
  
         return "users/list";

@@ -7,6 +7,9 @@ package com.americanbanksystems.wiki.service.implementation;
  * 
  */
 
+import java.util.List;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +55,16 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 		} else {
 			return null;
 		}
+	}
+	
+	@Override
+	public List<User> list() {
+		List<User> userList = super.list();
+		for(User u: userList){
+			Hibernate.initialize(u.getRole());			
+		}
+		
+		 return userList;
 	}
 
 	@Override

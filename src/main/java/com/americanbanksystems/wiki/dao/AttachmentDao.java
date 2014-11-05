@@ -17,7 +17,7 @@ import com.americanbanksystems.wiki.service.GenericDAO;
 //GenericDAO
 public interface AttachmentDao extends GenericDAO<Attachment, Long> {	
 	
-    static List<Attachment> savedAttachments = new ArrayList<Attachment>();
+    List<Attachment> savedAttachments = new ArrayList<Attachment>();
 	
 	public List<Attachment> getSavedAttachments() ;
 	

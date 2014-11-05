@@ -3,6 +3,7 @@ package com.americanbanksystems.wiki.web.helpers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
@@ -31,11 +32,26 @@ public final class EntityGenerator {
     public void generateDomain() {
     	
     	UserRole admin = new UserRole("ADMIN");
-    	UserRole user = new UserRole("USER");
+    	UserRole user = new UserRole("USER"); 
+    	UserRole anotherUser = new UserRole("USER"); 
     	
-        User steve = new User("Steve", "Walley", "sw", "matrix", user);
-        User kenny = new User("Kenny", "Rajiah", "kr", "maurit", admin);
-        User boris = new User("Boris", "Mechkov", "bm", "sirob", admin);
+    	
+    	String password = "matrix";
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(password);
+    	
+        User steve = new User("Steve", "Walley", "sw", hashedPassword, user);
+        
+        String password2 = "sirob";		
+        String hashedPassword2 = passwordEncoder.encode(password2);
+        
+		User boris = new User("Boris", "Mechkov", "bm", hashedPassword2, admin);
+		
+		String password3 = "liverpool";		
+		String hashedPassword3 = passwordEncoder.encode(password3);
+		
+        User kenny = new User("Kenny", "Rajiah", "kr", hashedPassword3, user);
+        
                         
         // free managers
         //Article itArticle = new Article("how to do IT", "it stuff stuff stuff stuff");
@@ -43,8 +59,9 @@ public final class EntityGenerator {
  
         admin.setUserName("bm");
         user.setUserName("sw");
+        anotherUser.setUserName("kr");
                 
-        addAll(userRoleDao, admin, user);
+        addAll(userRoleDao, admin, user, anotherUser);
         addAll(userDao, steve, kenny, boris);
        // addAll(articleDao, itArticle, sportArticle);
        

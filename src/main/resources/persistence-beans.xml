@@ -61,7 +61,7 @@
     <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
 </bean>
 
-<!-- ************************************************************************************* -->
+<!-- **************************************SPRING SECURITY CONFIG*********************************************** -->
 
 <!-- Configuring RoleVoter bean to use custom access roles, by default roles
         should be in the form ROLE_{XXX} -->
@@ -118,8 +118,13 @@
             <sec:jdbc-user-service data-source-ref="dataSource"
                 users-by-username-query="select username,password, enabled from user where username=?"
                 authorities-by-username-query="select username, role from user_roles where username=?" />
+             <sec:password-encoder ref="encoder" />
         </sec:authentication-provider>
     </sec:authentication-manager>
+    
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg name="strength" value="11" />
+    </bean>
  
     <!-- MySQL DB DataSource -->
     <!-- beans:bean id="dataSource"

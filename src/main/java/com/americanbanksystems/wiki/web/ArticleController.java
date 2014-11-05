@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -53,7 +55,11 @@ public class ArticleController {
 	
 	@RequestMapping(method = RequestMethod.GET)
     public String showArticles(Model model, Principal principal) {
-    	
+		model.addAttribute("admin","false");
+    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    	for(GrantedAuthority ga: authorities) {
+    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
+    	} 
     	List<User> users = userDao.list();
     	User loggedInUser;
     	if  (null != principal) {
