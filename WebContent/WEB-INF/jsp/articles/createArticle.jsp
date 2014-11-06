@@ -18,6 +18,7 @@
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    <link href="<spring:url value="/resources/css/bootstrap-combobox.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -123,10 +124,20 @@
 				                   <label class="pull-left" for="tag">Tags</label>
 				                    <input class="form-control form-inline pull-right" name="tag" id="tag" type="text" class="form-control" value="${article.tag}"/>
 				                </div>
+				                <input class="hidden" name="product" id="product" type="text" value="${article.product }"/> 
+				                <div class="form-group pull-right" style="width:35%""> 
+						        	<label class="pull-left" for="tag">Associated Product</label>                      	
+		                        	<select id="productType" class="form-control combobox" >
+					                	<option></option>
+						                <c:forEach items="#{products}" var="prod">				                 							      
+									      <option value="${prod.id}">${prod.productName}</option>						    
+									    </c:forEach>
+								    </select>
+							    </div>							
 				                <input class="btn btn-default btn-lg" type="submit" value="Save" id="save" />				                
 				           </div>
-				        </sf:form>                       	
-                        	
+				        </sf:form>
+				        	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
                     </div>
@@ -168,6 +179,20 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/bootstrap-combobox.js"/> "></script>
+
+	 <script>
+	      $(document).ready(function(){
+	        $('.combobox').combobox();
+	      });
+	      
+	      $('#productType').on('change' , function(){
+	     //  alert($('#productType').val());
+	     	$('#product').val($('#productType').val());
+	      });	      
+    </script>
 
 </body>
 

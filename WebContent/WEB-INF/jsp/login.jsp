@@ -63,14 +63,8 @@
     
     <!-- jQuery Validation -->    
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
-    
-	<script>
-		$('#loginModal').on('hidden.bs.modal', function() {
-			//$(this).removeData('bs.modal')
-		});
-	</script>
-	
-	<script>
+        
+	<script>	
 		$('#loginForm').keypress(function(event){			 
 			var keycode = (event.keyCode ? event.keyCode : event.which);
 			if(keycode == '13'){
@@ -79,7 +73,7 @@
 		});
 		
 		// When the browser is ready...
-		$(function() {  
+		/*$(function() {  
 		  
 		    // Setup form validation on the #register-form element
 		    $("#loginForm").validate({
@@ -100,7 +94,7 @@
 		        	$('#ajaxSubmitBtn').click();
 		        }
 		    });
-		  });
+		  });*/
 	
 		function ajaxLogin(){
 	        $('#result').html('');

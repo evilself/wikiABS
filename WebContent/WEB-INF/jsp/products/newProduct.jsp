@@ -96,41 +96,20 @@
 
             <div class="row">
                 <div class="col-lg-12">               
-                    <div class="intro-message">                    	
-                        <h2>Articles</h2>
-                          <c:if test="${loggedUser != null}">
-					   		 <a href="articles?new">Add new article</a>
-					      </c:if>
-					      <c:if test="${fn:length(articles) gt 0}">
-							    <table class="table" >
-							        <tr style="font-weigth:bold;font-size: 1.1em;">
-							            <th class="text-left" style="width:60%">Title</th>
-							            <th class="text-left" style="width:20%">Tags</th>
-							            <th class="text-center" style="width:5%">Product</th>
-							            <th class="text-center" style="width:10%">Created By</th>
-							            <th class="text-center" style="width:5%"></th>
-							        </tr>
-							        <c:forEach items="#{articles}" var="art">
-						            <tr style="color:#0066CC;">
-						                <td class="text-left" style="width:60%;">${art.title}</td>
-						                <td class="text-left" style="width:20%">${art.tag}</td>
-						                <td class="text-center" style="width:5%">${art.product.productName}</td>
-						                <td class="text-center" style="width:10%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
-						                <td class="text-center" style="width:5%">
-						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
-						                </td>
-						                <!-- td>
-						                    <sf:form action="articles/${art.id}" method="delete" >
-						                        <input type="submit" value="" >Delete</input>
-						                    </sf:form>
-						                </td-->
-						            </tr>
-							        </c:forEach>
-							    </table> 
-					     </c:if>
-					     <c:if test="${fn:length(articles) eq 0}"> 
-					      <h2>No articles present</h2> 
-					     </c:if>                     	
+                    <div class="intro-message">
+                    <h2>${product.productName}</h2> 
+                    	<div id="list">
+					        <sf:form method="post" action="products">					            
+			                    <label for="productName">Product Name</label>
+			                    <input name="productName" id="productName"  class="form-control" value="${product.productName}"/>
+			              
+			                    <label for="description">Description</label>
+			                    <input name="description" id="description" class="form-control" value="${product.description}" />		                    
+			             				                   
+			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />					              
+					        </sf:form>
+					    </div>                   	
+                       
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                 
                         </ul>

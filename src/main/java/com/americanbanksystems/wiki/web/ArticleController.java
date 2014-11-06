@@ -21,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.AttachmentDao;
+import com.americanbanksystems.wiki.dao.ProductDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.Article;
 import com.americanbanksystems.wiki.domain.Attachment;
+import com.americanbanksystems.wiki.domain.Product;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.ArticleDeleteException;
 
@@ -37,9 +39,15 @@ public class ArticleController {
 	
 	private AttachmentDao attachmentDao;
 	
+	private ProductDao productDao;
 	
 	@Autowired
-	public void setattachmentDao(AttachmentDao attachmentDao) {
+	public void setProductDao(ProductDao productDao) {
+		this.productDao = productDao;
+	}
+	
+	@Autowired
+	public void setAttachmentDao(AttachmentDao attachmentDao) {
 		this.attachmentDao = attachmentDao;
 	}
 	
@@ -158,8 +166,16 @@ public class ArticleController {
     	} else {
     		loggedInUser = null;
     	}
+    	model.addAttribute("admin","false");
+    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    	for(GrantedAuthority ga: authorities) {
+    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
+    	}
+    	
     	model.addAttribute("loggedUser", loggedInUser);
 		
+    	model.addAttribute("products", productDao.list());
+    	
 	    model.addAttribute("article", new Article());
 	    attachmentDao.clearMemoryStore();
 	    return "articles/createArticle";
@@ -192,6 +208,8 @@ public class ArticleController {
 		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
 		System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
 		
+		Product prod = productDao.findProduct(Long.parseLong(article.getProduct().getProductName()));
+		article.setProduct(prod);
 		User loggedInUser = userDao.findUserByUsername(username);
 		article.setCreatedByUser(loggedInUser);		
 		articleDao.addEntity(article);

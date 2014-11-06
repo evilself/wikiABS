@@ -97,27 +97,23 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
-                        <h2>Articles</h2>
+                        <h2>Products</h2>
                           <c:if test="${loggedUser != null}">
-					   		 <a href="articles?new">Add new article</a>
+					   		 <a href="products?new">Add new product</a>
 					      </c:if>
-					      <c:if test="${fn:length(articles) gt 0}">
+					      <c:if test="${fn:length(products) gt 0}">
 							    <table class="table" >
 							        <tr style="font-weigth:bold;font-size: 1.1em;">
-							            <th class="text-left" style="width:60%">Title</th>
-							            <th class="text-left" style="width:20%">Tags</th>
-							            <th class="text-center" style="width:5%">Product</th>
-							            <th class="text-center" style="width:10%">Created By</th>
+							            <th class="text-left" style="width:30%">Name</th>
+							            <th class="text-left" style="width:65%">Description</th>							            
 							            <th class="text-center" style="width:5%"></th>
 							        </tr>
-							        <c:forEach items="#{articles}" var="art">
+							        <c:forEach items="#{products}" var="prod">
 						            <tr style="color:#0066CC;">
-						                <td class="text-left" style="width:60%;">${art.title}</td>
-						                <td class="text-left" style="width:20%">${art.tag}</td>
-						                <td class="text-center" style="width:5%">${art.product.productName}</td>
-						                <td class="text-center" style="width:10%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
+						                <td class="text-left" style="width:30%;">${prod.productName}</td>
+						                <td class="text-left" style="width:65%">${prod.description}</td>						                					                                
 						                <td class="text-center" style="width:5%">
-						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
+						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="products/${prod.id}">Edit</a>
 						                </td>
 						                <!-- td>
 						                    <sf:form action="articles/${art.id}" method="delete" >
@@ -128,8 +124,8 @@
 							        </c:forEach>
 							    </table> 
 					     </c:if>
-					     <c:if test="${fn:length(articles) eq 0}"> 
-					      <h2>No articles present</h2> 
+					     <c:if test="${fn:length(products) eq 0}"> 
+					      <h2>No products present</h2> 
 					     </c:if>                     	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                 
