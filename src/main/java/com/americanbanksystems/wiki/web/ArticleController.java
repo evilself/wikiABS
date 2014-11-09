@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
@@ -79,7 +80,7 @@ public class ArticleController {
         List<Article> articles = articleDao.findArticlesByTag(""); //change this later on TODO FIX ME!
         model.addAttribute("articles", articles);
  
-        return "articles/list";
+        return "articles/listArticles";
     }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -134,7 +135,7 @@ public class ArticleController {
 	    return "redirect:/articles";
 	}
 	
-	
+	//DELETE ARTICLE
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteArticle(@PathVariable("id") long id)
 	        throws ArticleDeleteException {
@@ -151,8 +152,9 @@ public class ArticleController {
 	 
 	    if (!wasDeleted) {
 	        throw new ArticleDeleteException(toDelete);
-	    }
-	 
+	    } else {
+	    	//return "Article deleted successfully!";
+	    }	    
 	    // everything OK, see remaining employees
 	    return "redirect:/articles";
 	}
@@ -196,7 +198,7 @@ public class ArticleController {
 		 List<Article> articles = articleDao.findArticlesByTag(tag);
 	        model.addAttribute("articles", articles);
 	        System.out.println("searchCriteriea");
-	        return "articles/list";
+	        return "articles/listArticles";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

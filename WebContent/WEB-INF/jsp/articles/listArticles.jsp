@@ -19,6 +19,9 @@
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    <!-- SweetAlert-->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -105,10 +108,13 @@
 							    <table class="table" >
 							        <tr style="font-weigth:bold;font-size: 1.1em;">
 							            <th class="text-left" style="width:60%">Title</th>
-							            <th class="text-left" style="width:20%">Tags</th>
+							            <th class="text-left" style="width:15%">Tags</th>
 							            <th class="text-center" style="width:5%">Product</th>
 							            <th class="text-center" style="width:10%">Created By</th>
 							            <th class="text-center" style="width:5%"></th>
+							            <c:if test="${admin == 'true'}">
+							            	<th class="text-center" style="width:5%"></th>
+							            </c:if>
 							        </tr>
 							        <c:forEach items="#{articles}" var="art">
 						            <tr style="color:#0066CC;">
@@ -119,11 +125,13 @@
 						                <td class="text-center" style="width:5%">
 						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
 						                </td>
-						                <!-- td>
-						                    <sf:form action="articles/${art.id}" method="delete" >
-						                        <input type="submit" value="" >Delete</input>
-						                    </sf:form>
-						                </td-->
+						                <c:if test="${admin == 'true'}">
+							                <td>
+							                    <sf:form id="deleteForm" action="articles/${art.id}" method="delete" >
+							                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
+							                    </sf:form>
+						                </td>
+						                </c:if>
 						            </tr>
 							        </c:forEach>
 							    </table> 
@@ -173,6 +181,28 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+    
+    <script>
+    	function confirmDel(e) {
+    	 	e.preventDefault();
+    		swal({
+    			  title: "Are you sure?",
+    			  text: "Your will not be able to recover this article and all associated attachments!",
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, delete it!"
+    			},
+    			function(){    			  
+    			  $('#deleteForm').submit();
+    			});
+    	 	
+    	}
+   
+    </script>
 
 </body>
 
