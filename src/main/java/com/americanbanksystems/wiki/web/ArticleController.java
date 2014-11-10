@@ -29,6 +29,7 @@ import com.americanbanksystems.wiki.domain.Attachment;
 import com.americanbanksystems.wiki.domain.Product;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.ArticleDeleteException;
+import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 
 @Controller
 @RequestMapping("/articles")
@@ -41,6 +42,9 @@ public class ArticleController {
 	private AttachmentDao attachmentDao;
 	
 	private ProductDao productDao;
+	
+	@Autowired
+    private SecurityServiceBean security;
 	
 	@Autowired
 	public void setProductDao(ProductDao productDao) {
@@ -63,20 +67,12 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-    public String showArticles(Model model, Principal principal) {
-		model.addAttribute("admin","false");
-    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    	for(GrantedAuthority ga: authorities) {
-    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
-    	} 
-    	List<User> users = userDao.list();
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("loggedUser", loggedInUser);
+    public String showArticles(Model model) {		
+    	
+    	//Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
+    	
         List<Article> articles = articleDao.findArticlesByTag(""); //change this later on TODO FIX ME!
         model.addAttribute("articles", articles);
  
@@ -84,16 +80,11 @@ public class ArticleController {
     }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String getArticle(@PathVariable("id") long id, Model model, Principal principal) {
+	public String getArticle(@PathVariable("id") long id, Model model) {
 		
-		List<User> users = userDao.list();
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("loggedUser", loggedInUser);
+		//Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 	    Article article = articleDao.findArticle(id);
 	    model.addAttribute("art", article);
@@ -114,20 +105,15 @@ public class ArticleController {
 	    
 	    model.addAttribute("attachments", atts);
 	 
-	    return "articles/view";
+	    return "articles/viewArticle";
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String updateArticle(@PathVariable("id") long id, Article article, Principal principal) {
+	public String updateArticle(@PathVariable("id") long id, Article article) {
 		
-		List<User> users = userDao.list();
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	//model.addAttribute("loggedUser", loggedInUser);
+		//Security information
+    	//model.addAttribute("admin",security.isAdmin()); 
+    	//model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 		article.setId(id);
 		articleDao.updateEntity(article);
@@ -160,21 +146,11 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(params = "new", method = RequestMethod.GET)
-	public String createArticleForm(Model model, Principal principal) {
-		List<User> users = userDao.list();
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("admin","false");
-    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    	for(GrantedAuthority ga: authorities) {
-    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
-    	}
-    	
-    	model.addAttribute("loggedUser", loggedInUser);
+	public String createArticleForm(Model model) {
+		
+		//Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
 		
     	model.addAttribute("products", productDao.list());
     	
@@ -184,16 +160,11 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(params = "searchCriteria", method = RequestMethod.GET)
-	public String getArticlesFromSearch(@RequestParam("searchCriteria")String tag, Model model, Principal principal) {
+	public String getArticlesFromSearch(@RequestParam("searchCriteria")String tag, Model model) {
 		
-		List<User> users = userDao.list();
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("loggedUser", loggedInUser);
+		//Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 		 List<Article> articles = articleDao.findArticlesByTag(tag);
 	        model.addAttribute("articles", articles);
@@ -202,18 +173,19 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String addArticle(Article article, Principal principal) {
+	public String addArticle(Article article) {
 		
-		String username = principal.getName();
-		System.out.println(username);	
+		//Security information
+    	//model.addAttribute("admin",security.isAdmin()); 
+    	//model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
-		System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
+		//System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
 		
 		Product prod = productDao.findProduct(Long.parseLong(article.getProduct().getProductName()));
 		article.setProduct(prod);
-		User loggedInUser = userDao.findUserByUsername(username);
-		article.setCreatedByUser(loggedInUser);		
+				
+		article.setCreatedByUser(security.getLoggedInUser());		
 		articleDao.addEntity(article);
 		
 		for(Attachment att:attachmentListToBeSaved) {

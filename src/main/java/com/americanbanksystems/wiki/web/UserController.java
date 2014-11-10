@@ -1,13 +1,9 @@
 package com.americanbanksystems.wiki.web;
 
-import java.security.Principal;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -17,13 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
+import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
+	
+	@Autowired
+    private SecurityServiceBean security;
+	
+	private ArticleDao articleDao;
+	
+	@Autowired
+	public void setArticleDao(ArticleDao articleDao) {
+	    this.articleDao = articleDao;
+	}
 	
 	private UserDao userDao;
 	 
@@ -33,25 +41,16 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-    public String showUsers(Model model, Principal principal) {
-        List<User> users = userDao.list();       
-        model.addAttribute("admin","false");
-    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    	for(GrantedAuthority ga: authorities) {
-    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
-    	} 
+    public String showUsers(Model model) {
+        List<User> users = userDao.list();    
+        
+        //Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
     	
-    	
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("loggedUser", loggedInUser);
         model.addAttribute("users", users);
  
-        return "users/list";
+        return "users/listUsers";
     }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -60,7 +59,7 @@ public class UserController {
 	    User user = userDao.findUser(id);
 	    model.addAttribute("user", user);
 	 
-	    return "users/view";
+	    return "users/viewUser";
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
@@ -78,10 +77,11 @@ public class UserController {
 	        throws UserDeleteException {
 	 
 	    User toDelete = userDao.findUser(id);
-	    boolean wasDeleted = userDao.removeEntity(toDelete);
+	    	    
+	    boolean wasDeleted = userDao.removeUser(toDelete);
 	 
 	    if (!wasDeleted) {
-	        throw new UserDeleteException(toDelete);
+	    //    throw new UserDeleteException(toDelete);
 	    }
 	 
 	    // everything OK, see remaining employees
@@ -92,7 +92,7 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String createUserForm(Model model) {
 	    model.addAttribute("user", new User());
-	    return "users/new";
+	    return "users/newUser";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

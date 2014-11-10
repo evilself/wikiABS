@@ -19,6 +19,9 @@
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    <!-- SweetAlert-->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -62,7 +65,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="../articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
@@ -74,12 +77,12 @@
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a style="color:red;" href="../login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -95,31 +98,46 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-12">               
-                    <div class="intro-message">
-                    <h2>${user.firstName} ${user.lastName}</h2> 
-                    	<div id="list">
-					        <sf:form method="post">					            
-			                    <label for="name">First Name</label>
-			                    <input name="name" id="name"  class="form-control" value="${user.firstName}"/>
-			              
-			                    <label for="department">Last Name</label>
-			                    <input name="department" id="department" class="form-control" value="${user.lastName}" />
-			          
-			                    <label for="username">Username</label>
-			                    <input name="username" id="username" class="form-control" value="${user.userName}" />
-			             
-			                    <label for="password">Password</label>
-			                    <input name="password" id="password" class="form-control" value="${user.password}" />
-			             				                   
-			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />					              
-					        </sf:form>
-					    </div>                   	
-                       
+                <div class="col-lg-12">
+                	 <div class="intro-message">                    	
+                        <h2>${art.title}</h2>
+						    <div id="list">						      
+						         <div class="col-lg-12 col-sm-12">					           		
+					                <div class="form-group">
+					                   <label class="pull-left" for="description">Description</label>
+						               <textarea class="form-control" style="opacity:0.5;height:550px" name="description" id="description" disabled="true">${art.description}</textarea>
+					                </div>
+					                <div class="form-group">
+					                   <label class="pull-left" for="tag">Tags</label>
+						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
+					                </div>
+					                <div class="form-group">
+					                   <label class="pull-left" for="tag">Attachments</label>
+					                   <c:forEach items="${attachments}" var="att">
+							            <tr>
+							                <td>${att.name}</td>							                
+							                <td>
+							                    <a target="_blank" href="../upload/display/${att.id}">View</a>
+							                </td>
+							                <!-- td>
+							                    <sf:form action="users/${att}" method="delete" >
+							                        <input type="submit" value="" >Delete</input>
+							                    </sf:form>
+							                </td-->
+							            </tr>
+							        	</c:forEach>					              
+					                </div>
+					                					                			                
+					             </div>						    
+						    </div>						 
+						    <br />
+						    <div class="col-lg-12 col-sm-12">
+							    <a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles">Back to Articles</a> 
+	                          	<a class="btn btn-info pull-right" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles/${art.id}">Edit</a>
+                        	</div>
                         <!-- h3>What are you looking for?</h3 -->
-                        <hr class="intro-divider">                 
-                        </ul>
-                    </div>
+                        <hr class="intro-divider">                       
+                    </div>                    
                 </div>
             </div>
 
@@ -158,6 +176,27 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+    
+    <script>
+    	function confirmLogout(e) {
+    	 	
+    		swal({
+    			  title: "Are you sure?",    			  
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, log me out!"
+    			},
+    			function(){    			  
+    			  window.location="../logout";
+    			});
+    	 	
+    	}
+   
+    </script>
 
 </body>
 

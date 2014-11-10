@@ -79,8 +79,19 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
 
 	@Override
 	public List<Article> findArticleByProduct(Product product) {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "from Article art where art.product = :prod";
+		Query articleQuery = currentSession().createQuery(query);
+								 articleQuery.setParameter("prod", product); 
+		List<Article> articleList = new ArrayList<Article>();
+		
+		articleList =articleQuery.list();
+		for(Article a: articleList)		{
+		//	Hibernate.initialize(a.getCreatedByUser());
+		//	Hibernate.initialize(a.getProduct());
+		}
+		
+		return articleList;
+		
 	}
 
 	@Override

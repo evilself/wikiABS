@@ -8,6 +8,7 @@ package com.americanbanksystems.wiki.domain;
  */
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,7 @@ public class Attachment extends BaseEntity implements Serializable{
 	protected String attachmentTitle;
 	protected String actualFilename;
 	protected String attachmentType;
+	protected String contentType;	
 	protected Article article;
 	protected byte[] attachment;
 
@@ -98,16 +100,29 @@ public class Attachment extends BaseEntity implements Serializable{
 		this.attachment = attachment;
 	}
 
+	@Column(name="CONTENT_TYPE")
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
 				+ ((actualFilename == null) ? 0 : actualFilename.hashCode());
+		result = prime * result + ((article == null) ? 0 : article.hashCode());
+		result = prime * result + Arrays.hashCode(attachment);
 		result = prime * result
 				+ ((attachmentTitle == null) ? 0 : attachmentTitle.hashCode());
 		result = prime * result
 				+ ((attachmentType == null) ? 0 : attachmentType.hashCode());
+		result = prime * result
+				+ ((contentType == null) ? 0 : contentType.hashCode());
 		return result;
 	}
 
@@ -125,6 +140,13 @@ public class Attachment extends BaseEntity implements Serializable{
 				return false;
 		} else if (!actualFilename.equals(other.actualFilename))
 			return false;
+		if (article == null) {
+			if (other.article != null)
+				return false;
+		} else if (!article.equals(other.article))
+			return false;
+		if (!Arrays.equals(attachment, other.attachment))
+			return false;
 		if (attachmentTitle == null) {
 			if (other.attachmentTitle != null)
 				return false;
@@ -135,6 +157,11 @@ public class Attachment extends BaseEntity implements Serializable{
 				return false;
 		} else if (!attachmentType.equals(other.attachmentType))
 			return false;
+		if (contentType == null) {
+			if (other.contentType != null)
+				return false;
+		} else if (!contentType.equals(other.contentType))
+			return false;
 		return true;
 	}
 
@@ -142,6 +169,9 @@ public class Attachment extends BaseEntity implements Serializable{
 	public String toString() {
 		return "Attachment [attachmentTitle=" + attachmentTitle
 				+ ", actualFilename=" + actualFilename + ", attachmentType="
-				+ attachmentType + "]";
-	}		
+				+ attachmentType + ", contentType=" + contentType
+				+ ", article=" + article + ", attachment="
+				+ Arrays.toString(attachment) + "]";
+	}	
+	
 }

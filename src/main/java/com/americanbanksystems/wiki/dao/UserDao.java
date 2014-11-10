@@ -15,4 +15,5 @@ import com.americanbanksystems.wiki.service.GenericDAO;
 public interface UserDao extends GenericDAO<User, Long> {	
 	User findUser(Long id);
 	User findUserByUsername(String username);
+	boolean removeUser(User user); 
 }

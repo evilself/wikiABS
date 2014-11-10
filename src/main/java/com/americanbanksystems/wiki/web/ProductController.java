@@ -1,12 +1,9 @@
 package com.americanbanksystems.wiki.web;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,14 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.americanbanksystems.wiki.dao.ProductDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.Product;
-import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
+import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
 	
 	private ProductDao productDao;
+	
+	@Autowired
+    private SecurityServiceBean security;
 	 
 	@Autowired
 	public void setProductDao(ProductDao productDao) {
@@ -42,21 +42,11 @@ public class ProductController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
-    public String showProducts(Model model, Principal principal) {    	
+    public String showProducts(Model model) {    	
     	
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	model.addAttribute("loggedUser",loggedInUser);
-    	
-    	model.addAttribute("admin","false");
-    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    	for(GrantedAuthority ga: authorities) {
-    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
-    	}
+		//Security information
+		model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
     	
         List<Product> products = productDao.list();
         model.addAttribute("products", products);
@@ -65,6 +55,7 @@ public class ProductController {
     }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String getProduct(@PathVariable("id") long id, Model model) {
 	    Product product = productDao.findProduct(id);
 	    model.addAttribute("product", product);
@@ -99,21 +90,12 @@ public class ProductController {
 	
 	@RequestMapping(params = "new", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String createProductForm(Model model , Principal principal) {    	
+	public String createProductForm(Model model) {    	
     	
-    	User loggedInUser;
-    	if  (null != principal) {
-    		loggedInUser = userDao.findUserByUsername(principal.getName());
-    	} else {
-    		loggedInUser = null;
-    	}
-    	
-    	model.addAttribute("admin","false");
-    	List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    	for(GrantedAuthority ga: authorities) {
-    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) model.addAttribute("admin","true");
-    	}
-    	
+		//Security information
+		model.addAttribute("admin",security.isAdmin()); 
+		model.addAttribute("loggedUser", security.getLoggedInUser());
+		
 	    model.addAttribute("product", new Product());
 	    return "products/newProduct";
 	}
@@ -121,6 +103,8 @@ public class ProductController {
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String addProduct(Product product) {
+		String productIdentity  = product.getProductName().replaceAll(" ", "_");
+		product.setProductIdentity(productIdentity);
 		productDao.addEntity(product);
 	 
 	    return "redirect:/products";

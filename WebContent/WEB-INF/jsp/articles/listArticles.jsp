@@ -82,7 +82,7 @@
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -130,7 +130,7 @@
 							                    <sf:form id="deleteForm" action="articles/${art.id}" method="delete" >
 							                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
 							                    </sf:form>
-						                </td>
+							                </td>
 						                </c:if>
 						            </tr>
 							        </c:forEach>
@@ -198,6 +198,24 @@
     			},
     			function(){    			  
     			  $('#deleteForm').submit();
+    			});
+    	 	
+    	}
+   
+    </script>
+    
+    <script>
+    	function confirmLogout(e) {
+    	 	
+    		swal({
+    			  title: "Are you sure?",    			  
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, log me out!"
+    			},
+    			function(){    			  
+    			  window.location="logout";
     			});
     	 	
     	}

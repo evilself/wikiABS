@@ -19,6 +19,8 @@
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<!-- SweetAlert-->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -78,7 +80,7 @@
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -135,7 +137,7 @@
 					        <tr>
 					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="#{eliteArticles}" var="art">
+					        <c:forEach items="${eliteArticles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>					                
 					                <td>
@@ -171,7 +173,7 @@
 					        <tr>
 					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
-					        <c:forEach items="#{cplArticles}" var="art">
+					        <c:forEach items="${ComplianceProArticles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>						                
 					                <td>
@@ -207,7 +209,7 @@
 					        <tr>
 					           <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
-					        <c:forEach items="#{cproArticles}" var="art">
+					        <c:forEach items="${cproArticles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>	
 					                <td>
@@ -287,6 +289,27 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+    
+    <script>
+    	function confirmLogout(e) {
+    	 	
+    		swal({
+    			  title: "Are you sure?",    			  
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, log me out!"
+    			},
+    			function(){    			  
+    			  window.location="logout";
+    			});
+    	 	
+    	}
+   
+    </script>
 
 </body>
 

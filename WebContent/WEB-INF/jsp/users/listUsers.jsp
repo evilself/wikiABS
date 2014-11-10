@@ -19,6 +19,8 @@
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    <!-- SweetAlert-->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -79,7 +81,7 @@
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -106,7 +108,10 @@
 						            <th class="text-center" style="width:20%">Username</th>
 						            <th class="text-center" style="width:20%">Password</th>
 						            <th class="text-center" style="width:10%">Role</th>
-						            <th class="text-center" style="width:10%"></th>
+						            <th class="text-center" style="width:5%"></th>
+						             <c:if test="${admin == 'true'}">
+						            	<th class="text-center" style="width:5%"></th>
+						            </c:if>
 						        </tr>
 						        <c:forEach items="#{users}" var="usr">
 					            <tr style="color:#0066CC;">						            
@@ -115,14 +120,16 @@
 					                <td class="text-center" style="width:20%">${usr.userName}</td>
 					                <td class="text-center" style="width:20%">Password hashed</td>
 					                <th class="text-center" style="width:10%">${usr.role.role}</th>	                                
-					                <td class="text-center" style="width:10%">
-					                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="users/${usr.id}">View</a>
+					                <td class="text-center" style="width:5%">
+					                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="users/${usr.id}">Edit</a>
 					                </td>
-					                <!-- td>
-					                    <sf:form action="users/${usr.id}" method="delete" >
-					                        <input type="submit" value="" >Delete</input>
-					                    </sf:form>
-				                	</td-->
+					                <c:if test="${admin == 'true'}">
+						                <td>${usr.id}
+						                    <sf:form id="deleteForm_${usr.id}" action="users/${usr.id}" method="delete" >
+						                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
+						                    </sf:form>
+						                </td>					                
+				                	</c:if>
 					            </tr>
 						        </c:forEach>
 						    </table>				    
@@ -168,7 +175,46 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+	
+	 <script>
+    	function confirmDel(e) {
+    	 	e.preventDefault();
+    		swal({
+    			  title: "Are you sure?",
+    			  text: "Your will not be able to recover this user!",
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, delete it!"
+    			},
+    			function(){     				
+    			  $('#'+$(e.target).parent()[0].id).submit();
+    			});
+    	 	
+    	}
+   
+    </script>
 
+	<script>
+    	function confirmLogout(e) {
+    	 	
+    		swal({
+    			  title: "Are you sure?",    			  
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, log me out!"
+    			},
+    			function(){    			  
+    			  window.location="logout";
+    			});
+    	 	
+    	}
+   
+    </script>
 </body>
 
 </html>

@@ -23,6 +23,9 @@ public class Product extends BaseEntity implements Serializable {
 	
 	protected Long id;
 	protected String productName;
+	protected String productIdentity;
+	
+
 	protected String description;	
 
 	public Product() {
@@ -62,6 +65,15 @@ public class Product extends BaseEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	@Column(name="PRODUCT_IDENTITY")
+	public String getProductIdentity() {
+		return productIdentity;
+	}
+
+	public void setProductIdentity(String productIdentity) {
+		this.productIdentity = productIdentity;
+	}
 
 	@Override
 	public int hashCode() {
@@ -69,6 +81,8 @@ public class Product extends BaseEntity implements Serializable {
 		int result = 1;
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((productIdentity == null) ? 0 : productIdentity.hashCode());
 		result = prime * result
 				+ ((productName == null) ? 0 : productName.hashCode());
 		return result;
@@ -88,6 +102,11 @@ public class Product extends BaseEntity implements Serializable {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (productIdentity == null) {
+			if (other.productIdentity != null)
+				return false;
+		} else if (!productIdentity.equals(other.productIdentity))
+			return false;
 		if (productName == null) {
 			if (other.productName != null)
 				return false;
@@ -98,7 +117,7 @@ public class Product extends BaseEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [productName=" + productName + ", description="
-				+ description + "]";
-	}
+		return "Product [productName=" + productName + ", productIdentity="
+				+ productIdentity + ", description=" + description + "]";
+	}	
 }

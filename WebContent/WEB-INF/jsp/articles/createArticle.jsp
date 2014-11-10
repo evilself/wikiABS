@@ -19,6 +19,8 @@
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
     <link href="<spring:url value="/resources/css/bootstrap-combobox.css"/>" rel="stylesheet">
+    <!-- SweetAlert-->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -86,7 +88,7 @@
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -182,6 +184,27 @@
     
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap-combobox.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+    
+    <script>
+    	function confirmLogout(e) {
+    	 	
+    		swal({
+    			  title: "Are you sure?",    			  
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, log me out!"
+    			},
+    			function(){    			  
+    			  window.location="logout";
+    			});
+    	 	
+    	}
+   
+    </script>
 
 	 <script>
 	      $(document).ready(function(){

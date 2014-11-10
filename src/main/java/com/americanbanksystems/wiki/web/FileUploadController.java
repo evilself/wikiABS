@@ -97,7 +97,7 @@ public class FileUploadController {
         try {
             response.setHeader("Content-Disposition", "inline;filename=\"" +att.getActualFilename()+ "\"");
             OutputStream out = response.getOutputStream();
-            response.setContentType("image/jpeg");
+            response.setContentType(att.getContentType());
             ByteArrayInputStream bis = new ByteArrayInputStream(att.getAttachment());
             IOUtils.copy(bis, out);
             out.flush();
@@ -134,6 +134,7 @@ public class FileUploadController {
 			}
 	  	newatt.setAttachmentTitle("new attachment");
 	  	newatt.setAttachmentType("type");
+	  	newatt.setContentType(mpf.getContentType());
 	  	
 	  	//attDao.addEntity(newatt);
 	  	attDao.saveInMemory(newatt);
