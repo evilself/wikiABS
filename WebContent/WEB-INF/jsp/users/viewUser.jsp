@@ -101,21 +101,29 @@
                     <div class="intro-message">
                     <h2>${user.firstName} ${user.lastName}</h2> 
                     	<div id="list">
-					        <sf:form method="post">					            
+					        <sf:form method="post">	
+					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
 			                    <label for="name">First Name</label>
-			                    <input name="name" id="name"  class="form-control" value="${user.firstName}"/>
+			                    <input name="firstName" id="firstName"  class="form-control" value="${user.firstName}"/>
 			              
 			                    <label for="department">Last Name</label>
-			                    <input name="department" id="department" class="form-control" value="${user.lastName}" />
+			                    <input name="lastName" id=""lastName" class="form-control" value="${user.lastName}" />
 			          
 			                    <label for="username">Username</label>
-			                    <input name="username" id="username" class="form-control" value="${user.userName}" />
+			                    <input name="userName" id="userName" class="form-control" value="${user.userName}" />
 			             
-			                    <label for="password">Password</label>
-			                    <input name="password" id="password" class="form-control" value="${user.password}" />
+			                    <label for="password">New Password</label>
+			                    <input name="password" id="password" class="form-control" type="password" value="${user.password}" />
+			                    
+			                    <label for="password">Confirm New Password</label>
+			                    <input name="newpassword" id="newpassword" type="password" class="form-control" />
 			             				                   
-			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />					              
+			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />
+			                    </div>					              
 					        </sf:form>
+					        <div class="col-lg-12 col-sm-12">
+					        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../users">Cancel</a>
+					    	</div>
 					    </div>                   	
                        
                         <!-- h3>What are you looking for?</h3 -->

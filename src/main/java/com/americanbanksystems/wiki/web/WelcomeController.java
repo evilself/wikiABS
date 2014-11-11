@@ -53,9 +53,10 @@ public class WelcomeController {
     	model.addAttribute("loggedUser", security.getLoggedInUser());
     	
     	List<Product> prodList = productDao.list();
+    	int size = 5;
     	for(Product prod : prodList) {
-    		List<Article> articles = articleDao.findArticleByProduct(prod);
-            model.addAttribute((prod.getProductName()+"Articles"), articles);    		
+    		List<Article> articles = articleDao.findArticleByProduct(prod, size);
+            model.addAttribute((prod.getProductIdentity()+"_Articles"), articles);    		
     	}
     	
     	//List<Article> cproArticles = articleDao.findArticleByProduct(product);
@@ -81,7 +82,12 @@ public class WelcomeController {
     @RequestMapping(value="/login")
     public String login(HttpServletRequest request, Model model){
         return "login";
-    }    
+    }
+    
+    @RequestMapping(value="/register")
+    public String register(HttpServletRequest request, Model model){
+        return "register";
+    } 
      
     //Custom Logout method. I am using this instead of j_spring_logout
     @RequestMapping(value="/logout")

@@ -83,12 +83,19 @@ public class ArticleController {
 	public String getArticle(@PathVariable("id") long id, Model model) {
 		
 		//Security information
+		User loggedInUser = security.getLoggedInUser();
     	model.addAttribute("admin",security.isAdmin()); 
-    	model.addAttribute("loggedUser", security.getLoggedInUser());
+    	model.addAttribute("loggedUser", loggedInUser);
 		
 	    Article article = articleDao.findArticle(id);
 	    model.addAttribute("art", article);
 	    
+	    //Editable
+	    if(null != loggedInUser) {
+		    if(loggedInUser.getUserName().equalsIgnoreCase(article.getCreatedByUser().getUserName()) || security.isAdmin())
+		    	model.addAttribute("editable", true );
+		    else model.addAttribute("editable", false );
+	    } else model.addAttribute("editable", false );
 	   	//Hibernate.initialize(article.getAttachments());
 	    List<Attachment> listAttachment = article.getAttachments();
 	    //System.out.println(listAttachment.size()+" is what i retrieved");
@@ -108,7 +115,43 @@ public class ArticleController {
 	    return "articles/viewArticle";
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String editArticle(@PathVariable("id") long id, Model model) {
+		
+		//Security information
+    	model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());		
+		
+	    Article article = articleDao.findArticle(id);
+	    model.addAttribute("article", article);
+	    
+	    if(!article.getCreatedByUser().getUserName().equalsIgnoreCase(security.getLoggedInUser().getUserName()) && !security.isAdmin()) return "/denied";
+	    
+	    
+	    model.addAttribute("products", productDao.list());
+	    
+	   	//Hibernate.initialize(article.getAttachments());
+	    List<Attachment> listAttachment = article.getAttachments();
+	    //System.out.println(listAttachment.size()+" is what i retrieved");
+	    
+	    //List<String> fileNames = new ArrayList<String>();
+	    List<HashMap<String, String>> atts = new ArrayList<HashMap<String, String>>();
+	    	    
+	    for(Attachment a: listAttachment) {
+	    	HashMap<String, String> map = new HashMap<String, String>();
+	    	map.put("name", a.getActualFilename());
+	    	map.put("id", ""+a.getId());
+	    	atts.add(map);
+	    }
+	    
+	    model.addAttribute("attachments", atts);
+	    model.addAttribute("action", "../edit/"+id);
+	    model.addAttribute("upload", "/wikiABS/upload");
+	 
+	    return "articles/createArticle";
+	}
+	
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String updateArticle(@PathVariable("id") long id, Article article) {
 		
 		//Security information
@@ -116,7 +159,29 @@ public class ArticleController {
     	//model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 		article.setId(id);
+		
+		Article existing = articleDao.findArticle(id);
+		User createdByUser = existing.getCreatedByUser();
+		
+		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
+		//System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
+		
+		Product prod = productDao.findProduct(Long.parseLong(article.getProduct().getProductName()));
+		article.setProduct(prod);
+				
+		article.setCreatedByUser(createdByUser);		
+		//article.setModifiedByUser(security.getLoggedInUser());
 		articleDao.updateEntity(article);
+		
+		for(Attachment att:attachmentListToBeSaved) {
+			
+			att.setArticle(article);
+			attachmentDao.addEntity(att);
+			
+		}
+		
+		attachmentListToBeSaved.clear();
+	  		
 	 	
 	    return "redirect:/articles";
 	}
@@ -151,6 +216,8 @@ public class ArticleController {
 		//Security information
     	model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
+    	model.addAttribute("action", "articles");
+    	model.addAttribute("upload", "upload");
 		
     	model.addAttribute("products", productDao.list());
     	

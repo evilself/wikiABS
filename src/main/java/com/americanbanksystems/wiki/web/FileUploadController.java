@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -111,6 +112,18 @@ public class FileUploadController {
          
          
         return null;
+    }
+    
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize("hasRole('ADMIN')")
+	public String deleteAttachment(@PathVariable("id") long id) {
+         
+        Attachment att = attDao.findAttachment(id);
+        boolean isDeleted = attDao.removeEntity(att);     
+        
+        if(!isDeleted) System.out.println("ERROR");
+         
+        return "Attachment Deleted!";
     }
     
     //*************************TEST AJAX******************************************************************

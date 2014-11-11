@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,6 @@
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS for the main page-->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-    <link href="<spring:url value="/resources/css/bootstrap-combobox.css"/>" rel="stylesheet">
     <!-- SweetAlert-->
     <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -36,13 +36,6 @@
 </head>
 
 <body>	
-	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
-           
-    	</div>
-    </div>
-	</div>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -76,7 +69,7 @@
 					</c:if>                    
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a style="color:purple; cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -86,51 +79,34 @@
         <!-- /.container -->
     </nav>
 
-    <!-- Header -->
+   <!-- Header -->
     <div class="intro-header">
 
-        <div class="container">        
-	       <div class="row">
+        <div class="container">
+
+            <div class="row">
                 <div class="col-lg-12">               
-                    <div class="intro-message">      
-                    	<h2>Create/Edit Article</h2>              	
-                        <sf:form method="post" action="${action}">
-				           <div class="col-lg-12 col-sm-12">
-				           		<div class="form-group">
-				                    <label class="pull-left" for="title">Title</label>
-				                    <input class="form-control form-inline pull-right" name="title" id="title" type="text" value="${article.title}"/>
-				                </div>
-				                <div class="form-group" style="padding:1px;">				                	
-					                <label class="pull-left" for="description">Description</label>
-					                <label style="margin-top:6px" class=" pull-right">
-					                    <a class="btn btn-sm btn-default" style="background-color: #CCFF99" href="${upload}"
-										   data-toggle="modal"
-										   data-target="#uploadModal">Attachments
-										 </a>
-					                    </label>
-				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
-				                	<textarea id="description" name="description" value="${article.description}" style="height:400px" class="form-control">${article.description}</textarea>
-				                </div>
-				                <div class="form-group pull-left" style="width:58%">
-				                    <label class="pull-left" for="tag">Tags</label>
-				                    <input class="form-control form-inline pull-right" name="tag" id="tag" type="text" class="form-control" value="${article.tag}"/>
-				                </div>
-				                <input class="hidden" name="product" id="product" type="text" c="${article.product.productName}" value="${article.product.id}"/> 
-				                <div class="text-left form-group pull-right" style="width:38%" > 
-						        	<label class="text-left">Associated Product</label>                  	
-		                        	<select id="productType" class="form-control combobox" >					                	
-						                <c:forEach items="#{products}" var="prod">							                						      
-									      	<option  value="${prod.id}">${prod.productName}</option>										     			    
-									    </c:forEach>
-								    </select>
-							    </div>			                
-				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="articles">Cancel</a> 				                
-				           		<input style="margin-right:5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" class="btn btn-info pull-right" type="submit" value="Save" id="save" />
-				           </div>
-				        </sf:form>
-				        	
+                    <div class="intro-message">                    
+                    	<div id="list">
+					        <sf:form method="post">	
+					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
+			                    <label for="name">Product</label>
+			                    <input name="product" id="product"  class="form-control" value="${product.productName}"/>
+			              
+			                    <label for="description">Last Name</label>
+			                    <input name="description" id=""description" class="form-control" value="${product.description}" />		                   
+			             				                   
+			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />
+			                    </div>					              
+					        </sf:form>
+					        <div class="col-lg-12 col-sm-12">
+					        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../products">Cancel</a>
+					    	</div>
+					    </div>                   	
+                       
                         <!-- h3>What are you looking for?</h3 -->
-                        <hr class="intro-divider">                       
+                        <hr class="intro-divider">                 
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -139,7 +115,7 @@
         <!-- /.container -->
 
     </div>
-    <!-- /.intro-header -->   
+    <!-- /.intro-header -->
 
     <!-- Footer -->
     <footer>
@@ -172,9 +148,6 @@
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
     
     <!-- Bootstrap Core JavaScript -->
-    <script src="<spring:url value="/resources/js/bootstrap-combobox.js"/> "></script>
-    
-    <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
     <script>
@@ -195,18 +168,6 @@
    
     </script>
 
-	 <script>
-	      $(document).ready(function(){
-	        $('.combobox').combobox();
-	        $(".combobox").val($("#product").attr("c"));
-	      });
-	      
-	      $('#productType').on('change' , function(){
-	     //  alert($('#productType').val());
-	     	$('#product').val($('#productType').val());
-	      });	      
-    </script>
-
 </body>
 
-</html> 
+</html>

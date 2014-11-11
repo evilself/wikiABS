@@ -44,6 +44,13 @@
     	</div>
     </div>
 	</div>
+	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:450px;">
+           
+    	</div>
+    </div>
+	</div>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -79,10 +86,13 @@
 	                    <li>
 	                        <a style="color:red;" href="../login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
+	                    <li>
+	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -117,14 +127,16 @@
 							            <tr>
 							                <td>${att.name}</td>							                
 							                <td>
-							                    <a target="_blank" href="../upload/display/${att.id}">View</a>
+							                    <a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../upload/display/${att.id}">View</a>
 							                </td>
-							                <!-- td>
-							                    <sf:form action="users/${att}" method="delete" >
-							                        <input type="submit" value="" >Delete</input>
-							                    </sf:form>
-							                </td-->
-							            </tr>
+							                <c:if test="${admin == 'true'}"> 
+								                <td>
+								                    <sf:form action="../upload/delete/${att.id}" method="delete" >
+								                        <button class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit">Delete</button>
+								                    </sf:form>
+								                </td>
+							                </c:if>
+							             </tr>
 							        	</c:forEach>					              
 					                </div>
 					                					                			                
@@ -133,7 +145,9 @@
 						    <br />
 						    <div class="col-lg-12 col-sm-12">
 							    <a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles">Back to Articles</a> 
-	                          	<a class="btn btn-info pull-right" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles/${art.id}">Edit</a>
+	                          	<c:if test="${editable}">
+	                          		<a class="btn btn-info pull-right" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles/edit/${art.id}">Edit</a>
+                        		</c:if>
                         	</div>
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
@@ -191,7 +205,7 @@
     			  confirmButtonText: "Yes, log me out!"
     			},
     			function(){    			  
-    			  window.location="../logout";
+    			  window.location="/wikiABS/logout";
     			});
     	 	
     	}

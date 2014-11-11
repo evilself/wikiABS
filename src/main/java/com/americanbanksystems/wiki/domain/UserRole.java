@@ -38,6 +38,7 @@ public class UserRole implements Serializable {
 	
 	public UserRole(String role, String username) {
 		this.role = role;
+		this.userName = username;
 		
 	}
 

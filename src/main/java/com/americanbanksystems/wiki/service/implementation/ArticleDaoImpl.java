@@ -53,7 +53,9 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
 		
 		if (articleQuery.list().size() > 0) {
 			a = (Article) articleQuery.list().get(0);
+			Hibernate.initialize(a.getCreatedByUser());
 			Hibernate.initialize(a.getAttachments());
+			Hibernate.initialize(a.getProduct());
 		} else {
 			
 		}		
@@ -81,6 +83,23 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
 	public List<Article> findArticleByProduct(Product product) {
 		String query = "from Article art where art.product = :prod";
 		Query articleQuery = currentSession().createQuery(query);
+								 articleQuery.setParameter("prod", product); 
+		List<Article> articleList = new ArrayList<Article>();
+		
+		articleList =articleQuery.list();
+		for(Article a: articleList)		{
+		//	Hibernate.initialize(a.getCreatedByUser());
+		//	Hibernate.initialize(a.getProduct());
+		}
+		
+		return articleList;
+		
+	}
+	
+	@Override
+	public List<Article> findArticleByProduct(Product product, int size) {
+		String query = "from Article art where art.product = :prod order by art.createdDate desc";
+		Query articleQuery = currentSession().createQuery(query).setMaxResults(size);
 								 articleQuery.setParameter("prod", product); 
 		List<Article> articleList = new ArrayList<Article>();
 		

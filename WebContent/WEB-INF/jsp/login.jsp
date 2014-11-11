@@ -106,18 +106,18 @@
 			        success: function(data){
 			        	
 			        	if (data.indexOf("Success") < 0) {
-			        		$('#result').html("Login failed, please try again!").css({"color":"red", "font-size":"1.5em"});
-			        		$('#username, #password').val("").css({"border-color":"red"});		        		
+			        		$('#result').html("Login failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+			        		$('#username, #password').val("").css({"border-color":"#FFE6E6"});		        		
 			        		
 			            } else {		            	
-			            	$('#result').html("Login successful!").css({"color":"green", "font-size":"1.5em"});
+			            	$('#result').html("Login successful!").css({"color":"#CCFF99", "font-size":"1.5em"});
 			            	$('#username, #password').css({"border-color":""});
 			            	setTimeout(function() { window.location.reload(true); }, 1000);
 			            }		                       
 			        }		       
 			    });	
 	        } else {	        	
-	        	 $('#result').html('Please provide both username and password!').css({"color":"red", "font-size":"1.2em"});	        	
+	        	 $('#result').html('Please provide both username and password!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
 	        }
 	    }		
 	</script>

@@ -42,5 +42,18 @@ public class ProductDaoImpl extends HibernateDao<Product, Long> implements Produ
 			return null;
 		}
 	}
+
+	@Override
+	public boolean productDeletable(Product prod) {
+		Query productQuery = currentSession().createQuery(
+                "from Article a where a.product = :prod");
+		productQuery.setParameter("prod", prod); 
+		
+		if (productQuery.list().size() > 0) {
+			return false;
+		} else {
+			return true;
+		}		
+	}
 	
 }

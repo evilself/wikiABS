@@ -39,7 +39,7 @@
             	<value>com.americanbanksystems.wiki.domain.User</value>
             	<value>com.americanbanksystems.wiki.domain.Product</value>
                 <value>com.americanbanksystems.wiki.domain.Article</value>                
-                <value>com.americanbanksystems.wiki.domain.Attachment</value>                
+                <value>com.americanbanksystems.wiki.domain.Attachment</value>                                
             </list>
         </property>
         <property name="hibernateProperties">
@@ -79,6 +79,8 @@
     <sec:http request-matcher="regex" authentication-manager-ref="jdbc-auth"
         access-decision-manager-ref="accessDecisionManager">                
         <sec:intercept-url pattern="\A/articles\?new*\Z" access="USER,ADMIN" />
+       
+        <sec:intercept-url pattern="/articles/edit/\d*" access="ADMIN,USER" />
         <sec:intercept-url pattern="/users*" access="ADMIN" />
         <sec:intercept-url pattern="/users/\d*" access="ADMIN" />
         <sec:intercept-url pattern="\A/users\?new*\Z" access="ADMIN" />
@@ -91,7 +93,7 @@
         <sec:logout invalidate-session="true" logout-success-url="/loginFull"
             logout-url="/j_spring_security_logout" />
         <sec:access-denied-handler error-page="/denied"/>
-        <sec:session-management invalid-session-url="/welcome">
+        <sec:session-management invalid-session-url="/">
             <sec:concurrency-control max-sessions="50"
                 expired-url="/loginFull" />
         </sec:session-management>

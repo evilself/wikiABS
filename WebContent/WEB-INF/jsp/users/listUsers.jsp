@@ -124,7 +124,7 @@
 					                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="users/${usr.id}">Edit</a>
 					                </td>
 					                <c:if test="${admin == 'true'}">
-						                <td>${usr.id}
+						                <td class="text-center" style="width:5%"">
 						                    <sf:form id="deleteForm_${usr.id}" action="users/${usr.id}" method="delete" >
 						                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
 						                    </sf:form>

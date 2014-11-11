@@ -21,7 +21,9 @@
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
     <!-- SweetAlert-->
     <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
-    
+    <!-- SweetAlert-->
+ 
+     <link href="<spring:url value="/resources/css/dataTables.bootstrap.css"/>" rel="stylesheet">
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- Custom Fonts -->
@@ -40,6 +42,13 @@
 	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
+           
+    	</div>
+    </div>
+	</div>
+	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:450px;">
            
     	</div>
     </div>
@@ -79,10 +88,13 @@
 	                    <li>
 	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
+	                    <li>
+	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -105,35 +117,47 @@
 					   		 <a href="articles?new">Add new article</a>
 					      </c:if>
 					      <c:if test="${fn:length(articles) gt 0}">
-							    <table class="table" >
+							    <table id="articleTable" class="table" >
+							    	
+							    	<thead>
 							        <tr style="font-weigth:bold;font-size: 1.1em;">
-							            <th class="text-left" style="width:60%">Title</th>
-							            <th class="text-left" style="width:15%">Tags</th>
+							            <th class="text-left" style="width:45%">Title</th>
+							            <th class="text-left" style="width:10%">Tags</th>
 							            <th class="text-center" style="width:5%">Product</th>
-							            <th class="text-center" style="width:10%">Created By</th>
+							            <th class="text-center" style="width:25%">Created By</th>
 							            <th class="text-center" style="width:5%"></th>
 							            <c:if test="${admin == 'true'}">
 							            	<th class="text-center" style="width:5%"></th>
 							            </c:if>
+							            <c:if test="${admin != 'true'}">
+						                	<th class="text-center" style="width:1%"></th>
+						                </c:if>
 							        </tr>
+							        </thead>
+							        <tbody>
 							        <c:forEach items="#{articles}" var="art">
 						            <tr style="color:#0066CC;">
-						                <td class="text-left" style="width:60%;">${art.title}</td>
+						                <td class="text-left" style="width:40%;">${art.title}</td>
 						                <td class="text-left" style="width:20%">${art.tag}</td>
 						                <td class="text-center" style="width:5%">${art.product.productName}</td>
-						                <td class="text-center" style="width:10%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
+						                <td class="text-center" style="width:20%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
 						                <td class="text-center" style="width:5%">
 						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
 						                </td>
 						                <c:if test="${admin == 'true'}">
-							                <td>
-							                    <sf:form id="deleteForm" action="articles/${art.id}" method="delete" >
+							                <td class="text-center" style="width:5%">
+							                    <sf:form id="deleteForm_${art.id}" action="articles/${art.id}" method="delete" >
 							                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
 							                    </sf:form>
 							                </td>
 						                </c:if>
+						                <c:if test="${admin != 'true'}">
+						                	 <td class="text-center" style="width:1%">							                    
+							                 </td>
+						                </c:if>
 						            </tr>
 							        </c:forEach>
+							        </tbody>
 							    </table> 
 					     </c:if>
 					     <c:if test="${fn:length(articles) eq 0}"> 
@@ -185,6 +209,22 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/jquery.dataTables.min.js"/> "></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<spring:url value="/resources/js/dataTables.bootstrap.js"/> "></script>   
+    
+    <script>
+    	$(document).ready(function() {
+    		$('#articleTable').DataTable({
+    		    "bFilter": false, "bLengthChange":false , "bPaginate":false,  "aoColumnDefs": [
+    		                                                                                   { "bSortable": false, "aTargets": [ 4,5 ] }
+    		                                                                                   ] 
+    		  } );
+    	});
+    </script>
+    
     <script>
     	function confirmDel(e) {
     	 	e.preventDefault();
@@ -197,7 +237,7 @@
     			  confirmButtonText: "Yes, delete it!"
     			},
     			function(){    			  
-    			  $('#deleteForm').submit();
+    				$('#'+$(e.target).parent()[0].id).submit();
     			});
     	 	
     	}

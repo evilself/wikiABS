@@ -42,6 +42,13 @@
     	</div>
     </div>
 	</div>
+	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:450px;">
+           
+    	</div>
+    </div>
+	</div>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -75,12 +82,15 @@
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a href="login" style="color:red" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                    </li>
+	                    <li>
+	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -101,7 +111,7 @@
                         
                         	<sf:form action="articles" method="get" >
                         	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control" style="color:blue;font-height:120%;height:45px;border-radius:10px; " placeholder="What are you looking for?"/>
-		                       <button type="submit" style="margin:5px;" class="btn btn-default btn-lg">Search</button>
+		                       <button type="submit" style="margin:5px;background-color:#CCFF99" class="btn btn-default btn-lg">Search</button>
 		                    </sf:form>                  
 		                   
 		                    <c:if test="${loggedUser != null}">
@@ -137,7 +147,7 @@
 					        <tr>
 					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="${eliteArticles}" var="art">
+					        <c:forEach items="${Bank_Manager_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>					                
 					                <td>

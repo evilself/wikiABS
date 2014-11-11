@@ -57,35 +57,43 @@ public class ProductController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String getProduct(@PathVariable("id") long id, Model model) {
+		//Security information
+		model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
 	    Product product = productDao.findProduct(id);
 	    model.addAttribute("product", product);
 	 
-	    return "products/view";
+	    return "products/viewProduct";
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String updateProduct(@PathVariable("id") long id, Product product) {
 		product.setId(id);
+		String productIdentity  = product.getProductName().replaceAll(" ", "_");
+		product.setProductIdentity(productIdentity);
 		productDao.updateEntity(product);
 	 
 	    return "redirect:/products";
 	}
 	
+	//Delete Product
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteProduct(@PathVariable("id") long id)
 	        throws UserDeleteException {
 	 
+		boolean wasDeleted = false;
+		
 		Product toDelete = productDao.findProduct(id);
-	    boolean wasDeleted = productDao.removeEntity(toDelete);
+		if(productDao.productDeletable(toDelete)) wasDeleted = productDao.removeEntity(toDelete);	    
 	 
 	    if (!wasDeleted) {
 	      //  throw new UserDeleteException(toDelete);
 	    }
 	 
 	    // everything OK, see remaining employees
-	    return "redirect:/users";
+	    return "redirect:/products";
 	}
 	
 	@RequestMapping(params = "new", method = RequestMethod.GET)

@@ -38,7 +38,7 @@
 	        <h4 class="modal-title" id="myModalLabel">Upload</h4>
         </div>
         <div class="modal-body">
-            <form method="post" id="uploadForm" action="upload/ajax" enctype="multipart/form-data">
+            <form method="post" id="uploadForm" action="/wikiABS/upload/ajax" enctype="multipart/form-data">
 				<div class="form-group col-lg-offset-2">
 		        	<label>Select file to upload</label>
 		            <input name="file" id="file" type="file" class="form-control" style="width:80%" />		                       
@@ -84,6 +84,7 @@
 		        $("#uploadForm").ajaxForm({
 		        success:function(data) {
 		        	  $('#file').val('');
+		        	 // swal("Good job!", data+" uploaded!", "success");
 		              $('#result').html('['+data+']'+' uploaded!').css({"color":"green","font-size":"1.2em"});
 		         },
 		         dataType:"text"

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -66,6 +67,13 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String updateEmployee(@PathVariable("id") long id, User user) {
 		user.setId(id);
+		
+		String password = user.getPassword();
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(password);
+		
+		user.setPassword(hashedPassword);
+		
 		userDao.updateEntity(user);
 	 
 	    return "redirect:/users";

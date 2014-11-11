@@ -14,4 +14,5 @@ import com.americanbanksystems.wiki.service.GenericDAO;
 //GenericDAO
 public interface ProductDao extends GenericDAO<Product, Long> {	
 	Product findProduct(Long id);
+	boolean productDeletable(Product prod);
 }
