@@ -33,6 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+     <style> .invalid { color: red; }</style>
 </head>
 
 <body>	
@@ -64,7 +65,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="/wikiABS/articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
@@ -94,7 +95,7 @@
                 <div class="col-lg-12">               
                     <div class="intro-message">      
                     	<h2>Create/Edit Article</h2>              	
-                        <sf:form method="post" action="${action}">
+                        <sf:form method="post" id="createArticleForm" action="${action}">
 				           <div class="col-lg-12 col-sm-12">
 				           		<div class="form-group">
 				                    <label class="pull-left" for="title">Title</label>
@@ -115,16 +116,16 @@
 				                    <label class="pull-left" for="tag">Tags</label>
 				                    <input class="form-control form-inline pull-right" name="tag" id="tag" type="text" class="form-control" value="${article.tag}"/>
 				                </div>
-				                <input class="hidden" name="product" id="product" type="text" c="${article.product.productName}" value="${article.product.id}"/> 
+				                <input name="product" style="visibility:hidden;height:1px;width:1px;margin-top:2px;" id="product" type="text" value="${article.product.id}"/> 
 				                <div class="text-left form-group pull-right" style="width:38%" > 
-						        	<label class="text-left">Associated Product</label>                  	
-		                        	<select id="productType" class="form-control combobox" >					                	
+						        	<label class="text-left">Associated Product</label> <label id="product-error" class="invalid pull-right" style="display:none;" for="product">product is missing</label>                 	
+		                        	<select id="productType" name="productType" class="form-control combobox" >					                	
 						                <c:forEach items="#{products}" var="prod">							                						      
-									      	<option  value="${prod.id}">${prod.productName}</option>										     			    
+									      	<option  name="${prod.id}" value="${prod.id}">${prod.productName}</option>										     			    
 									    </c:forEach>
 								    </select>
 							    </div>			                
-				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="articles">Cancel</a> 				                
+				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/articles">Cancel</a> 				                
 				           		<input style="margin-right:5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" class="btn btn-info pull-right" type="submit" value="Save" id="save" />
 				           </div>
 				        </sf:form>
@@ -177,7 +178,40 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
+    <!-- jQuery Validation -->    
+    <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
+    
     <script>
+ 	// When the browser is ready...
+	$(function() {  	
+		
+	    // Setup form validation on the #register-form element
+	    $("#createArticleForm").validate({
+	    	errorClass: 'invalid',
+	        // Specify the validation rules
+	        rules: {
+	        	title: "required",
+	        	description: "required"	,
+	        		tag: "required",
+	        		product:  "required"
+	        },
+	        
+	        // Specify the validation error messages
+	        messages: {
+	        	title: "title is missing",
+	        	description: "description is missing",
+	        	tag: "tag is missing",
+	        	product: "product is missing"
+	        },
+	        
+	        submitHandler: function(form) {
+	        	//alert($('#product').val());
+	        	form.submit();
+	        }
+	    });
+	  });
+    
+    
     	function confirmLogout(e) {
     	 	
     		swal({
@@ -197,14 +231,17 @@
 
 	 <script>
 	      $(document).ready(function(){
-	        $('.combobox').combobox();
-	        $(".combobox").val($("#product").attr("c"));
+	        //$('.combobox').combobox();
+	        //alert($("#product").attr("c"));
+	        $(".combobox").val($("#product").val());
+	        
 	      });
 	      
 	      $('#productType').on('change' , function(){
-	     //  alert($('#productType').val());
+	       //alert($('#productType').val());
 	     	$('#product').val($('#productType').val());
-	      });	      
+	     	if($('#product').val() != "") $('#product-error').hide();	     	
+	      });	     
     </script>
 
 </body>

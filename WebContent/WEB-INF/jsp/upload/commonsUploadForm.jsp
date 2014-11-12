@@ -85,12 +85,12 @@
 		        success:function(data) {
 		        	  $('#file').val('');
 		        	 // swal("Good job!", data+" uploaded!", "success");
-		              $('#result').html('['+data+']'+' uploaded!').css({"color":"green","font-size":"1.2em"});
+		              $('#result').html('['+data+']'+' uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
 		         },
 		         dataType:"text"
 		        }).submit();     
 	        } else {
-	        	$('#result').html('Please select a file!').css({"color":"red","font-size":"1.2em"});
+	        	$('#result').html('Please select a file!').css({"color":"#FFE6E6","font-size":"1.2em"});
 	        }
 	    }	  
 	  

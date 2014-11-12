@@ -122,21 +122,21 @@
 						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
 					                </div>
 					                <div class="form-group">
-					                   <label class="pull-left" for="tag">Attachments</label>
+					                   <label class="pull-left" for="tag">Attachments [${fn:length(attachments)}]</label>
 					                   <c:forEach items="${attachments}" var="att">
 							            <tr>
 							                <td>${att.name}</td>							                
 							                <td>
 							                    <a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../upload/display/${att.id}">View</a>
 							                </td>
-							                <c:if test="${admin == 'true'}"> 
+							                <c:if test="${editable}"> 
 								                <td>
 								                    <sf:form action="../upload/delete/${att.id}" method="delete" >
 								                        <button class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit">Delete</button>
 								                    </sf:form>
 								                </td>
 							                </c:if>
-							             </tr>
+							             </tr><br/>
 							        	</c:forEach>					              
 					                </div>
 					                					                			                
