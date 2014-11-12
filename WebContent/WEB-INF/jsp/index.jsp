@@ -147,7 +147,7 @@
 					        <tr>
 					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>					            
 					        </tr>
-					        <c:forEach items="${Bank_Manager_Articles}" var="art">
+					        <c:forEach items="${BankManagerElite_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>					                
 					                <td>
@@ -183,7 +183,7 @@
 					        <tr>
 					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
-					        <c:forEach items="${ComplianceProArticles}" var="art">
+					        <c:forEach items="${CompliancePro_Loans_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>						                
 					                <td>
@@ -219,7 +219,7 @@
 					        <tr>
 					           <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
 					        </tr>
-					        <c:forEach items="${cproArticles}" var="art">
+					        <c:forEach items="${CompliancePro_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>	
 					                <td>
