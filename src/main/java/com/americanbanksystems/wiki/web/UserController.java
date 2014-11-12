@@ -16,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.UserDao;
+import com.americanbanksystems.wiki.dao.UserRoleDao;
 import com.americanbanksystems.wiki.domain.User;
+import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
 import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 
@@ -28,6 +30,13 @@ public class UserController {
     private SecurityServiceBean security;
 	
 	private ArticleDao articleDao;
+	
+	private UserRoleDao userRoleDao;
+	
+	@Autowired
+	public void setUserRoleDao(UserRoleDao userRoleDao) {
+	    this.userRoleDao = userRoleDao;
+	}
 	
 	@Autowired
 	public void setArticleDao(ArticleDao articleDao) {
@@ -68,9 +77,14 @@ public class UserController {
 	public String updateEmployee(@PathVariable("id") long id, User user) {
 		user.setId(id);
 		
+		User existing = userDao.findUser(id);
+		
 		String password = user.getPassword();
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
+		
+		
+		user.setRole(existing.getRole());
 		
 		user.setPassword(hashedPassword);
 		
@@ -85,6 +99,10 @@ public class UserController {
 	        throws UserDeleteException {
 	 
 	    User toDelete = userDao.findUser(id);
+	    
+	    UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());
+	    
+	    userRoleDao.removeEntity(role);
 	    	    
 	    boolean wasDeleted = userDao.removeUser(toDelete);
 	 
@@ -106,6 +124,18 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String addUser(User user) {
+		
+		UserRole role = new UserRole("USER",user.getUserName());
+		user.setRole(role);
+		
+		userRoleDao.addEntity(role);
+		
+		String password = user.getPassword();
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(password);
+		
+		user.setPassword(hashedPassword);
+		
 		userDao.addEntity(user);
 	 
 	    return "redirect:/users";

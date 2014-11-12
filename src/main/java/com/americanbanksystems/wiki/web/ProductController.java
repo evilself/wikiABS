@@ -72,6 +72,7 @@ public class ProductController {
 		product.setId(id);
 		String productIdentity  = product.getProductName().replaceAll(" ", "_");
 		product.setProductIdentity(productIdentity);
+		product.setCustom(true);
 		productDao.updateEntity(product);
 	 
 	    return "redirect:/products";
@@ -113,6 +114,8 @@ public class ProductController {
 	public String addProduct(Product product) {
 		String productIdentity  = product.getProductName().replaceAll(" ", "_");
 		product.setProductIdentity(productIdentity);
+		product.setCustom(true);
+		
 		productDao.addEntity(product);
 	 
 	    return "redirect:/products";

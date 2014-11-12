@@ -24,7 +24,7 @@ public class Product extends BaseEntity implements Serializable {
 	protected Long id;
 	protected String productName;
 	protected String productIdentity;
-	
+	protected boolean custom;	
 
 	protected String description;	
 
@@ -35,6 +35,15 @@ public class Product extends BaseEntity implements Serializable {
 	public Product(String productName) {
 		this.productName = productName;
 		
+	}
+	
+	@Column(name="CUSTOM")
+	public boolean getCustom() {
+		return custom;
+	}
+
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 	
 	@Column(name="PRODUCT_NAME")
@@ -79,6 +88,7 @@ public class Product extends BaseEntity implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (custom ? 1231 : 1237);
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result
@@ -97,6 +107,8 @@ public class Product extends BaseEntity implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
+		if (custom != other.custom)
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
@@ -118,6 +130,7 @@ public class Product extends BaseEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "Product [productName=" + productName + ", productIdentity="
-				+ productIdentity + ", description=" + description + "]";
+				+ productIdentity + ", custom=" + custom + ", description="
+				+ description + "]";
 	}	
 }

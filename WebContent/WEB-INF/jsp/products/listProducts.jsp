@@ -115,7 +115,9 @@
 						                <td class="text-left" style="width:30%;">${prod.productName}</td>
 						                <td class="text-left" style="width:65%">${prod.description}</td>						                					                                
 						                <td class="text-center" style="width:5%">
-						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="products/${prod.id}">Edit</a>
+						                	<c:if test="${prod.custom}">
+						                    	<a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="products/${prod.id}">Edit</a>
+						                	</c:if>
 						                </td>
 						                <!-- td>
 						                    <sf:form action="articles/${art.id}" method="delete" >

@@ -53,6 +53,7 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 		if (userQuery.list().size() > 0) {
 			User u =  (User) userQuery.list().get(0);
 			Hibernate.initialize(u.getCreatedArticles());
+			Hibernate.initialize(u.getRole());
 			return u;
 		} else {
 			return null;

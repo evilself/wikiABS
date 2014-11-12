@@ -1,5 +1,6 @@
 package com.americanbanksystems.wiki.web.helpers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +43,18 @@ public final class EntityGenerator {
     	
         User steve = new User("Steve", "Walley", "sw", hashedPassword, user);
         
-        String password2 = "sirob";		
+        String password2 = "admin";		
         String hashedPassword2 = passwordEncoder.encode(password2);
+        //steve.setCreatedDate(new Date());
         
 		User boris = new User("Boris", "Mechkov", "bm", hashedPassword2, admin);
+		//boris.setCreatedDate(new Date());
 		
 		String password3 = "liverpool";		
 		String hashedPassword3 = passwordEncoder.encode(password3);
 		
         User kenny = new User("Kenny", "Rajiah", "kr", hashedPassword3, user);
-        
+       //kenny.setCreatedDate(new Date());
                         
         // free managers
         //Article itArticle = new Article("how to do IT", "it stuff stuff stuff stuff");
