@@ -111,7 +111,7 @@
 
             <div class="row">
                 <div class="col-lg-12">               
-                    <div class="intro-message">                    	
+                    <div class="intro-message" >                    	
                         <h2>Articles</h2>
                           <c:if test="${loggedUser != null}">
 					   		 <a href="articles?new">Add new article</a>

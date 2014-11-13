@@ -109,7 +109,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                	 <div class="intro-message">                    	
+                	 <div class="intro-message" style="padding-top: 10%; padding-bottom: 10%;">                    	
                         <h2>${art.title}</h2>
 						    <div id="list">						      
 						         <div class="col-lg-12 col-sm-12">					           		
@@ -122,24 +122,18 @@
 						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
 					                </div>
 					                <div class="form-group">
-					                   <label class="pull-left" for="tag">Attachments [${fn:length(attachments)}]</label>
-					                   <c:forEach items="${attachments}" var="att">
-							            <tr>
-							                <td>${att.name}</td>							                
-							                <td>
-							                    <a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../upload/display/${att.id}">View</a>
-							                </td>
-							                <c:if test="${editable}"> 
-								                <td>
-								                    <sf:form action="../upload/delete/${att.id}" method="delete" >
-								                        <button class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit">Delete</button>
-								                    </sf:form>
-								                </td>
-							                </c:if>
-							             </tr><br/>
-							        	</c:forEach>					              
-					                </div>
-					                					                			                
+					                   <label class="pull-left" for="tag">Attachments [${fn:length(attachments)}]</label>					                  
+					                   <c:forEach items="${attachments}" var="att">							            
+							            	<div class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
+							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
+							                	<div class="col-lg-8 col-sm-8">
+							                		<div class="col-lg-2 col-sm-2 text-right">
+								                    	<a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/upload/display/${att.id}">View</a>
+								               		</div>								               		
+								                </div>
+								                </div>					             
+							        	</c:forEach>							        						              
+					                </div>					                					                			                
 					             </div>						    
 						    </div>						 
 						    <br />

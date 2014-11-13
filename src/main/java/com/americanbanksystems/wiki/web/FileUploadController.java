@@ -3,7 +3,9 @@ package com.americanbanksystems.wiki.web;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -116,14 +119,17 @@ public class FileUploadController {
     
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String deleteAttachment(@PathVariable("id") long id) {
+	public @ResponseBody String deleteAttachment(@PathVariable("id") long id) {
          
         Attachment att = attDao.findAttachment(id);
+        
+        Article art = articleDao.findArticle(att.getArticle().getId());
+                
         boolean isDeleted = attDao.removeEntity(att);     
         
-        if(!isDeleted) System.out.println("ERROR");
-         
-        return "Attachment Deleted!";
+        if(!isDeleted) return "Error"; 
+        String jsonResult = "{\"identity\":"+att.getId()+", \"count\":"+ (art.getAttachments().size()-1)+"}";
+        return jsonResult;
     }
     
     //*************************TEST AJAX******************************************************************
@@ -186,6 +192,66 @@ public class FileUploadController {
   
       //return "<img src='http://localhost:8080/spring-mvc-file-upload/rest/cont/get/"+Calendar.getInstance().getTimeInMillis()+"' />";
       return mpf.getOriginalFilename();
+  
+   }
+    
+ 
+    @RequestMapping(value = "/ajaxUpload/{id}", method = RequestMethod.POST)
+    public @ResponseBody String uploadFromEdit(@PathVariable("id") Long id, MultipartHttpServletRequest request, HttpServletResponse response) {                
+  
+      //0. notice, we have used MultipartHttpServletRequest
+    	
+    	Article article = articleDao.findArticle(id);
+  
+      //1. get the files from the request object
+      Iterator<String> itr =  request.getFileNames();
+  
+      MultipartFile mpf = request.getFile(itr.next());
+      
+        Attachment newatt = new Attachment();
+	  	newatt.setActualFilename(mpf.getOriginalFilename());
+	  	try {
+				newatt.setAttachment(mpf.getBytes());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	  	newatt.setAttachmentTitle("new attachment");
+	  	newatt.setAttachmentType("type");
+	  	newatt.setContentType(mpf.getContentType());
+	  	
+	  	newatt.setArticle(article);
+	  	
+	  	attDao.addEntity(newatt);	  	
+	  	
+	  	Article newInstane  = articleDao.findArticle(id);
+	  	//attDao.saveInMemory(newatt);	  	
+	  	
+	  	List<Attachment> listAttachment = newInstane.getAttachments();  
+	  	
+	  	String responseData = " <div class=\"form-group\"> "+
+							  " <label class=\"pull-left\" id=\"attachmentCount\" for=\"tag\">Attachments [<span id=\"count\">"+(listAttachment.size())+"</span>]</label>	";
+	  	
+	  	for(Attachment a: listAttachment) {
+	  				responseData +=             " <div id=\""+a.getId()+"\" class=\"col-lg-12 col-sm-12 \" style=\"overflow:auto; margin-bottom:5px;\"> ";			            
+	  				responseData +=		        " <div class=\"col-lg-4 text-right\"><label>"+ a.getActualFilename() +"</label></div> ";	  	      		                 
+	  				responseData +=		        " <div class=\"col-lg-8 col-sm-8\"> ";
+	  				responseData +=		        " <div class=\"col-lg-2 col-sm-2 text-right\"> ";
+	  				responseData +=		        " <a target=\"_blank\" class=\"btn btn-info\" style=\"padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5\" href=\"/wikiABS/upload/display/"+a.getId()+"\">View</a> ";
+	  			    responseData +=		        " </div> ";
+	  				responseData +=		        " <div class=\"col-lg-2 col-sm-2 text-left\">	";					                    
+	  				responseData +=		        " <button type=\"button\" class=\"btn btn-warning\" style=\"padding-top:1px; padding-bottom: 1px; color:#0066CC; border-color:#C9C9D5\" onclick=\"deleteAttachment("+a.getId()+");\">Delete</button> ";
+	  				responseData +=		        " </div> ";						        						               		
+	  				responseData +=		        " </div> ";
+	  				responseData +=		        " </div>	";	  	           			        		
+	    }	  	
+      responseData += "</div>";
+      
+      System.out.println(mpf.getOriginalFilename() +" uploaded!");
+  
+      System.out.println(responseData);
+      
+      return responseData;
   
    }
     

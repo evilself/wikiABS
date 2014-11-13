@@ -146,7 +146,7 @@ public class ArticleController {
 	    
 	    model.addAttribute("attachments", atts);
 	    model.addAttribute("action", "../edit/"+id);
-	    model.addAttribute("upload", "/wikiABS/upload");
+	    model.addAttribute("upload", "/wikiABS/upload/"+article.getId());
 	 
 	    return "articles/createArticle";
 	}
@@ -217,7 +217,7 @@ public class ArticleController {
     	model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
     	model.addAttribute("action", "articles");
-    	model.addAttribute("upload", "upload");
+    	model.addAttribute("upload", "/wikiABS/upload");
 		
     	model.addAttribute("products", productDao.list());
     	

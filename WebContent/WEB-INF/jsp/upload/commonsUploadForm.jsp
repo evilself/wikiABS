@@ -38,12 +38,22 @@
 	        <h4 class="modal-title" id="myModalLabel">Upload</h4>
         </div>
         <div class="modal-body">
-            <form method="post" id="uploadForm" action="/wikiABS/upload/ajax" enctype="multipart/form-data">
-				<div class="form-group col-lg-offset-2">
-		        	<label>Select file to upload</label>
-		            <input name="file" id="file" type="file" class="form-control" style="width:80%" />		                       
-	            </div>		   
-		     </form>
+        	<c:if test="${article.id == null }">
+	            <form method="post" id="uploadForm" action="/wikiABS/upload/ajax" enctype="multipart/form-data">
+					<div class="form-group col-lg-offset-2">
+			        	<label>Select file to upload</label>
+			            <input name="file" id="file" type="file" class="form-control" style="width:80%" />		                       
+		            </div>		   
+			     </form>
+		     </c:if>
+		     <c:if test="${article.id != null }">
+	            <form method="post" id="uploadForm" action="/wikiABS/upload/ajaxUpload/${article.id}" enctype="multipart/form-data">
+					<div class="form-group col-lg-offset-2">
+			        	<label>Select file to upload</label>
+			            <input name="file" id="file" type="file" class="form-control" style="width:80%" />		                       
+		            </div>		   
+			     </form>
+		     </c:if>
 		     <!-- button onclick="uploadFormData()" >Upload</button><i>Using FormData Object</i-->
         </div>
         <div class="modal-footer">
@@ -85,7 +95,9 @@
 		        success:function(data) {
 		        	  $('#file').val('');
 		        	 // swal("Good job!", data+" uploaded!", "success");
-		              $('#result').html('['+data+']'+' uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
+		        	 //alert(data);
+		        	  $('#ajaxResponse').html(data);
+		              $('#result').html('Attachment uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
 		         },
 		         dataType:"text"
 		        }).submit();     

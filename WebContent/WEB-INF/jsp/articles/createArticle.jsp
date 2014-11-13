@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +37,7 @@
      <style> .invalid { color: red; }</style>
 </head>
 
-<body>	
+<body id="articleBody">	
 	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:300px;">
@@ -93,7 +94,7 @@
         <div class="container">        
 	       <div class="row">
                 <div class="col-lg-12">               
-                    <div class="intro-message">      
+                    <div class="intro-message" style="padding-top: 10%; padding-bottom: 10%;">      
                     	<h2>Create/Edit Article</h2>              	
                         <sf:form method="post" id="createArticleForm" action="${action}">
 				           <div class="col-lg-12 col-sm-12">
@@ -106,7 +107,7 @@
 					                <label style="margin-top:6px" class=" pull-right">
 					                    <a class="btn btn-sm btn-default" style="background-color: #CCFF99" href="${upload}"
 										   data-toggle="modal"
-										   data-target="#uploadModal">Attachments
+										   data-target="#uploadModal">Upload
 										 </a>
 					                    </label>
 				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
@@ -124,8 +125,27 @@
 									      	<option  name="${prod.id}" value="${prod.id}">${prod.productName}</option>										     			    
 									    </c:forEach>
 								    </select>
-							    </div>			                
-				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/articles">Cancel</a> 				                
+							    </div>
+							    <div id="ajaxResponse">
+								    <div class="form-group">
+					                   <label class="pull-left" id="attachmentCount" for="tag">Attachments [<span id="count">${fn:length(attachments)}</span>]</label>					                  
+					                   <c:forEach items="${attachments}" var="att">							            
+							            	<div id="${att.id }" class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
+							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
+							                	<div class="col-lg-8 col-sm-8">
+							                		<div class="col-lg-2 col-sm-2 text-right">
+								                    	<a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/upload/display/${att.id}">View</a>
+								               		</div>
+								               		 <div class="col-lg-2 col-sm-2 text-left">								                    
+									                    <button type="button" class="btn btn-warning" style="padding-top:1px; padding-bottom: 1px; color:#0066CC; border-color:#C9C9D5" onclick="deleteAttachment(${att.id});">Delete</button>
+									                </div>
+									                <div id="result"></div>									               		
+								                </div>
+								                </div>					             
+							        	</c:forEach>							        						              
+					                </div>
+							   	</div>	                
+				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/articles/${article.id}">Cancel</a> 				                
 				           		<input style="margin-right:5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" class="btn btn-info pull-right" type="submit" value="Save" id="save" />
 				           </div>
 				        </sf:form>
@@ -228,6 +248,42 @@
     	}
    
     </script>
+
+	<script>
+		function deleteAttachment(el) {			
+			//e.preventDefault();
+    		swal({
+    			  title: "Are you sure?",
+    			  text: "Your will not be able to recover this attachment!",
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, delete it!"
+    			},
+    			function(){   
+    				//var formID = $(e.target).parent()[0].id;
+    				
+    				$.ajax({
+    		        	url:  "/wikiABS/upload/delete/" + el,
+    			        type: "delete",
+    			        //data: $("#loginForm").serialize(),
+    			        success: function(data){
+    			        	
+    			        	if (data.indexOf("Error") > -1) {
+    			        		$('#result').html("Oops...Error occured while deleting!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+    			            } else {  	   			            	
+    			            	//setTimeout(function() { window.location.reload(true); }, 1000);    			            	
+    			            	var res = JSON.parse(data);     			            	
+    			            	$('#'+res.identity).remove();
+    			            	$('#count').html(res.count);
+    			            }		                       
+    			        }		       
+    			    });	
+    				
+    			});
+			
+		}
+	</script>
 
 	 <script>
 	      $(document).ready(function(){

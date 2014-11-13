@@ -76,4 +76,8 @@ public class AttachmentDaoImpl extends HibernateDao<Attachment, Long> implements
 		return true;
 	}	
 	
+	public void flushSession() {		
+		currentSession().flush();
+	}
+	
 }
