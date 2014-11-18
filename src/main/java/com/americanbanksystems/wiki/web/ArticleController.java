@@ -233,7 +233,7 @@ public class ArticleController {
     	model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
 		
-		 List<Article> articles = articleDao.findArticlesByTag(tag);
+		 List<Article> articles = articleDao.findArticlesByTagOrTitle(tag);
 	        model.addAttribute("articles", articles);
 	        System.out.println("searchCriteriea");
 	        return "articles/listArticles";

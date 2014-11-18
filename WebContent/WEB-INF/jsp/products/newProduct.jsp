@@ -33,6 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style> .invalid { color: red; }</style>
 </head>
 
 <body>
@@ -101,14 +102,16 @@
                     <div class="intro-message">
                     <h2>${product.productName}</h2> 
                     	<div id="list">
-					        <sf:form method="post" action="products">					            
-			                    <label for="productName">Product Name</label>
+					        <sf:form id="productForm" method="post" action="products">	
+					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
+			                    <label class="pull-left"  for="productName">Product Name</label>
 			                    <input name="productName" id="productName"  class="form-control" value="${product.productName}"/>
 			              
-			                    <label for="description">Description</label>
+			                    <label class="pull-left" for="description">Description</label>
 			                    <input name="description" id="description" class="form-control" value="${product.description}" />		                    
 			             				                   
 			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />					              
+					        	</div>
 					        </sf:form>
 					    </div>                   	
                        
@@ -158,7 +161,37 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
+    !-- jQuery Validation -->    
+    <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
+    
     <script>
+    
+ // When the browser is ready...
+	$(function() {  	
+		
+	    // Setup form validation on the #register-form element
+	    $("#productForm").validate({
+	    	errorClass: 'invalid',
+	        // Specify the validation rules
+	        rules: {
+	        	productName: "required",
+	        	description: "required"		        		
+	        },
+	        
+	        // Specify the validation error messages
+	        messages: {
+	        	productName: "Product name is missing!",
+	        	description: "Description is missing!"	        	
+	        },
+	        
+	        submitHandler: function(form) {
+	        	//alert($('#product').val());
+	        	form.submit();
+	        }
+	    });
+	  });
+    
+    
     	function confirmLogout(e) {
     	 	
     		swal({

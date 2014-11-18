@@ -8,11 +8,11 @@ package com.americanbanksystems.wiki.service.implementation;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
-import org.springframework.orm.hibernate3.HibernateInterceptor;
 import org.springframework.stereotype.Repository;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
@@ -121,8 +121,73 @@ public class ArticleDaoImpl extends HibernateDao<Article, Long> implements Artic
 
 	@Override
 	public List<Article> findArticleByCreator(User creator) {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "from Article art where art.createdByUser = :user order by art.createdDate desc";
+		Query articleQuery = currentSession().createQuery(query);
+								 articleQuery.setParameter("user", creator); 
+		List<Article> articleList = new ArrayList<Article>();
+		
+		articleList =articleQuery.list();
+		for(Article a: articleList)		{
+		//	Hibernate.initialize(a.getCreatedByUser());
+		//	Hibernate.initialize(a.getProduct());
+		}
+		
+		return articleList;
+	}
+
+	@Override
+	public List<Article> findArticlesByTagOrTitle(String tag) {
+		
+		//tag = tag.replace(" ", "");
+		
+		String[] tags = tag.split(",");		
+		
+		String query = "from Article art "; 
+		
+		HashMap<String, String> tagMap = new HashMap<String, String>();
+		
+		if (tags.length > 0) {
+			query += " where ";
+			
+			int i = 0;
+			for(String word: tags) {
+				word = word.trim();
+				
+				String var = ":tag"+i;
+				String vara = "tag"+i;
+				
+				tagMap.put(vara,word);
+				
+				query += " art.tag like "+var+" or art.title like "+var+" ";
+				
+				query += " or ";
+				i++;
+			}
+		}		
+		
+		int lastIndexOR = query.lastIndexOf("or");
+		query = query.substring(0, lastIndexOR);
+		
+		//System.out.println(query);
+		
+		Query articleQuery = currentSession().createQuery(query);
+		
+		for(String key: tagMap.keySet()){
+			
+			String value = "%"+tagMap.get(key)+"%";
+			articleQuery.setParameter(key, value); 			
+		}
+								// articleQuery.setParameter("tag", "%"+tag+"%"); 
+								// articleQuery.setParameter("title", "%"+tag+"%");
+		List<Article> articleList = new ArrayList<Article>();
+		
+		articleList =articleQuery.list();
+		for(Article a: articleList)		{
+			Hibernate.initialize(a.getCreatedByUser());
+			Hibernate.initialize(a.getProduct());
+		}
+		
+			return articleList;
 	}
 	
 	

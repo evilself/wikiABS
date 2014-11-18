@@ -49,7 +49,7 @@ public class ProductDaoImpl extends HibernateDao<Product, Long> implements Produ
                 "from Article a where a.product = :prod");
 		productQuery.setParameter("prod", prod); 
 		
-		if (productQuery.list().size() > 0) {
+		if (productQuery.list().size() > 0 || !prod.getCustom()) {
 			return false;
 		} else {
 			return true;

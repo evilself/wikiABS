@@ -68,10 +68,10 @@
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="/wikiABS/products">Products</a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="/wikiABS/users">Users</a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
@@ -81,7 +81,7 @@
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -183,7 +183,7 @@
     			  confirmButtonText: "Yes, log me out!"
     			},
     			function(){    			  
-    			  window.location="logout";
+    			  window.location="/wikiABS/logout";
     			});
     	 	
     	}

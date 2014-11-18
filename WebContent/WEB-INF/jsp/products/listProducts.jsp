@@ -113,17 +113,19 @@
 							        <c:forEach items="#{products}" var="prod">
 						            <tr style="color:#0066CC;">
 						                <td class="text-left" style="width:30%;">${prod.productName}</td>
-						                <td class="text-left" style="width:65%">${prod.description}</td>						                					                                
+						                <td class="text-left" style="width:60%">${prod.description}</td>						                					                                
 						                <td class="text-center" style="width:5%">
 						                	<c:if test="${prod.custom}">
 						                    	<a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="products/${prod.id}">Edit</a>
 						                	</c:if>
 						                </td>
-						                <!-- td>
-						                    <sf:form action="articles/${art.id}" method="delete" >
-						                        <input type="submit" value="" >Delete</input>
+						                <c:if test="${prod.custom}">
+						                <td class="text-center" style="width:5%">
+						                    <sf:form id="deleteProductForm_${prod.id}" action="products/${prod.id}" method="delete" >
+						                        <button class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" >Delete</button>
 						                    </sf:form>
-						                </td-->
+						                </td>
+						                </c:if>
 						            </tr>
 							        </c:forEach>
 							    </table> 
@@ -176,6 +178,25 @@
     
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
+    
+     <script>
+    	function confirmDel(e) {
+    	 	e.preventDefault();
+    		swal({
+    			  title: "Are you sure?",
+    			  text: "Your will not be able to recover this product!",
+    			  type: "warning",
+    			  showCancelButton: true,
+    			  confirmButtonColor: "#DD6B55",
+    			  confirmButtonText: "Yes, delete it!"
+    			},
+    			function(){     				
+    			  $('#'+$(e.target).parent()[0].id).submit();
+    			});
+    	 	
+    	}
+   
+    </script>
     
     <script>
     	function confirmLogout(e) {

@@ -20,6 +20,7 @@ public interface ArticleDao extends GenericDAO<Article, Long> {
 	
 	Article findArticle(Long id);
 	List<Article> findArticlesByTag(String tag);
+	List<Article> findArticlesByTagOrTitle(String tag);
 	List<Article> findArticleByProduct(Product product);
 	List<Article> findArticleByProduct(Product product, int size);
 	List<Article> findArticleByKeyInDescription(String key);

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.dao.UserRoleDao;
+import com.americanbanksystems.wiki.domain.Article;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
@@ -66,6 +67,12 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String getUser(@PathVariable("id") long id, Model model) {
+		
+		
+		//Security information
+		model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
+		    	
 	    User user = userDao.findUser(id);
 	    model.addAttribute("user", user);
 	 
@@ -98,18 +105,24 @@ public class UserController {
 	public String deleteUser(@PathVariable("id") long id)
 	        throws UserDeleteException {
 	 
-	    User toDelete = userDao.findUser(id);
-	    
-	    UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());
-	    
-	    userRoleDao.removeEntity(role);
-	    	    
-	    boolean wasDeleted = userDao.removeUser(toDelete);
-	 
-	    if (!wasDeleted) {
-	    //    throw new UserDeleteException(toDelete);
+		User toDelete = userDao.findUser(id);
+	    List<Article> createdArticles = articleDao.findArticleByCreator(toDelete);
+		
+	    if (createdArticles.size() > 0) {
+	    	System.out.println("User cannot be deleted, because it has associated articles!");
+		   
+	    } else {
+	    	
+	    	 UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());
+			    
+		    userRoleDao.removeEntity(role);
+		    	    
+		    boolean wasDeleted = userDao.removeUser(toDelete);
+		 
+		    if (!wasDeleted) {
+		    //    throw new UserDeleteException(toDelete);
+		    }
 	    }
-	 
 	    // everything OK, see remaining employees
 	    return "redirect:/users";
 	}
@@ -117,6 +130,10 @@ public class UserController {
 	@RequestMapping(params = "new", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String createUserForm(Model model) {
+		//Security information
+		model.addAttribute("admin",security.isAdmin()); 
+    	model.addAttribute("loggedUser", security.getLoggedInUser());
+		
 	    model.addAttribute("user", new User());
 	    return "users/newUser";
 	}

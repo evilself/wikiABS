@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-	<!-- we can use annotations -->
-    <context:annotation-config /> 
+	<!-- we can use annotations . We dont have to use because context component scan below is enabled. This automatically turns on annotation usage-->
+    <!-- context:annotation-config /--> 
      
     <!-- package to look for annotated classes -->
     <context:component-scan base-package="com.americanbanksystems.wiki.service.implementation" />
@@ -18,15 +20,21 @@
     <!-- we will manage transactions with annotations -->
     <tx:annotation-driven />
  
+ 	<context:property-placeholder location="classpath:application.properties" />
+ 
+ 
     <!-- data source for our database -->
     <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName"
-            value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
-        <property name="url" value="jdbc:mysql://localhost:3306/wikiabs" />
-        <property name="username" value="root" />
-        <property name="password" value="adminroot" />
+        <property name="driverClassName" value="${ds.driverClassName}" />
+        <property name="url" value="${ds.url}" />
+        <property name="username" value="${ds.username}" />
+        <property name="password" value="${ds.password}" />
     </bean>
+    
+    <!-- The above code is my datasource but managed from my Spring container, below is a ref to my dataSource defined and managed by Tomcat container and ref'ed by JNDI -->
+    <!-- jee:jndi-lookup id="dataSource" jndi-name="jdbc/wikiabs" resource-ref="true" ></jee:jndi-lookup-->
+    
      
     <!-- configure hibernate session factory -->
     <bean id="sessionFactory"
