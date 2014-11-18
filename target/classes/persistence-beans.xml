@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:sec="http://www.springframework.org/schema/security"
 	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
@@ -38,9 +39,10 @@
      
     <!-- configure hibernate session factory -->
     <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="annotatedClasses" >
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" p:packagesToScan="com.americanbanksystems.wiki.domain">
+        <property name="dataSource" ref="dataSource" /> 
+        <!-- BorisM i commendted out the below because we use namespace :p above to specify the packages to scan, instead of one by one -->       
+        <!-- property name="annotatedClasses" >
             <list>
             	<value>com.americanbanksystems.wiki.domain.BaseEntity</value>
             	<value>com.americanbanksystems.wiki.domain.UserRole</value>
@@ -49,7 +51,7 @@
                 <value>com.americanbanksystems.wiki.domain.Article</value>                
                 <value>com.americanbanksystems.wiki.domain.Attachment</value>                                
             </list>
-        </property>
+        </property-->
         <property name="hibernateProperties">
             <props>
                 <prop key="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
