@@ -61,22 +61,22 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="${pageContext.request.contextPath}">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products">Products</a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users">Users</a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a style="color:red;" href="${pageContext.request.contextPath}/login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
@@ -101,7 +101,7 @@
                     <div class="intro-message">                    	
                         <h2>Products</h2>
                           <c:if test="${loggedUser != null}">
-					   		 <a href="products?new">Add new product</a>
+					   		 <a class="btn btn-default btn-sm" style="margin-top:5px; margin-bottom:5px;padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/products?new">Add new product</a>
 					      </c:if>
 					      <c:if test="${fn:length(products) gt 0}">
 							    <table class="table" >
@@ -116,12 +116,12 @@
 						                <td class="text-left" style="width:60%">${prod.description}</td>						                					                                
 						                <td class="text-center" style="width:5%">
 						                	<c:if test="${prod.custom}">
-						                    	<a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="products/${prod.id}">Edit</a>
+						                    	<a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/products/${prod.id}">Edit</a>
 						                	</c:if>
 						                </td>
 						                <c:if test="${prod.custom}">
 						                <td class="text-center" style="width:5%">
-						                    <sf:form id="deleteProductForm_${prod.id}" action="products/${prod.id}" method="delete" >
+						                    <sf:form id="deleteProductForm_${prod.id}" action="${pageContext.request.contextPath}/products/${prod.id}" method="delete" >
 						                        <button class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" >Delete</button>
 						                    </sf:form>
 						                </td>
@@ -153,11 +153,11 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="${pageContext.request.contextPath}/">Home</a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>

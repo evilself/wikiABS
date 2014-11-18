@@ -71,25 +71,25 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="${pageContext.request.contextPath}">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products">Products</a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users">Users</a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a style="color:red;" href="${pageContext.request.contextPath}/login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
 	                    <li>
-	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                        <a href="${pageContext.request.contextPath}/register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
@@ -114,7 +114,7 @@
                     <div class="intro-message" >                    	
                         <h2>Articles</h2>
                           <c:if test="${loggedUser != null}">
-					   		 <a href="articles?new">Add new article</a>
+					   		 <a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm" style="margin-top:5px;padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5">Create Article</a>
 					      </c:if>
 					      <c:if test="${fn:length(articles) gt 0}">
 							    <table id="articleTable" class="table" >
@@ -142,11 +142,11 @@
 						                <td class="text-center" style="width:5%">${art.product.productName}</td>
 						                <td class="text-center" style="width:20%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
 						                <td class="text-center" style="width:5%">
-						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="articles/${art.id}">Read</a>
+						                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/articles/${art.id}">Read</a>
 						                </td>
 						                <c:if test="${admin == 'true'}">
 							                <td class="text-center" style="width:5%">
-							                    <sf:form id="deleteForm_${art.id}" action="articles/${art.id}" method="delete" >
+							                    <sf:form id="deleteForm_${art.id}" action="${pageContext.request.contextPath}/articles/${art.id}" method="delete" >
 							                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
 							                    </sf:form>
 							                </td>
@@ -183,11 +183,11 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="${pageContext.request.contextPath}">Home</a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>

@@ -62,27 +62,27 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="${pageContext.request.contextPath}/">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products">Products</a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users">Users</a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a style="color:red;" href="${pageContext.request.contextPath}/login" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple; cursor:pointer;" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                        <a style="color:purple; cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);">Logout</a>
                     </li>
                     </c:if>
                 </ul>
@@ -102,7 +102,7 @@
                     <div class="intro-message">
                     <h2>${product.productName}</h2> 
                     	<div id="list">
-					        <sf:form id="productForm" method="post" action="products">	
+					        <sf:form id="productForm" method="post" action="${pageContext.request.contextPath}/products">	
 					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
 			                    <label class="pull-left"  for="productName">Product Name</label>
 			                    <input name="productName" id="productName"  class="form-control" value="${product.productName}"/>
@@ -114,7 +114,9 @@
 					        	</div>
 					        </sf:form>
 					    </div>                   	
-                       
+                       <div class="col-lg-12 col-sm-12">
+				        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/products">Cancel</a>
+				    	</div>
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                 
                         </ul>
@@ -135,11 +137,11 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="${pageContext.request.contextPath}/">Home</a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>

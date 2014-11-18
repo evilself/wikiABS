@@ -124,7 +124,7 @@
 					        </sf:form>
 					        <div id="result"></div>
 					        <div class="col-lg-12 col-sm-12">
-					        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="users">Cancel</a>
+					        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/users">Cancel</a>
 					    	</div>
 					    </div>                   	
                        

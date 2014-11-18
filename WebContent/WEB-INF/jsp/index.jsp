@@ -67,25 +67,25 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="${pageContext.request.contextPath}">Home</a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products">Products</a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users">Users</a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a href="login" style="color:red" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a href="${pageContext.request.contextPath}/login" style="color:red" data-toggle="modal" data-target="#loginModal">Login</a>                        
 	                    </li>
 	                    <li>
-	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                        <a href="${pageContext.request.contextPath}/register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
@@ -108,16 +108,13 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
-                        
-                        	<sf:form action="articles" method="get" >
+                        	<c:if test="${loggedUser != null}">
+		                    	<a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm pull-right" style="margin-bottom:5px;padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5">Create Article</a>
+		                 	 </c:if>
+                        	<sf:form action="${pageContext.request.contextPath}/articles" method="get" >
                         	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control" style="color:blue;font-height:120%;height:45px;border-radius:10px; " placeholder="What are you looking for?"/>
 		                       <button type="submit" style="margin:5px;background-color:#CCFF99" class="btn btn-default btn-lg">Search</button>
-		                    </sf:form>                  
-		                   
-		                    <c:if test="${loggedUser != null}">
-		                    	<a href="articles?new" class="btn btn-default btn-lg">Create Article</a>
-		                 	 </c:if>
-                        	
+		                    </sf:form>                      	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
                         </ul>
@@ -277,11 +274,11 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="${pageContext.request.contextPath}">Home</a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
