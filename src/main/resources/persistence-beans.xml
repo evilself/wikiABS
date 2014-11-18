@@ -37,6 +37,38 @@
     <!-- jee:jndi-lookup id="dataSource" jndi-name="jdbc/wikiabs" resource-ref="true" ></jee:jndi-lookup-->
     
      
+     <bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" p:packagesToScan="com.americanbanksystems.wiki.domain">
+        <property name="dataSource" ref="dataSource" /> 
+        <!-- BorisM i commendted out the below because we use namespace :p above to specify the packages to scan, instead of one by one -->       
+        <!-- property name="annotatedClasses" >
+            <list>
+            	<value>com.americanbanksystems.wiki.domain.BaseEntity</value>
+            	<value>com.americanbanksystems.wiki.domain.UserRole</value>
+            	<value>com.americanbanksystems.wiki.domain.User</value>
+            	<value>com.americanbanksystems.wiki.domain.Product</value>
+                <value>com.americanbanksystems.wiki.domain.Article</value>                
+                <value>com.americanbanksystems.wiki.domain.Attachment</value>                                
+            </list>
+        </property-->
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.ejb.HibernatePersistence" />
+        </property> 
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>  
+    </bean>
+     
+     <bean id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager">
+    	<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+     
+     
     <!-- configure hibernate session factory -->
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" p:packagesToScan="com.americanbanksystems.wiki.domain">
@@ -61,7 +93,7 @@
         </property>  
     </bean>
     
-    <bean id="transactionManager"
+    <bean id="hibernateTransactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     	<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
