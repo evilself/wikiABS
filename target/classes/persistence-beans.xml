@@ -20,6 +20,11 @@
      
     <!-- we will manage transactions with annotations -->
     <tx:annotation-driven />
+    
+    <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />       
+    </bean>
  
  	<context:property-placeholder location="classpath:application.properties" />
  

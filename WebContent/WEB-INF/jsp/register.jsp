@@ -35,7 +35,7 @@
 	<div class="col-lg-12 col-sm-12">
 		<div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-	        <h4 class="modal-title" id="myModalLabel">Register</h4>
+	        <h4 class="modal-title" id="myModalLabel"><spring:message code="newUserRegistration.pageTitle"/></h4>
 	    </div>
 	    <div class="modal-body">		        
 	 		<form id="registerForm" method="POST">

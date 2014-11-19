@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -29,6 +30,8 @@ import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 @RequestMapping(value={"/", "/welcome"})
 public class WelcomeController {
 	
+	private static final Logger logger = Logger.getLogger(WelcomeController.class);
+	
 	@Autowired
     private EntityGenerator entityGenerator;
 	
@@ -47,6 +50,9 @@ public class WelcomeController {
  
     @RequestMapping(method = RequestMethod.GET)
     public String showMenu(Model model) {   	
+    	if(logger.isDebugEnabled()){
+			logger.debug("getWelcome is executed!");
+		}
     	
     	//Security information
     	model.addAttribute("admin",security.isAdmin()); 
