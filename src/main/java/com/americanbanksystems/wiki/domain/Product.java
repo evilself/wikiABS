@@ -15,6 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="product")
@@ -22,10 +25,15 @@ public class Product extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 4881203836824067361L;
 	
 	protected Long id;
+	
+	@NotEmpty
+	@Size(min=1, max=40)
 	protected String productName;
 	protected String productIdentity;
 	protected boolean custom;	
 
+	@NotEmpty
+	@Size(min=1, max=124)
 	protected String description;	
 
 	public Product() {

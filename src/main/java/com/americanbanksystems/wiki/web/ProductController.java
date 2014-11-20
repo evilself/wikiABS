@@ -2,12 +2,16 @@ package com.americanbanksystems.wiki.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -111,7 +115,10 @@ public class ProductController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String addProduct(Product product) {
+	public String addProduct(@Valid @ModelAttribute Product product, BindingResult errors) {
+		if(errors.hasErrors()) {			
+			return "products/newProduct";
+		}
 		String productIdentity  = product.getProductName().replaceAll(" ", "_");
 		product.setProductIdentity(productIdentity);
 		product.setCustom(true);

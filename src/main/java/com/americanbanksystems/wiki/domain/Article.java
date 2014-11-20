@@ -21,6 +21,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="article")
@@ -38,10 +42,20 @@ public class Article extends BaseEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	protected String title;
-	protected String description;
-	protected String tag;
+	
+	@NotEmpty
+	@Size(min=1, max=124)
+	protected String title;	
+	
+	@NotEmpty	
+	protected String description;	
+	
+	@NotEmpty	
+	@Size(min=1, max=124)
+	protected String tag;			
+
 	protected Product product;	
+	
 	protected User createdByUser;
 	protected User modifiedByUser;
 	protected List<Attachment> attachments;

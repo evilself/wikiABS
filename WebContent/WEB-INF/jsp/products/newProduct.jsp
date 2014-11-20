@@ -102,7 +102,7 @@
                     <div class="intro-message">
                     <h2>${product.productName}</h2> 
                     	<div id="list">
-					        <sf:form id="productForm" method="post" action="${pageContext.request.contextPath}/products">	
+					        <sf:form id="productForm" modelAttribute="product" method="post" action="${pageContext.request.contextPath}/products">	
 					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
 			                    <label class="pull-left"  for="productName">Product Name</label>
 			                    <input name="productName" id="productName"  class="form-control" value="${product.productName}"/>
@@ -169,7 +169,7 @@
     <script>
     
  // When the browser is ready...
-	$(function() {  	
+	/*$(function() {  	
 		
 	    // Setup form validation on the #register-form element
 	    $("#productForm").validate({
@@ -191,7 +191,7 @@
 	        	form.submit();
 	        }
 	    });
-	  });
+	  });*/
     
     
     	function confirmLogout(e) {

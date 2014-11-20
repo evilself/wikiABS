@@ -33,6 +33,16 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style> .invalid {  }
+    
+	    label.error {
+		 color:#FFE6E6;
+		}
+		input.error {
+		 background-color:#FFE6E6;
+		}
+    
+    </style>
 </head>
 
 <body>
@@ -101,28 +111,31 @@
                     <div class="intro-message">
                     <h2>${user.firstName} ${user.lastName}</h2> 
                     	<div id="list">
-					        <sf:form method="post">	
+					        <sf:form id="editUserForm" method="post">	
 					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
-			                    <label for="name">First Name</label>
+			                    <label class="pull-left" for="firstName">First Name</label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="firstName" htmlEscape="false"></sf:errors></label>
 			                    <input name="firstName" id="firstName"  class="form-control" value="${user.firstName}"/>
 			              
-			                    <label for="department">Last Name</label>
-			                    <input name="lastName" id=""lastName" class="form-control" value="${user.lastName}" />
+			                    <label class="pull-left" for="lastName">Last Name</label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="lastName" htmlEscape="false"></sf:errors></label>
+			                    <input name="lastName" id="lastName" class="form-control" value="${user.lastName}" />
 			          
-			                    <label for="username">Username</label>
+			                    <label class="pull-left" for="username">Username</label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="userName" htmlEscape="false"></sf:errors></label>
 			                    <input name="userName" id="userName" class="form-control" value="${user.userName}" />
 			             
-			                    <label for="password">New Password</label>
+			                    <label class="pull-left" for="password">New Password</label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="password" htmlEscape="false"></sf:errors></label>
 			                    <input name="password" id="password" class="form-control" type="password" value="${user.password}" />
 			                    
-			                    <label for="password">Confirm New Password</label>
-			                    <input name="newpassword" id="newpassword" type="password" class="form-control" />
-			             				                   
-			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />
+			                    <label class="pull-left" for="newpassword">Confirm New Password</label><label class="pull-right" id="result"></label>
+			                    <input name="newpassword" id="newpassword" type="password" onKeyUp="checkPass(); return false;" class="form-control" />
+			             		
+			             		<div style="margin-top:10px;"></div>		                   
+			                    <a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../users">Cancel</a>
+			                    <input type="submit" value="Save" id="save" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#CCFF99; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default pull-right" />
+			                    
 			                    </div>					              
 					        </sf:form>
-					        <div class="col-lg-12 col-sm-12">
-					        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../users">Cancel</a>
+					        <div  style="margin-bottom:10px" class="col-lg-12 col-sm-12">
+					        	
 					    	</div>
 					    </div>                   	
                        
@@ -172,7 +185,86 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
+	 <!-- jQuery Validation -->    
+    <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
+    
+    <script>	
+		var match = false;
+		
+		function checkPass()
+		{			
+		    //Store the password field objects into variables ...
+		    var pass1 = document.getElementById('password');
+		    var pass2 = document.getElementById('newpassword');
+		    //Store the Confimation Message Object ...
+		    var message = document.getElementById('result');
+		    //Set the colors we will be using ...
+		    var goodColor = "#CCFF99";
+		    var badColor = "#FFE6E6";
+		    //Compare the values in the password field
+		    //and the confirmation field
+		    if(pass2.value != "") {
+			    if(pass1.value == pass2.value){
+			        //The passwords match.
+			        //Set the color to the good color and inform
+			        //the user that they have entered the correct password
+			        pass2.style.backgroundColor = goodColor;
+			        message.style.color = goodColor;
+			        match=true;
+			        message.innerHTML = "Passwords Match!"
+			    }else{
+			        //The passwords do not match.
+			        //Set the color to the bad color and
+			        //notify the user.
+			        pass2.style.backgroundColor = badColor;
+			        message.style.color = badColor;
+			        match=false
+			        message.innerHTML = "Passwords do not match!"
+			    }
+		    }
+		}
+    
+    </script>
     <script>
+    
+	// When the browser is ready...
+	$(function() {  	
+		
+	    // Setup form validation on the #register-form element
+	    $("#editUserForm").validate({
+	    	//errorClass: 'invalid',
+	        // Specify the validation rules
+	        rules: {
+	        	firstName: "required",
+	        	lastName: "required",
+	            userName: "required"
+	            
+	        },
+	        
+	        errorPlacement: function(error, element) {
+	        	$(error).addClass('pull-right');
+	        	//$(element).css({'background-color':'#FFE6E6'});
+	            error.insertBefore(element);
+	        },
+	        
+	        // Specify the validation error messages
+	        messages: {
+	        	firstName: "First name is missing!",
+	        	lastName: "Last name is missing!",
+	        	userName: "Username is missing!",
+	        	
+	        },        
+	        
+	        submitHandler: function(form) {
+	        	//alert($('#product').val());
+	        	if(match) {
+	        		form.submit();
+	        	 }
+	        }
+	    });
+	  });    
+
+
     	function confirmLogout(e) {
     	 	
     		swal({

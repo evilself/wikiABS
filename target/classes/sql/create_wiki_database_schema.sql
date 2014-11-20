@@ -14,27 +14,23 @@ CREATE TABLE User_Roles
 CREATE TABLE User
 (
 	USER_ID int not null AUTO_INCREMENT,
-    CREATED_TIME datetime not null default now(),
-    MODIFIED_TIME timestamp not null,
+    CREATED_TIME timestamp,
+    MODIFIED_TIME timestamp,
 	FIRST_NAME varchar(64) not null,
 	LAST_NAME varchar(64) not null,
 	USERNAME varchar(32) not null,
     PASSWORD varchar(64) not null,
     ENABLED tinyint not null default 1,
     EMAIL varchar(64) null,    
-    USER_ROLE_ID bigint(20) not null default 2,
 	PRIMARY KEY (USER_ID)
 );
 
 CREATE TABLE Product
 (
 	PRODUCT_ID int not null AUTO_INCREMENT,
-    CREATED_TIME datetime not null default now(),
-    MODIFIED_TIME timestamp not null,
-	PRODUCT_NAME varchar(64) not null,
-    PRODUCT_IDENTITY varchar(64) not null,
-    PRODUCT_DESCRIPTION varchar(256) null, 
-    CUSTOM tinyint not null default 0,
+    CREATED_TIME timestamp,
+    MODIFIED_TIME timestamp,
+	PRODUCT_NAME varchar(64) not null,    
 	PRIMARY KEY (PRODUCT_ID)
 );
 
@@ -63,18 +59,11 @@ CREATE TABLE Attachment
 	ACTUAL_FILENAME varchar(256) not null,
 	ATTACHMENT longblob not null,
     ATTACHMENT_TYPE varchar(32) not null,
-    CONTENT_TYPE varchar(64) not null,
     ARTICLE_ID int null,
     FOREIGN KEY (ARTICLE_ID) REFERENCES Article(ARTICLE_ID),
 	PRIMARY KEY (ATTACHMENT_ID)
 );	
 
-insert into product (PRODUCT_DESCRIPTION, PRODUCT_IDENTITY, PRODUCT_NAME) values ("Risk Management and Tracking", "CompliancePro", "CompliancePro");
-insert into product (PRODUCT_DESCRIPTION, PRODUCT_IDENTITY, PRODUCT_NAME) values ("Imaging and Tracking", "BankManagerElite", "BankManagerElite");
-insert into product (PRODUCT_DESCRIPTION, PRODUCT_IDENTITY, PRODUCT_NAME) values ("Loan Origination", "CompliancePro_Loans", "CompliancePro Loans and Deposits");
-
-insert into user_roles (ROLE, USERNAME) values ("ADMIN", "admin");
-insert into user (FIRST_NAME, LAST_NAME, PASSWORD, USERNAME, USER_ROLE_ID) values ("Admin", "Adminov", '$2a$10$HCjaHWSbeObVjSWdJkq2n.udUSxSYnuN2FpBvQ9iOYxbTtgGpeMaa', "admin", 1);
 
 drop database wikiABS;
 
@@ -86,6 +75,7 @@ select * from attachment;
 
 delete from user_roles where role_id = 2;
 delete from article where article_id = 9;
-delete from attachment where attachment_id in (1);
-delete from product where product_id =4;
+delete from attachment where attachment_id in (1,2,3,4,5,6,7,8,9);
 
+select username,password, enabled from user where username='bm';
+select username, role from user_roles where username='bm';

@@ -20,8 +20,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="user")
@@ -39,10 +42,23 @@ public class User extends BaseEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	@NotEmpty
+	@Size(max=64)
 	protected String firstName;
+	
+	@NotEmpty
+	@Size(max=64)
 	protected String lastName;
+	
+	@NotEmpty
+	@Size(max=32)
 	protected String userName;
+	
+	@NotEmpty	
 	protected String password;
+	
+	@Email
 	protected String email;
 	protected boolean enabled = true;	
 	protected UserRole role;

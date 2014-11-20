@@ -96,7 +96,7 @@
                 <div class="col-lg-12">               
                     <div class="intro-message" style="padding-top: 10%; padding-bottom: 10%;">      
                     	<h2>Create/Edit Article</h2>              	
-                        <sf:form method="post" id="createArticleForm" action="${action}">
+                        <sf:form method="post" id="createArticleForm" modelAttribute="article" action="${action}">
 				           <div class="col-lg-12 col-sm-12">
 				           		<div class="form-group">
 				                    <label class="pull-left" for="title">Title</label>
@@ -203,7 +203,7 @@
     
     <script>
  	// When the browser is ready...
-	$(function() {  	
+	/*$(function() {  	
 		
 	    // Setup form validation on the #register-form element
 	    $("#createArticleForm").validate({
@@ -229,7 +229,7 @@
 	        	form.submit();
 	        }
 	    });
-	  });
+	  });*/
     
     
     	function confirmLogout(e) {

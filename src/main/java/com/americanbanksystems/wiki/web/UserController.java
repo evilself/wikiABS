@@ -2,13 +2,17 @@ package com.americanbanksystems.wiki.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -74,6 +78,9 @@ public class UserController {
     	model.addAttribute("loggedUser", security.getLoggedInUser());
 		    	
 	    User user = userDao.findUser(id);
+	    //we dont want to see password characters for editing a user. If we type in a new password then change it
+	    user.setPassword("");
+	    
 	    model.addAttribute("user", user);
 	 
 	    return "users/viewUser";
@@ -81,21 +88,34 @@ public class UserController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String updateEmployee(@PathVariable("id") long id, User user) {
+	public String updateEmployee(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors) {
+		if(errors.hasErrors() && !errors.hasFieldErrors("password")) {
+			return "users/viewUser";
+		}
+		
 		user.setId(id);
 		
 		User existing = userDao.findUser(id);
 		
-		String password = user.getPassword();
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(password);
+		if(user.getPassword().trim() != "") {
+			String password = user.getPassword();
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String hashedPassword = passwordEncoder.encode(password);
+			user.setPassword(hashedPassword);
+		} else {
+			user.setPassword(existing.getPassword());
+		}
+		
+		UserRole ur = existing.getRole();
+		ur.setUserName(user.getUserName());
 		
 		
-		user.setRole(existing.getRole());
+		user.setRole(ur);
 		
-		user.setPassword(hashedPassword);
+		//user.setPassword(hashedPassword);
 		
 		userDao.updateEntity(user);
+		userRoleDao.updateEntity(ur);
 	 
 	    return "redirect:/users";
 	}
@@ -138,9 +158,16 @@ public class UserController {
 	    return "users/newUser";
 	}
 	
+	
+	//CREATE A NEW USER - POST.
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String addUser(User user) {
+	public String addUser(@Valid @ModelAttribute User user, BindingResult errors) {
+		
+		//If there are any errors return the form!
+		if(errors.hasErrors()) {
+			return "users/newUser";
+		}
 		
 		UserRole role = new UserRole("USER",user.getUserName());
 		user.setRole(role);
