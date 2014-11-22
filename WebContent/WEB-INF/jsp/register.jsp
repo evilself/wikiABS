@@ -12,12 +12,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
+    <title>ABS Wiki</title>
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -40,23 +50,22 @@
 	    <div class="modal-body">		        
 	 		<form id="registerForm" method="POST">
 	 			<div class="form-group col-lg-offset-2">
-	 				<label>First Name</label>
+	 				<label><spring:message code="newUserRegistration.firstname"/></label>
 		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="firstName" name='firstName' />
-		            <label>Last Name</label>
+		            <label><spring:message code="newUserRegistration.lastname"/></label>
 		            <input class="form-control" style="width:80%" type='text' placeholder="Last Name" id="lastName" name='lastName' />
-		        	<label>Username</label>
+		        	<label><spring:message code="newUserRegistration.username"/></label>
 		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />
-		            <label>Password</label>
+		            <label><spring:message code="newUserRegistration.password"/></label>
 		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="rpassword" name='password' />
-		            <label>Confirm Password</label>
+		            <label><spring:message code="newUserRegistration.confirmpassword"/></label>
 		            <input class="form-control" style="width:80%" type='password' onKeyUp="checkPass(); return false;" placeholder="Password" id="rnewPassword" name='newPassword' />		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
           		</div-->
 	       </form>
-	       <button class="btn btn-default pull-right" id="ajaxSubmitBtn" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;margin-right:17%;" onclick="ajaxRegister()">Register</button>	        
-	           	   
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxRegister()"><spring:message code="newUserRegistration.registerbutton"/></button>	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
      </div>
@@ -68,78 +77,8 @@
     
     <!-- jQuery Validation -->    
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
-        
-	<script>	
-		var match = false;
-		
-		function checkPass()
-		{			
-		    //Store the password field objects into variables ...
-		    var pass1 = document.getElementById('rpassword');
-		    var pass2 = document.getElementById('rnewPassword');
-		    //Store the Confimation Message Object ...
-		    var message = document.getElementById('result');
-		    //Set the colors we will be using ...
-		    var goodColor = "#CCFF99";
-		    var badColor = "#FFE6E6";
-		    //Compare the values in the password field
-		    //and the confirmation field
-		    if(pass2.value != "") {
-			    if(pass1.value == pass2.value){
-			        //The passwords match.
-			        //Set the color to the good color and inform
-			        //the user that they have entered the correct password
-			        pass2.style.backgroundColor = goodColor;
-			        message.style.color = goodColor;
-			        match=true;
-			        message.innerHTML = "Passwords Match!"
-			    }else{
-			        //The passwords do not match.
-			        //Set the color to the bad color and
-			        //notify the user.
-			        pass2.style.backgroundColor = badColor;
-			        message.style.color = badColor;
-			        match=false
-			        message.innerHTML = "Passwords do not match!"
-			    }
-		    }
-		}
-	
-		$('#registerForm').keypress(function(event){			 
-			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if(keycode == '13'){
-				$('#ajaxSubmitBtn').click();
-			}		 
-		});		
-	
-		function ajaxRegister(){
-	        $('#result').html('');
-	        if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "")) {
-		        if(match) {	          
-			        $.ajax({
-			        	url:  "/wikiABS/ajaxRegister",
-				        type: "POST",
-				        data: $("#registerForm").serialize(),
-				        success: function(data){
-				        	
-				        	if (data.indexOf("Success") < 0) {
-				        		$('#result').html("Register failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
-				        		$('#username, #password').val("").css({"border-color":"red"});		        		
-				        		
-				            } else {		            	
-				            	$('#result').html("Registered! Please log in with your credentials!").css({"color":"#CCFF99", "font-size":"1.5em"});
-				            	$('#username, #password').css({"border-color":""});
-				            	setTimeout(function() { window.location.reload(true); }, 1000);
-				            }		                       
-				        }		       
-				    });	
-		        } else {	        	
-		        	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
-		        }
-	        } else {
-	        	$('#result').html('Please provide all information!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
-	        }
-	    }		
-	</script>
+    
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
 </body>
 </html>

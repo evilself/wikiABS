@@ -16,11 +16,18 @@
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
-	<!-- SweetAlert-->
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
     <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -61,36 +68,36 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
-                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
+                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com"><spring:message code="welcome.message"/></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="${pageContext.request.contextPath}">Home</a>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="${pageContext.request.contextPath}/products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products"><spring:message code="menu.products"/></a>
 	                    </li>
 	                    <li>
-	                        <a href="${pageContext.request.contextPath}/users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users"><spring:message code="menu.users"/></a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a href="${pageContext.request.contextPath}/login" style="color:red" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
 	                    </li>
 	                    <li>
-	                        <a href="${pageContext.request.contextPath}/register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                        <a href="${pageContext.request.contextPath}/register" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
                     </li>
                     </c:if>
                 </ul>
@@ -102,18 +109,16 @@
 
     <!-- Header -->
     <div class="intro-header">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
                         	<c:if test="${loggedUser != null}">
-		                    	<a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm pull-right" style="margin-bottom:5px;padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5">Create Article</a>
+		                    	<a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm commonButton pull-right" ><spring:message code="article.createArticle"/></a>
 		                 	 </c:if>
                         	<sf:form action="${pageContext.request.contextPath}/articles" method="get" >
-                        	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control" style="color:blue;font-height:120%;height:45px;border-radius:10px; " placeholder="What are you looking for?"/>
-		                       <button type="submit" style="margin:5px;background-color:#CCFF99" class="btn btn-default btn-lg">Search</button>
+                        	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control searchFormControl" placeholder="What are you looking for?"/>
+		                       <button type="submit" class="btn btn-default btn-lg searchButton">Search</button>
 		                    </sf:form>                      	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
@@ -142,13 +147,13 @@
                     <p class="lead">
                     	<table class="table" >
 					        <tr>
-					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>					            
+					            <th class="productTable_header"><spring:message code="article.latest"/></th>					            
 					        </tr>
 					        <c:forEach items="${BankManagerElite_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>					                
 					                <td>
-					                    <a href="articles/${art.id}">Read</a>
+					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -162,7 +167,6 @@
 
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.content-section-a -->
 
@@ -178,13 +182,13 @@
                     <p class="lead">
                     	<table class="table" >
 					        <tr>
-					            <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
+					            <th class="productTable_header"><spring:message code="article.latest"/></th>				            
 					        </tr>
 					        <c:forEach items="${CompliancePro_Loans_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>						                
 					                <td>
-					                    <a href="articles/${art.id}">Read</a>
+					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -214,13 +218,13 @@
                     <p class="lead">
                     	<table class="table" >
 					        <tr>
-					           <th style="color:#C9C9D5; font-weight:bold;font-size:1.2em">Latest articles</th>				            
+					           <th class="productTable_header"><spring:message code="article.latest"/></th>					            
 					        </tr>
 					        <c:forEach items="${CompliancePro_Articles}" var="art">
 					            <tr>
 					                <td><li>${art.title}</li></td>	
 					                <td>
-					                    <a href="articles/${art.id}">Read</a>
+					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -231,20 +235,16 @@
                     <img class="img-responsive" src="<spring:url value="/resources/img/masthead.jpg"/>" alt="">
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.content-section-a -->
 
     <div class="banner">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-6">
-                    <h2>Useful Links</h2>
+                    <h2><spring:message code="general.usefulLinks"/></h2>
                 </div>
                 <div class="col-lg-6">
                     <ul class="list-inline banner-social-buttons">
@@ -260,13 +260,10 @@
                     </ul>
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.banner -->
-
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -274,18 +271,18 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="${pageContext.request.contextPath}">Home</a>
+                            <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#about">About</a>
+                            <a href="#about"><spring:message code="menu.about"/></a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
+                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
                 </div>
             </div>
         </div>
@@ -297,28 +294,11 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/bootstrap.min.js"/> "></script>
     
-    <!-- Bootstrap Core JavaScript -->
+    <!-- Sweet Alert JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
-    <script>
-    	function confirmLogout(e) {
-    	 	
-    		swal({
-    			  title: "Are you sure?",    			  
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, log me out!"
-    			},
-    			function(){    			  
-    			  window.location="logout";
-    			});
-    	 	
-    	}
-   
-    </script>
-
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
 </body>
-
 </html>
     

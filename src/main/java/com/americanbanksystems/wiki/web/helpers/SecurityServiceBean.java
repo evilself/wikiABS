@@ -27,7 +27,12 @@ public final class SecurityServiceBean {
     private boolean isAdmin = false;
     
     public boolean isAdmin() {
-		return isAdmin;
+    	for(GrantedAuthority ga: getAuthorities()) {
+    		if ((ga.getAuthority()).equalsIgnoreCase("admin")) {
+    			return true;    			
+    		}    		
+    	}
+    	return false;
 	}
 
 	private void setAdmin(boolean isAdmin) {
@@ -49,7 +54,17 @@ public final class SecurityServiceBean {
     private User loggedInUser;
    
     public User getLoggedInUser() {
-		return loggedInUser;
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	try {
+	    	String username = ((org.springframework.security.core.userdetails.User) principal).getUsername();
+	    	if  (null != principal) {
+	    		return userDao.findUserByUsername(username);
+	    	} else {
+	    		return null;
+	    	}
+    	} catch (Exception ex) {
+    		return null;
+    	}
 	}
 
 	private void setLoggedInUser(User loggedInUser) {
@@ -61,7 +76,7 @@ public final class SecurityServiceBean {
 		getLoggedInUserFromPrincipal(principal);
 		for(GrantedAuthority ga: getAuthorities()) {
     		if ((ga.getAuthority()).equalsIgnoreCase("admin")) {
-    			setAdmin(true);
+    			//setAdmin(true);
     			break;
     		}    		
     	}
@@ -81,6 +96,6 @@ public final class SecurityServiceBean {
     	} else {
     		loggedInUser = null;
     	}
-		setLoggedInUser(loggedInUser);
+		//setLoggedInUser(loggedInUser);
 	} 
 }
