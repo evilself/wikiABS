@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+   <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Wiki Page/Knowledge base">
@@ -17,11 +17,21 @@
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-    <!-- SweetAlert-->
-    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- DataTable CSS. This is a superb custom data table -->
+    <link href="<spring:url value="/resources/css/dataTables.bootstrap.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -55,33 +65,33 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
-                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
+                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com"><spring:message code="welcome.message"/></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
+                 <ul class="nav navbar-nav navbar-right">
+                   <li>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                     </li>
                     <li>
-                        <a href="articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="/wikiABS/products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products"><spring:message code="menu.products"/></a>
 	                    </li>
-	                    <li>
-	                        <a href="/wikiABS/users">Users</a>
-	                    </li>
+						<li>
+	                        <a href="${pageContext.request.contextPath}/users"><spring:message code="menu.users"/></a>
+	                    </li>   
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="login" data-toggle="modal" data-target="#loginModal">Login</a>                        
-	                    </li>
+	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
+	                    </li>	                    
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
                     </li>
                     </c:if>
                 </ul>
@@ -93,26 +103,27 @@
 
    <!-- Header -->
     <div class="intro-header">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
-                        <h2>Users</h2>                          
-					   	  <a href="users?new">Add new user</a>					     
-						    <table class="table" >
+                        <h2><spring:message code="user.listUsers"/></h2>                          
+					   	  <a class="btn btn-default commonButton btn-sm" href="${pageContext.request.contextPath}/users?new"><spring:message code="user.addUser"/></a>					     
+						    <table id="userTable" class="table" >
+						    	<thead>
 						        <tr style="font-weigth:bold;font-size: 1.1em;">
-						            <th class="text-left" style="width:20%">First Name</th>
-						            <th class="text-left" style="width:20%">Last Name</th>
-						            <th class="text-center" style="width:20%">Username</th>
-						            <th class="text-center" style="width:20%">Password</th>
-						            <th class="text-center" style="width:10%">Role</th>
+						            <th class="text-left" style="width:20%"><spring:message code="user.firstName"/></th>
+						            <th class="text-left" style="width:20%"><spring:message code="user.lastName"/></th>
+						            <th class="text-center" style="width:20%"><spring:message code="user.username"/></th>
+						            <th class="text-center" style="width:20%"><spring:message code="user.password"/></th>
+						            <th class="text-center" style="width:10%"><spring:message code="user.role"/></th>
 						            <th class="text-center" style="width:5%"></th>
 						             <c:if test="${admin == 'true'}">
 						            	<th class="text-center" style="width:5%"></th>
 						            </c:if>
 						        </tr>
+						        </thead>
+						        <tbody>
 						        <c:forEach items="#{users}" var="usr">
 					            <tr style="color:#0066CC;">						            
 					                <td class="text-left" style="width:20%;">${usr.firstName}</td>
@@ -121,17 +132,18 @@
 					                <td class="text-center" style="width:20%">Password hashed</td>
 					                <th class="text-center" style="width:10%">${usr.role.role}</th>	                                
 					                <td class="text-center" style="width:5%">
-					                    <a class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="users/${usr.id}">Edit</a>
+					                    <a class="btn btn-info commonButton" href="${pageContext.request.contextPath}/users/${usr.id}"><spring:message code="user.editButton"/></a>
 					                </td>
 					                <c:if test="${admin == 'true'}">
 						                <td class="text-center" style="width:5%"">
-						                    <sf:form id="deleteForm_${usr.id}" action="users/${usr.id}" method="delete" >
-						                        <input class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" type="submit" onclick="confirmDel(event)" value="Delete"></input>
+						                    <sf:form id="deleteForm_${usr.id}" action="${pageContext.request.contextPath}/users/${usr.id}" method="delete" >
+						                        <input class="btn btn-info commonButton" type="submit" onclick="confirmUserDel(event)" value="Delete"></input>
 						                    </sf:form>
 						                </td>					                
 				                	</c:if>
 					            </tr>
 						        </c:forEach>
+						        </tbody>
 						    </table>				    
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                 
@@ -139,10 +151,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.intro-header -->
 
@@ -153,18 +163,18 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                         </li>                        
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="articles">Articles</a>
+                            <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#about">About</a>
+                            <a href="#about"><spring:message code="menu.about"/></a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
+                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
                 </div>
             </div>
         </div>
@@ -178,43 +188,23 @@
     
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
-	
-	 <script>
-    	function confirmDel(e) {
-    	 	e.preventDefault();
-    		swal({
-    			  title: "Are you sure?",
-    			  text: "Your will not be able to recover this user!",
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, delete it!"
-    			},
-    			function(){     				
-    			  $('#'+$(e.target).parent()[0].id).submit();
-    			});
-    	 	
-    	}
-   
-    </script>
-
-	<script>
-    	function confirmLogout(e) {
-    	 	
-    		swal({
-    			  title: "Are you sure?",    			  
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, log me out!"
-    			},
-    			function(){    			  
-    			  window.location="logout";
-    			});
-    	 	
-    	}
-   
-    </script>
+    
+    <!-- jQuery Datatable -->
+    <script src="<spring:url value="/resources/js/jquery.dataTables.min.js"/> "></script>
+    
+    <!-- Bootstrap Datatable -->
+    <script src="<spring:url value="/resources/js/dataTables.bootstrap.js"/> "></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
+    
+    <script>
+    	$(document).ready(function() {
+    		$('#userTable').DataTable({
+    		    "bFilter": false, "bLengthChange":false , "bPaginate":false,  "aoColumnDefs": [
+    		                                                                                   { "bSortable": false, "aTargets": [ 5,6 ] }
+    		                                                                                   ]  } );
+    	});    	
+    </script>	
 </body>
-
 </html>

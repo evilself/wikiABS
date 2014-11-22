@@ -78,7 +78,7 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                        
-                        	<div class="col-lg-12 col-sm-12 text-left" style="top:30%; left:25%">
+                        	<div class="col-lg-6 col-sm-6 col-lg-offset 3 col-sm-offset-3 text-left" style="top:30%; ">
 							        <c:url var="loginUrl" value="/j_spring_security_check"></c:url>
 							 		<form action="${loginUrl}" id="loginForm" method="POST" novalidate="novalidate">
 							 			<c:if test="${not empty error}">
@@ -89,13 +89,13 @@
 										</c:if>
 							 			<div class="form-group">
 								        	<label><spring:message code="login.username"/></label>
-								            <input class="form-control" style="width:50%" type='text' placeholder="Username" name='username' />
+								            <input class="form-control"  type='text' placeholder="Username" name='username' />
 								        </div>
 								        <div class="form-group">
 								            <label><spring:message code="login.password"/></label>
-								            <input class="form-control" style="width:50%" type='password' placeholder="Password" name='password' />		            
+								            <input class="form-control" type='password' placeholder="Password" name='password' />		            
 							            </div>
-							            <div style="margin-top:5px;width:60%" class="text-center">	            	
+							            <div style="margin-top:5px; margin-bottom:5px; margin-left:15%" class="text-center">	            	
 						          			<button name="submit" class="btn btn-default ajaxRegisterButton" type="submit" value="Login"><spring:message code="login.loginButton"/></button>
 						          		</div>
 						          		<div class="clear"></div>
@@ -153,7 +153,35 @@
 			if(keycode == '13'){
 				$("#loginForm").submit();
 			}		 
-		});		
+		});	
+		
+		//When the browser is ready...
+		$(function() {
+		    // Setup form validation on the #register-form element
+		    $("#loginForm").validate({
+		    	errorClass: 'invalid',
+		        // Specify the validation rules
+		        rules: {
+		            username: "required",
+		            password: "required"		            
+		        },
+		        
+		        errorPlacement: function(error, element) {
+		        	$(error).addClass('pull-right');        	
+		            error.insertBefore(element);
+		        },
+		        
+		        // Specify the validation error messages
+		        messages: {
+		            username: "Username is required!",
+		            password: "Password is required!"		            
+		        },
+		        
+		        submitHandler: function(form) {
+		        	form.submit();
+		        }
+		    });
+		  });
 	</script>
 </body>
 </html>    

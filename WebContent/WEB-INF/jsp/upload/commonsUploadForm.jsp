@@ -7,17 +7,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+   <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
+    <title>ABS Wiki</title>
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -115,7 +125,7 @@
 	      oMyForm.append("file", file.files[0]);
 	     
 	      $.ajax({
-	        url: 'upload/ajax',
+	        url: '/wikiABS/upload/ajax',
 	        data: oMyForm,
 	        dataType: 'text',
 	        processData: false,

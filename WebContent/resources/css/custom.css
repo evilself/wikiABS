@@ -26,6 +26,14 @@
 	border-color:#C9C9D5" !important;
 }
 
+.cancelButton {
+	padding-top:1px !important;
+	padding-bottom: 1px !important; 
+	background-color:#FFE6E6 !important;
+	color:#0066CC !important;
+	border-color:#C9C9D5 !important;
+}
+
 .searchButton {
 	margin:5px !important;
 	background-color:#CCFF99 !important;
@@ -55,7 +63,12 @@
 .errorLogin {
 	width:50% !important;
 	color:#FFE6E6 !important;
+}
 
+.smallTopBottomMargin {
+	padding-top: 10% !important;
+	padding-bottom: 10% !important;
+}
 
 /*Ta1bles************************************************************************************************************/
 

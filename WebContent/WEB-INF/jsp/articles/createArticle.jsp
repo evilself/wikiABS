@@ -17,12 +17,21 @@
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-    <link href="<spring:url value="/resources/css/bootstrap-combobox.css"/>" rel="stylesheet">
-    <!-- SweetAlert-->
-    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- DataTable CSS. This is a superb custom data table -->
+    <link href="<spring:url value="/resources/css/dataTables.bootstrap.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -34,7 +43,23 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-     <style> .invalid { color: red; }</style>
+    <style>    
+	    label.error {
+		 	color:#FFE6E6;
+		}
+		
+		textarea.error {
+			background-color:#FFE6E6;
+		}
+		
+		#productType.error {
+			background-color:#FFE6E6;
+		}
+		
+		input.error {
+		 	background-color:#FFE6E6;
+		}    
+    </style>
 </head>
 
 <body id="articleBody">	
@@ -57,28 +82,36 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
-                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
+                 <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com"><spring:message code="welcome.message"/></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
+                 <ul class="nav navbar-nav navbar-right">
+                   <li>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                     </li>
                     <li>
-                        <a href="/wikiABS/articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products"><spring:message code="menu.products"/></a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users"><spring:message code="menu.users"/></a>
 	                    </li>
-					</c:if>                    
+					</c:if>                  
+                    <c:if test="${loggedUser == null}">
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
+	                    </li>
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}/register" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
+	                    </li>
+                    </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
                     </li>
                     </c:if>
                 </ul>
@@ -95,31 +128,34 @@
 	       <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message" style="padding-top: 10%; padding-bottom: 10%;">      
-                    	<h2>Create/Edit Article</h2>              	
+                    	<h2><spring:message code="article.createHeader"/></h2>              	
                         <sf:form method="post" id="createArticleForm" modelAttribute="article" action="${action}">
+                        	<sf:errors path="*">
+				        		<div style="color:#FFE6E6;"><spring:message code="error.global" /></div>
+				        	</sf:errors>
 				           <div class="col-lg-12 col-sm-12">
 				           		<div class="form-group">
-				                    <label class="pull-left" for="title">Title</label>
+				                    <label class="pull-left" for="title"><spring:message code="article.title"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="title" htmlEscape="false"></sf:errors></label>
 				                    <input class="form-control form-inline pull-right" name="title" id="title" type="text" value="${article.title}"/>
 				                </div>
 				                <div class="form-group" style="padding:1px;">				                	
-					                <label class="pull-left" for="description">Description</label>
+					                <label class="pull-left" for="description"><spring:message code="article.description"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="description" htmlEscape="false"></sf:errors></label>
 					                <label style="margin-top:6px" class=" pull-right">
 					                    <a class="btn btn-sm btn-default" style="background-color: #CCFF99" href="${upload}"
 										   data-toggle="modal"
-										   data-target="#uploadModal">Upload
+										   data-target="#uploadModal"><spring:message code="article.uploadButton"/>
 										 </a>
 					                    </label>
 				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
 				                	<textarea id="description" name="description" value="${article.description}" style="height:400px" class="form-control">${article.description}</textarea>
 				                </div>
 				                <div class="form-group pull-left" style="width:58%">
-				                    <label class="pull-left" for="tag">Tags</label>
+				                    <label class="pull-left" for="tag"><spring:message code="article.tags"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="tag" htmlEscape="false"></sf:errors></label>
 				                    <input class="form-control form-inline pull-right" name="tag" id="tag" type="text" class="form-control" value="${article.tag}"/>
 				                </div>
 				                <input name="product" style="visibility:hidden;height:1px;width:1px;margin-top:2px;" id="product" type="text" value="${article.product.id}"/> 
 				                <div class="text-left form-group pull-right" style="width:38%" > 
-						        	<label class="text-left">Associated Product</label> <label id="product-error" class="invalid pull-right" style="display:none;" for="product">product is missing</label>                 	
+						        	<label class="text-left"><spring:message code="article.product"/></label> <label id="product-error" class="error pull-right" style="display:none;" for="product">Select a product!</label>                 	
 		                        	<select id="productType" name="productType" class="form-control combobox" >					                	
 						                <c:forEach items="#{products}" var="prod">							                						      
 									      	<option  name="${prod.id}" value="${prod.id}">${prod.productName}</option>										     			    
@@ -128,16 +164,16 @@
 							    </div>
 							    <div id="ajaxResponse">
 								    <div class="form-group">
-					                   <label class="pull-left" id="attachmentCount" for="tag">Attachments [<span id="count">${fn:length(attachments)}</span>]</label>					                  
+					                   <label class="pull-left" id="attachmentCount" for="tag"><spring:message code="article.attachments"/> [<span id="count">${fn:length(attachments)}</span>]</label>					                  
 					                   <c:forEach items="${attachments}" var="att">							            
 							            	<div id="${att.id }" class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
 							                	<div class="col-lg-8 col-sm-8">
 							                		<div class="col-lg-2 col-sm-2 text-right">
-								                    	<a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/upload/display/${att.id}">View</a>
+								                    	<a target="_blank" class="btn btn-info commonButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
 								               		</div>
 								               		 <div class="col-lg-2 col-sm-2 text-left">								                    
-									                    <button type="button" class="btn btn-warning" style="padding-top:1px; padding-bottom: 1px; color:#0066CC; border-color:#C9C9D5" onclick="deleteAttachment(${att.id});">Delete</button>
+									                    <button type="button" class="btn commonButton btn-warning" onclick="deleteAttachment(${att.id});"><spring:message code="attachment.deletebutton"/></button>
 									                </div>
 									                <div id="result"></div>									               		
 								                </div>
@@ -145,8 +181,8 @@
 							        	</c:forEach>							        						              
 					                </div>
 							   	</div>	                
-				                <a class="btn btn-info pull-right" style="padding-top:1px; padding-bottom: 1px; background-color:#FFE6E6; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/articles/${article.id}">Cancel</a> 				                
-				           		<input style="margin-right:5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" class="btn btn-info pull-right" type="submit" value="Save" id="save" />
+				                <a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/articles/${article.id}"><spring:message code="general.cancelButton"/></a> 				                
+				           		<input style="margin-right:5px;" class="btn btn-info commonButton pull-right" type="submit" value="Save" id="save" />
 				           </div>
 				        </sf:form>
 				        	
@@ -155,10 +191,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.intro-header -->   
 
@@ -167,21 +201,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <ul class="list-inline">
-                        <li>
-                            <a href="/">Home</a>
-                        </li>                        
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="articles">Articles</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
-                    </ul>
-                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
-                </div>
+	                <ul class="list-inline">
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
+	                    </li>                        
+	                    <li class="footer-menu-divider">&sdot;</li>
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
+	                    </li>
+	                    <li class="footer-menu-divider">&sdot;</li>
+	                    <li>
+	                        <a href="#about"><spring:message code="menu.about"/></a>
+	                    </li>
+	                </ul>
+	                <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
+            	</div>
             </div>
         </div>
     </footer>
@@ -201,90 +235,9 @@
     <!-- jQuery Validation -->    
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
     
-    <script>
- 	// When the browser is ready...
-	/*$(function() {  	
-		
-	    // Setup form validation on the #register-form element
-	    $("#createArticleForm").validate({
-	    	errorClass: 'invalid',
-	        // Specify the validation rules
-	        rules: {
-	        	title: "required",
-	        	description: "required"	,
-	        		tag: "required",
-	        		product:  "required"
-	        },
-	        
-	        // Specify the validation error messages
-	        messages: {
-	        	title: "title is missing",
-	        	description: "description is missing",
-	        	tag: "tag is missing",
-	        	product: "product is missing"
-	        },
-	        
-	        submitHandler: function(form) {
-	        	//alert($('#product').val());
-	        	form.submit();
-	        }
-	    });
-	  });*/
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>    
     
-    
-    	function confirmLogout(e) {
-    	 	
-    		swal({
-    			  title: "Are you sure?",    			  
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, log me out!"
-    			},
-    			function(){    			  
-    			  window.location="/wikiABS/logout";
-    			});
-    	 	
-    	}
-   
-    </script>
-
-	<script>
-		function deleteAttachment(el) {			
-			//e.preventDefault();
-    		swal({
-    			  title: "Are you sure?",
-    			  text: "Your will not be able to recover this attachment!",
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, delete it!"
-    			},
-    			function(){   
-    				//var formID = $(e.target).parent()[0].id;
-    				
-    				$.ajax({
-    		        	url:  "/wikiABS/upload/delete/" + el,
-    			        type: "delete",
-    			        //data: $("#loginForm").serialize(),
-    			        success: function(data){
-    			        	
-    			        	if (data.indexOf("Error") > -1) {
-    			        		$('#result').html("Oops...Error occured while deleting!").css({"color":"#FFE6E6", "font-size":"1.5em"});
-    			            } else {  	   			            	
-    			            	//setTimeout(function() { window.location.reload(true); }, 1000);    			            	
-    			            	var res = JSON.parse(data);     			            	
-    			            	$('#'+res.identity).remove();
-    			            	$('#count').html(res.count);
-    			            }		                       
-    			        }		       
-    			    });	
-    				
-    			});
-			
-		}
-	</script>
-
 	 <script>
 	      $(document).ready(function(){
 	        //$('.combobox').combobox();
@@ -297,9 +250,43 @@
 	       //alert($('#productType').val());
 	     	$('#product').val($('#productType').val());
 	     	if($('#product').val() != "") $('#product-error').hide();	     	
-	      });	     
+	      });	
+	      
+	      $(function() {
+	    		// Setup form validation on the #register-form element
+	    		$("#createArticleForm").validate({
+	    			//errorClass: 'invalid',
+	    		    // Specify the validation rules
+	    		    rules: {
+	    		    	title:       "required",
+	    		    	description: "required"	,
+	    		    	tag:         "required",
+	    		    	//product:     "required",
+	    		    	productType:     "required"
+	    		    	
+	    		    },
+	    		    
+	    		    errorPlacement: function(error, element) {
+	    	        	//$(error).css({'margin-left':'360px'}); 
+	    	        	$(error).addClass('pull-right'); 
+	    	            error.insertBefore(element);
+	    	        },
+	    		    
+	    		    // Specify the validation error messages
+	    		    messages: {
+	    		    	title:       "Title is required!",
+	    		    	description: "Description is required!",
+	    		    	tag:         "Tag is required!",
+	    		    	//product:     "Product is required!"
+	    		    	productType:     "Product is required!"
+	    		    },
+	    		    
+	    		    submitHandler: function(form) {
+	    		    	//alert($('#product').val());
+	    		    	form.submit();
+	    		    }
+	    		});
+	    	});
     </script>
-
 </body>
-
-</html> 
+</html>

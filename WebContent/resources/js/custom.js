@@ -121,32 +121,84 @@ $('#loginForm').keypress(function(event){
 	if(keycode == '13'){
 		$('#ajaxSubmitBtn').click();
 	}		 
-});		
+});	
 
-//When the browser is ready...
-$(function() {
-    // Setup form validation on the #register-form element
-    $("#loginForm").validate({
-    	errorClass: 'invalid',
-        // Specify the validation rules
-        rules: {
-            username: "required",
-            password: "required"		            
-        },
-        
-        errorPlacement: function(error, element) {
-        	$(error).css({'margin-left':'360px'});        	
-            error.insertBefore(element);
-        },
-        
-        // Specify the validation error messages
-        messages: {
-            username: "Username is missing!",
-            password: "Password is missing!"		            
-        },
-        
-        submitHandler: function(form) {
-        	form.submit();
-        }
-    });
-  });		
+function confirmDel(e) {
+ 	e.preventDefault();
+	swal({
+		  title: "Are you sure?",
+		  text: "Your will not be able to recover this article and all associated attachments!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, delete it!"
+		},
+		function(){    			  
+			$('#'+$(e.target).parent()[0].id).submit();
+		});    	 	
+}
+
+function deleteAttachment(el) {			
+	//e.preventDefault();
+	swal({
+		  title: "Are you sure?",
+		  text: "Your will not be able to recover this attachment!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, delete it!"
+		},
+		function(){   
+			//var formID = $(e.target).parent()[0].id;
+			
+			$.ajax({
+	        	url:  "/wikiABS/upload/delete/" + el,
+		        type: "delete",
+		        //data: $("#loginForm").serialize(),
+		        success: function(data){
+		        	
+		        	if (data.indexOf("Error") > -1) {
+		        		$('#result').html("Oops...Error occured while deleting!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+		            } else {  	   			            	
+		            	//setTimeout(function() { window.location.reload(true); }, 1000);    			            	
+		            	var res = JSON.parse(data);     			            	
+		            	$('#'+res.identity).remove();
+		            	$('#count').html(res.count);
+		            }		                       
+		        }		       
+		    });	
+			
+		});
+	
+}	
+
+function confirmProductDel(e) {
+ 	e.preventDefault();
+	swal({
+		  title: "Are you sure?",
+		  text: "Your will not be able to recover this product!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, delete it!"
+		},
+		function(){     				
+		  $('#'+$(e.target).parent()[0].id).submit();
+		});
+ 	
+}
+
+function confirmUserDel(e) {
+ 	e.preventDefault();
+	swal({
+		  title: "Are you sure?",
+		  text: "Your will not be able to recover this user!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, delete it!"
+		},
+		function(){     				
+		  $('#'+$(e.target).parent()[0].id).submit();
+		});    	 	
+}

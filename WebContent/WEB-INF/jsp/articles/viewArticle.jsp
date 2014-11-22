@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+   <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Wiki Page/Knowledge base">
@@ -17,12 +17,21 @@
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-    <!-- SweetAlert-->
+    
+    <!-- FAVICON -->
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
     <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
     
-	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- DataTable CSS. This is a superb custom data table -->
+    <link href="<spring:url value="/resources/css/dataTables.bootstrap.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -63,36 +72,36 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
-                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
+                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com"><spring:message code="welcome.message"/></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
+                 <ul class="nav navbar-nav navbar-right">
+                   <li>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                     </li>
                     <li>
-                        <a href="../articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="products">Products</a>
+	                        <a href="${pageContext.request.contextPath}/products"><spring:message code="menu.products"/></a>
 	                    </li>
 	                    <li>
-	                        <a href="users">Users</a>
+	                        <a href="${pageContext.request.contextPath}/users"><spring:message code="menu.users"/></a>
 	                    </li>
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="../login" data-toggle="modal" data-target="#loginModal">Login</a>                        
+	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
 	                    </li>
 	                    <li>
-	                        <a href="register" style="color:green" data-toggle="modal" data-target="#registerModal">Register</a>                        
+	                        <a href="${pageContext.request.contextPath}/register" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple;cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);" >Logout</a>
+                        <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
                     </li>
                     </c:if>
                 </ul>
@@ -104,31 +113,29 @@
 
    <!-- Header -->
     <div class="intro-header">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">
-                	 <div class="intro-message" style="padding-top: 10%; padding-bottom: 10%;">                    	
+                	 <div class="intro-message smallTopBottomMargin">                    	
                         <h2>${art.title}</h2>
 						    <div id="list">						      
 						         <div class="col-lg-12 col-sm-12">					           		
 					                <div class="form-group">
-					                   <label class="pull-left" for="description">Description</label>
+					                   <label class="pull-left" for="description"><spring:message code="article.description"/></label>
 						               <textarea class="form-control" style="opacity:0.5;height:550px" name="description" id="description" disabled="true">${art.description}</textarea>
 					                </div>
 					                <div class="form-group">
-					                   <label class="pull-left" for="tag">Tags</label>
+					                   <label class="pull-left" for="tag"><spring:message code="article.tags"/></label>
 						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
 					                </div>
 					                <div class="form-group">
-					                   <label class="pull-left" for="tag">Attachments [${fn:length(attachments)}]</label>					                  
+					                   <label class="pull-left" for="tag"><spring:message code="article.attachments"/> [${fn:length(attachments)}]</label>					                  
 					                   <c:forEach items="${attachments}" var="att">							            
 							            	<div class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
 							                	<div class="col-lg-8 col-sm-8">
 							                		<div class="col-lg-2 col-sm-2 text-right">
-								                    	<a target="_blank" class="btn btn-info" style="padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="/wikiABS/upload/display/${att.id}">View</a>
+								                    	<a target="_blank" class="btn btn-info commonButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
 								               		</div>								               		
 								                </div>
 								                </div>					             
@@ -138,9 +145,9 @@
 						    </div>						 
 						    <br />
 						    <div class="col-lg-12 col-sm-12">
-							    <a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles">Back to Articles</a> 
+							    <a class="btn btn-info commonButton pull-right" href="${pageContext.request.contextPath}/articles"><spring:message code="navigation.toArticles"/></a> 
 	                          	<c:if test="${editable}">
-	                          		<a class="btn btn-info pull-right" style="margin-right: 5px; padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="../articles/edit/${art.id}">Edit</a>
+	                          		<a class="btn btn-info commonButton pull-right" style="margin-right:5px;" href="${pageContext.request.contextPath}/articles/edit/${art.id}"><spring:message code="article.editButton"/></a>
                         		</c:if>
                         	</div>
                         <!-- h3>What are you looking for?</h3 -->
@@ -148,33 +155,29 @@
                     </div>                    
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.intro-header -->
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="list-inline">
-                        <li>
-                            <a href="/">Home</a>
-                        </li>                        
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="articles">Articles</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
-                    </ul>
-                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
-                </div>
+            <div class="col-lg-12">
+                <ul class="list-inline">
+                    <li>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
+                    </li>                        
+                    <li class="footer-menu-divider">&sdot;</li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
+                    </li>
+                    <li class="footer-menu-divider">&sdot;</li>
+                    <li>
+                        <a href="#about"><spring:message code="menu.about"/></a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
             </div>
         </div>
     </footer>
@@ -188,24 +191,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
-    <script>
-    	function confirmLogout(e) {
-    	 	
-    		swal({
-    			  title: "Are you sure?",    			  
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, log me out!"
-    			},
-    			function(){    			  
-    			  window.location="/wikiABS/logout";
-    			});
-    	 	
-    	}
-   
-    </script>
-
+     <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
 </body>
-
 </html>

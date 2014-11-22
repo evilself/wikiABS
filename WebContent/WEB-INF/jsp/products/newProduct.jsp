@@ -8,20 +8,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Wiki Page/Knowledge base">
-    <meta name="author" content="BorisM">
-    <title>ABS Wiki</title>
-    
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
-    <!-- SweetAlert-->
-    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- DataTable CSS. This is a superb custom data table -->
+    <link href="<spring:url value="/resources/css/dataTables.bootstrap.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -33,7 +36,15 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <style> .invalid { color: red; }</style>
+    <style>    
+	    label.error {
+		 	color:#FFE6E6;
+		}
+		
+		input.error {
+		 	background-color:#FFE6E6;
+		}    
+    </style>
 </head>
 
 <body>
@@ -56,33 +67,30 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img class="img-responsive navbar-brand" src="<spring:url value="/resources/img/newEagle.jpg"/>" alt=""></img>
-                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com">Welcome to American Bank System's knowledge pool!</a>
+                <a class="navbar-brand" target="_blank" href="http://www.americanbanksystems.com"><spring:message code="welcome.message"/></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/">Home</a>
+                   <li>
+                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/articles">Articles</a>
+                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
                     </li> 
                     <c:if test="${admin == 'true'}">                   
 					    <li>
-	                        <a href="${pageContext.request.contextPath}/products">Products</a>
-	                    </li>
-	                    <li>
-	                        <a href="${pageContext.request.contextPath}/users">Users</a>
-	                    </li>
+	                        <a href="${pageContext.request.contextPath}/products"><spring:message code="menu.products"/></a>
+	                    </li>	                    
 					</c:if>                  
                     <c:if test="${loggedUser == null}">
 	                    <li>
-	                        <a style="color:red;" href="${pageContext.request.contextPath}/login" data-toggle="modal" data-target="#loginModal">Login</a>                        
-	                    </li>
+	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
+	                    </li>	                    
                     </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
-                        <a style="color:purple; cursor:pointer;" id="logoutLink" onclick="confirmLogout(event);">Logout</a>
+                        <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
                     </li>
                     </c:if>
                 </ul>
@@ -94,61 +102,59 @@
 
    <!-- Header -->
     <div class="intro-header">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">
-                    <h2>${product.productName}</h2> 
+                    <h2><spring:message code="product.createProductTitle"/></h2> 
                     	<div id="list">
 					        <sf:form id="productForm" modelAttribute="product" method="post" action="${pageContext.request.contextPath}/products">	
+					        	<sf:errors path="*">
+					        		<div style="color:#FFE6E6;"><spring:message code="error.global" /></div>
+					        	</sf:errors>
 					        	<div class="col-lg-4 col-sm-4 col-lg-offset-4 col-sm-offset-4">				            
-			                    <label class="pull-left"  for="productName">Product Name</label>
+			                    <label class="pull-left"  for="productName"><spring:message code="product.name"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="productName" htmlEscape="false"></sf:errors></label>
 			                    <input name="productName" id="productName"  class="form-control" value="${product.productName}"/>
 			              
-			                    <label class="pull-left" for="description">Description</label>
+			                    <label class="pull-left" for="description"><spring:message code="product.description"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="description" htmlEscape="false"></sf:errors></label>
 			                    <input name="description" id="description" class="form-control" value="${product.description}" />		                    
-			             				                   
-			                    <input type="submit" value="Save" id="save" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;" class="btn btn-default;" />					              
+			             			
+			             		<a class="btn btn-info cancelButton pull-right" style="margin-top:5px" href="${pageContext.request.contextPath}/products"><spring:message code="general.cancelButton"/></a>             
+			                    <input type="submit" value="Save" style="margin-right:5px;margin-top:5px" id="save" class="btn btn-default commonButton pull-right"/>					              
 					        	</div>
 					        </sf:form>
-					    </div>                   	
-                       <div class="col-lg-12 col-sm-12">
-				        	<a class="btn btn-info pull-right" style=" padding-top:1px; padding-bottom: 1px; background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5" href="${pageContext.request.contextPath}/products">Cancel</a>
-				    	</div>
+					    </div>                
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                 
                         </ul>
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- /.container -->
-
     </div>
     <!-- /.intro-header -->
-
+    
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">
+                <div class="row">
                 <div class="col-lg-12">
                     <ul class="list-inline">
-                        <li>
-                            <a href="${pageContext.request.contextPath}/">Home</a>
-                        </li>                        
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/articles">Articles</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
-                    </ul>
-                    <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2014. All Rights Reserved</p>
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}"><spring:message code="menu.home"/></a>
+	                    </li>                        
+	                    <li class="footer-menu-divider">&sdot;</li>
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}/articles"><spring:message code="menu.articles"/></a>
+	                    </li>
+	                    <li class="footer-menu-divider">&sdot;</li>
+	                    <li>
+	                        <a href="#about"><spring:message code="menu.about"/></a>
+	                    </li>
+	                </ul>
+	                <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
                 </div>
             </div>
         </div>
@@ -163,54 +169,48 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<spring:url value="/resources/js/sweet-alert.min.js"/> "></script>
     
-    !-- jQuery Validation -->    
+    <!-- jQuery Validation -->    
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
     
-    <script>
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
     
- // When the browser is ready...
-	/*$(function() {  	
-		
-	    // Setup form validation on the #register-form element
-	    $("#productForm").validate({
-	    	errorClass: 'invalid',
-	        // Specify the validation rules
-	        rules: {
-	        	productName: "required",
-	        	description: "required"		        		
-	        },
-	        
-	        // Specify the validation error messages
-	        messages: {
-	        	productName: "Product name is missing!",
-	        	description: "Description is missing!"	        	
-	        },
-	        
-	        submitHandler: function(form) {
-	        	//alert($('#product').val());
-	        	form.submit();
-	        }
-	    });
-	  });*/
-    
-    
-    	function confirmLogout(e) {
-    	 	
-    		swal({
-    			  title: "Are you sure?",    			  
-    			  type: "warning",
-    			  showCancelButton: true,
-    			  confirmButtonColor: "#DD6B55",
-    			  confirmButtonText: "Yes, log me out!"
-    			},
-    			function(){    			  
-    			  window.location="/wikiABS/logout";
-    			});
-    	 	
-    	}
-   
-    </script>
-
+    <script>    
+	    $(document).keypress(function(event){			 
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				$("#productForm").submit();
+			}		 
+		});	
+	    
+	    // When the browser is ready...
+		$(function() {  	
+			
+		    // Setup form validation on the #register-form element
+		    $("#productForm").validate({		    	
+		        // Specify the validation rules
+		        rules: {
+		        	productName: "required",
+		        	description: "required"		        		
+		        },
+		        
+		        errorPlacement: function(error, element) {
+		        	$(error).addClass('pull-right');        	
+		            error.insertBefore(element);
+		        },
+		        
+		        // Specify the validation error messages
+		        messages: {
+		        	productName: "Product name is required!",
+		        	description: "Description is required!"	        	
+		        },
+		        
+		        submitHandler: function(form) {
+		        	//alert($('#product').val());
+		        	form.submit();
+		        }
+		    });
+		  });  
+      </script>
 </body>
-
 </html>
