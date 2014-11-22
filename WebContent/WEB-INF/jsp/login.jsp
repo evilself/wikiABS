@@ -12,12 +12,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Wiki Page/Knowledge base">
     <meta name="author" content="BorisM">
+    <title>ABS Wiki</title>
     
     <!-- Bootstrap Core CSS -->
     <link href="<spring:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
-    <!-- Custom CSS for the main page-->
+    
+    <!-- Template CSS -->
     <link href="<spring:url value="/resources/css/landing-page.css"/>" rel="stylesheet">
+    
+    <!-- FAVICON -->
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<!-- SweetAlert CSS. This is a superb custom alert popup -->
+    <link href="<spring:url value="/resources/css/sweet-alert.css"/>" rel="stylesheet">
+    
+    <!-- WikiABS custom CSS classes -->
+    <link href="<spring:url value="/resources/css/custom.css"/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
@@ -35,23 +45,22 @@
 	<div class="col-lg-12 col-sm-12">
 		<div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-	        <h4 class="modal-title" id="myModalLabel">Login</h4>
+	        <h4 class="modal-title" id="myModalLabel"><spring:message code="login.login"/></h4>
 	    </div>
 	    <div class="modal-body">	    	
 	        <c:url var="loginUrl" value="/j_spring_security_check"></c:url>
 	 		<form id="loginForm" method="POST">
 	 			<div class="form-group col-lg-offset-2">
-		        	<label>Username</label>
+		        	<label><spring:message code="login.username"/></label>
 		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="username" name='username' />
-		            <label>Password</label>
+		            <label><spring:message code="login.password"/></label>
 		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="password" name='password' />		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
           		</div-->
 	       </form>
-	       <button class="btn btn-default pull-right" id="ajaxSubmitBtn" style="background-color:#C9C9D5; color:#0066CC; border-color:#C9C9D5;margin-right:17%;" onclick="ajaxLogin()">Login</button>	        
-	           	   
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxLogin()"><spring:message code="login.loginButton"/></button>	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
      </div>
@@ -63,63 +72,8 @@
     
     <!-- jQuery Validation -->    
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
-        
-	<script>	
-		$('#loginForm').keypress(function(event){			 
-			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if(keycode == '13'){
-				$('#ajaxSubmitBtn').click();
-			}		 
-		});
-		
-		// When the browser is ready...
-		/*$(function() {  
-		  
-		    // Setup form validation on the #register-form element
-		    $("#loginForm").validate({
-		    
-		        // Specify the validation rules
-		        rules: {
-		            username: "required",
-		            password: "required"		            
-		        },
-		        
-		        // Specify the validation error messages
-		        messages: {
-		            username: "Username is missing",
-		            password: "Password is missing"		            
-		        },
-		        
-		        submitHandler: function(form) {
-		        	$('#ajaxSubmitBtn').click();
-		        }
-		    });
-		  });*/
-	
-		function ajaxLogin(){
-	        $('#result').html('');
-	        if(($('#username').val() != "") && ($('#password').val() != "")) {	          
-		        $.ajax({
-		        	url:  "/wikiABS/ajaxLogin",
-			        type: "POST",
-			        data: $("#loginForm").serialize(),
-			        success: function(data){
-			        	
-			        	if (data.indexOf("Success") < 0) {
-			        		$('#result').html("Login failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
-			        		$('#username, #password').val("").css({"border-color":"#FFE6E6"});		        		
-			        		
-			            } else {		            	
-			            	$('#result').html("Login successful!").css({"color":"#CCFF99", "font-size":"1.5em"});
-			            	$('#username, #password').css({"border-color":""});
-			            	setTimeout(function() { window.location.reload(true); }, 1000);
-			            }		                       
-			        }		       
-			    });	
-	        } else {	        	
-	        	 $('#result').html('Please provide both username and password!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
-	        }
-	    }		
-	</script>
+    
+    <!-- Custom JavaScript -->
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>    
 </body>
 </html>

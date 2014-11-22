@@ -81,6 +81,12 @@
                         	<div class="col-lg-12 col-sm-12 text-left" style="top:30%; left:25%">
 							        <c:url var="loginUrl" value="/j_spring_security_check"></c:url>
 							 		<form action="${loginUrl}" id="loginForm" method="POST" novalidate="novalidate">
+							 			<c:if test="${not empty error}">
+											<div class="errorLogin text-center">${error}</div>
+										</c:if>
+										<c:if test="${not empty denied}">
+											<div class="errorLogin text-center">${denied}</div>
+										</c:if>
 							 			<div class="form-group">
 								        	<label><spring:message code="login.username"/></label>
 								            <input class="form-control" style="width:50%" type='text' placeholder="Username" name='username' />

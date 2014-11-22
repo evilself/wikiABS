@@ -91,6 +91,38 @@ function ajaxRegister(){
     }
 }
 
+function ajaxLogin(){
+    $('#result').html('');
+    if(($('#username').val() != "") && ($('#password').val() != "")) {	          
+        $.ajax({
+        	url:  "/wikiABS/ajaxLogin",
+	        type: "POST",
+	        data: $("#loginForm").serialize(),
+	        success: function(data){
+	        	
+	        	if (data.indexOf("Success") < 0) {
+	        		$('#result').html("Login failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+	        		$('#username, #password').val("").css({"border-color":"#FFE6E6"});		        		
+	        		
+	            } else {		            	
+	            	$('#result').html("Login successful!").css({"color":"#CCFF99", "font-size":"1.5em"});
+	            	$('#username, #password').css({"border-color":""});
+	            	setTimeout(function() { window.location.reload(true); }, 1000);
+	            }		                       
+	        }		       
+	    });	
+    } else {	        	
+    	 $('#result').html('Please provide both username and password!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
+    }
+}	
+
+$('#loginForm').keypress(function(event){			 
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		$('#ajaxSubmitBtn').click();
+	}		 
+});		
+
 //When the browser is ready...
 $(function() {
     // Setup form validation on the #register-form element
@@ -109,8 +141,8 @@ $(function() {
         
         // Specify the validation error messages
         messages: {
-            username: "Username is missing",
-            password: "Password is missing"		            
+            username: "Username is missing!",
+            password: "Password is missing!"		            
         },
         
         submitHandler: function(form) {

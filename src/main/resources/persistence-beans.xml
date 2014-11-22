@@ -134,7 +134,7 @@
         <sec:intercept-url pattern="/products*" access="ADMIN" />
         <sec:intercept-url pattern="/products/\d*" access="ADMIN" />
         <sec:intercept-url pattern="\A/products\?new*\Z" access="ADMIN" />
-        <sec:form-login login-page="/loginFull" authentication-failure-url="/denied"
+        <sec:form-login login-page="/loginFull" authentication-failure-url="/loginFull?error"
             username-parameter="username" password-parameter="password"
             default-target-url="/" />
         <sec:logout invalidate-session="true" logout-success-url="/loginFull"
