@@ -88,14 +88,22 @@ public class UserController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String updateEmployee(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors) {
+	public String updateEmployee(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors, Model model) {		
 		if(errors.hasErrors() && !errors.hasFieldErrors("password")) {
+					
 			return "users/viewUser";
 		}
 		
-		user.setId(id);
-		
 		User existing = userDao.findUser(id);
+		User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
+		//Check if another username exists
+		if (checkUsernameUser != null && (existing.getId() != checkUsernameUser.getId())) {
+			model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
+			return "users/viewUser";
+		}
+				
+		user.setId(id);		
+		
 		
 		if(user.getPassword().trim() != "") {
 			String password = user.getPassword();
@@ -162,12 +170,20 @@ public class UserController {
 	//CREATE A NEW USER - POST.
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String addUser(@Valid @ModelAttribute User user, BindingResult errors) {
+	public String addUser(@Valid @ModelAttribute User user, BindingResult errors, Model model) {
 		
 		//If there are any errors return the form!
 		if(errors.hasErrors()) {
 			return "users/newUser";
+		}		
+		
+		User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
+		//Check if another username exists
+		if (checkUsernameUser != null) {
+			model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
+			return "users/newUser";
 		}
+		
 		
 		UserRole role = new UserRole("USER",user.getUserName());
 		user.setRole(role);

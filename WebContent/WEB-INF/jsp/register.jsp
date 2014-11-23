@@ -54,12 +54,12 @@
 		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="firstName" name='firstName' />
 		            <label><spring:message code="newUserRegistration.lastname"/></label>
 		            <input class="form-control" style="width:80%" type='text' placeholder="Last Name" id="lastName" name='lastName' />
-		        	<label><spring:message code="newUserRegistration.username"/></label>
+		        	<label><spring:message code="newUserRegistration.username"/></label>		        	 
 		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />
 		            <label><spring:message code="newUserRegistration.password"/></label>
-		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="rpassword" name='password' />
+		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="password" name='password' />
 		            <label><spring:message code="newUserRegistration.confirmpassword"/></label>
-		            <input class="form-control" style="width:80%" type='password' onKeyUp="checkPass(); return false;" placeholder="Password" id="rnewPassword" name='newPassword' />		            
+		            <input class="form-control" style="width:80%" type='password' onKeyUp="checkPass(); return false;" placeholder="Password" id="newPassword" name='newPassword' />		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>

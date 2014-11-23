@@ -43,6 +43,13 @@ public class AjaxRegisterController {
 	  
 	//System.out.println("username "+username);
 	//System.out.println("password "+password);
+	  
+	User checkUsernameUser = userDao.findUserByUsername(userName);
+	//Check if another username exists
+	if (checkUsernameUser != null) {		
+		return "Fail(Username exists!)";
+	}  
+	  
 	User user = new User();
 	user.setFirstName(firstName);
 	user.setLastName(lastName);

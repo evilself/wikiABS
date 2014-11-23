@@ -122,13 +122,16 @@
 			                    <input name="lastName" id=""lastName" class="form-control" value="${user.lastName}" />
 			          
 			                    <label class="pull-left" for="username"><spring:message code="user.username"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="userName" htmlEscape="false"></sf:errors></label>
+			                    <c:if test="${not empty usernameCheck}">
+									<div style="color:#FFE6E6" class="pull-right">${usernameCheck}</div>
+								</c:if>
 			                    <input name="userName" id="userName" class="form-control" value="${user.userName}" />
 			             					             	
 			                    <label class="pull-left" for="password"><spring:message code="user.newPassword"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="password" htmlEscape="false"></sf:errors></label>
 			                    <input name="password" id="password" class="form-control" type="password" value="${user.password}" />
 			                    
 			                    <label class="pull-left" for="newpassword"><spring:message code="user.confirmNewPassword"/></label><label class="pull-right" id="result"></label>
-			                    <input name="newpassword" onKeyUp="checkPass(); return false;" id="newpassword" type="password" class="form-control" />
+			                    <input name="newpassword" onKeyUp="checkPass(); return false;" id="newPassword" type="password" class="form-control" />
 			             		
 			             		<div style="margin-top:10px;"></div>		      
 				             		 <a class="btn btn-info commonButton pull-right" href="${pageContext.request.contextPath}/users"><spring:message code="general.cancelButton"/></a>             
@@ -215,7 +218,7 @@
 	        	lastName: "Last name is missing!",
 	        	userName: "Username is missing!",
 	        	password: "Password is missing!",
-		        newpassword: "New password is missing!"
+		        newpassword: "Password confirmation is missing!"
 	        },        
 	        
 	        submitHandler: function(form) {

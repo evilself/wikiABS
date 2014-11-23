@@ -123,9 +123,13 @@
 			                    <input name="lastName" id="lastName" class="form-control" value="${user.lastName}" />
 			          
 			                    <label class="pull-left" for="username"><spring:message code="user.username"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="userName" htmlEscape="false"></sf:errors></label>
+			                    <c:if test="${not empty usernameCheck}">
+									<div style="color:#FFE6E6" class="pull-right">${usernameCheck}</div>
+								</c:if>
 			                    <input name="userName" id="userName" class="form-control" value="${user.userName}" />
 			             
 			                    <label class="pull-left" for="password"><spring:message code="user.newPassword"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="password" htmlEscape="false"></sf:errors></label>
+			                   			                    
 			                    <input name="password" id="password" class="form-control" type="password" value="${user.password}" />
 			                    
 			                    <label class="pull-left" for="newpassword"><spring:message code="user.confirmNewPassword"/></label><label class="pull-right" id="result"></label>
@@ -189,7 +193,7 @@
     <script src="<spring:url value="/resources/js/custom.js"/> "></script>
     
     <script>	
-		var match = false;
+		var match = true;
 		
 		function checkPass()
 		{			
@@ -221,6 +225,10 @@
 			        match=false
 			        message.innerHTML = "Passwords do not match!"
 			    }
+		    } else {
+		    	if (pass1.value == "") {		    		
+		    		match = true;
+		    	}
 		    }
 		}
 		

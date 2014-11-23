@@ -23,8 +23,8 @@ var match = false;
 function checkPass()
 {			
     //Store the password field objects into variables ...
-    var pass1 = document.getElementById('rpassword');
-    var pass2 = document.getElementById('rnewPassword');
+    var pass1 = document.getElementById('password');
+    var pass2 = document.getElementById('newPassword');
     //Store the Confimation Message Object ...
     var message = document.getElementById('result');
     //Set the colors we will be using ...
@@ -73,9 +73,13 @@ function ajaxRegister(){
 		        success: function(data){
 		        	
 		        	if (data.indexOf("Success") < 0) {
-		        		$('#result').html("Register failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
-		        		$('#username, #password').val("").css({"border-color":"red"});		        		
-		        		
+		        		if(data.indexOf("Username") > 0) {
+		        			$('#result').html("Username already taken!!!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+			        		$('#userName').val("").css({"border-color":"red"});
+		        		} else {
+			        		$('#result').html("Register failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+			        		$('#firstName, #lastName , #userName , #password , #newPassword').val("").css({"border-color":"red"});		        		
+		        		}
 		            } else {		            	
 		            	$('#result').html("Registered! Please log in with your credentials!").css({"color":"#CCFF99", "font-size":"1.5em"});
 		            	$('#username, #password').css({"border-color":""});
