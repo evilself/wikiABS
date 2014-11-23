@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-    		 xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    		 xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
- 
+    		 xmlns:beans="http://www.springframework.org/schema/beans" 
+    		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    		 xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd    		 				
+             					 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">             
+         
     <!-- Configuring RoleVoter bean to use custom access roles, by default roles
         should be in the form ROLE_{XXX} -->
-    <beans:bean id="roleVoter"
-        class="org.springframework.security.access.vote.RoleVoter">
+    <beans:bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
         <beans:property name="rolePrefix" value=""></beans:property>
-    </beans:bean>
+    </beans:bean>  
  
     <beans:bean id="accessDecisionManager"
         class="org.springframework.security.access.vote.AffirmativeBased">
-        <beans:constructor-arg name="decisionVoters"
-            ref="roleVoter" />
+        <beans:constructor-arg name="decisionVoters" ref="roleVoter" />
     </beans:bean>
  
-    <http authentication-manager-ref="jdbc-auth"
-        access-decision-manager-ref="accessDecisionManager">
-        <intercept-url pattern="/emp/**" access="Admin" />
-        <form-login login-page="/login" authentication-failure-url="/denied"
+    <http request-matcher="regex" authentication-manager-ref="jdbc-auth"
+        access-decision-manager-ref="accessDecisionManager">                
+        <intercept-url pattern="\A/articles\?new*\Z" access="USER,ADMIN" />
+       
+        <intercept-url pattern="/articles/edit/\d*" access="ADMIN,USER" />
+        <intercept-url pattern="/users*" access="ADMIN" />
+        <intercept-url pattern="/users/\d*" access="ADMIN" />
+        <intercept-url pattern="\A/users\?new*\Z" access="ADMIN" />
+        <intercept-url pattern="/products*" access="ADMIN" />
+        <intercept-url pattern="/products/\d*" access="ADMIN" />
+        <intercept-url pattern="\A/products\?new*\Z" access="ADMIN" />
+        <form-login login-page="/loginFull" authentication-failure-url="/loginFull?error"
             username-parameter="username" password-parameter="password"
-            default-target-url="/home" />
-        <logout invalidate-session="true" logout-success-url="/login"
+            default-target-url="/" />
+        <logout invalidate-session="true" logout-success-url="/loginFull"
             logout-url="/j_spring_security_logout" />
         <access-denied-handler error-page="/denied"/>
-        <session-management invalid-session-url="/login">
-            <concurrency-control max-sessions="1"
-                expired-url="/login" />
+        <session-management invalid-session-url="/">
+            <concurrency-control max-sessions="50"
+                expired-url="/loginFull" />
         </session-management>
     </http>
  
@@ -48,16 +55,21 @@
     <beans:bean id="userDetailsService"
         class="com.americanbanksystems.wiki.security.dao.implementation.UserDetailsServiceImpl" />
  
-    <authentication-manager id="jdbc-auth">
+    <authentication-manager id="jdbc-auth" alias="authenticationManager">
         <authentication-provider>
             <jdbc-user-service data-source-ref="dataSource"
-                users-by-username-query="select username,password from User where username = ?"
-                authorities-by-username-query="select username,role from user_roles where username = ?" />
+                users-by-username-query="select username,password, enabled from user where username=?"
+                authorities-by-username-query="select username, role from user_roles where username=?" />
+             <password-encoder ref="encoder" />
         </authentication-provider>
     </authentication-manager>
+    
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<beans:constructor-arg name="strength" value="11" />
+    </beans:bean>
  
     <!-- MySQL DB DataSource -->
-    <beans:bean id="dataSource"
+    <!-- beans:bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
  
         <beans:property name="driverClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
@@ -65,7 +77,7 @@
             value="jdbc:mysql://localhost:3306/wikiabs" />
         <beans:property name="username" value="root" />
         <beans:property name="password" value="adminroot" />
-    </beans:bean>   
+    </beans:bean-->   
  
     <!-- If DataSource is configured in Tomcat Servlet Container -->
     <!-- beans:bean id="dbDataSource"
