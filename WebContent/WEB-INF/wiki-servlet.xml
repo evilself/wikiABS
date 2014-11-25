@@ -24,4 +24,7 @@ xsi:schemaLocation="
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <!-- Here i want to define a Spring WebFlow for my registration.  -->
+    <import resource="registrationWebFlowContext.xml" />
 </beans>

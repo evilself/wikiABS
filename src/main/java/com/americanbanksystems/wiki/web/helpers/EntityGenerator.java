@@ -87,6 +87,12 @@ public final class EntityGenerator {
         	userRoleDao.removeEntity(role);
         }
     }
+    
+    //tst for webflow...erase later on
+    public String returnSuccess() {   	
+    	
+       return "success";
+    }
      
     private <T> void addAll(GenericDAO<T, Long> dao, T... entites) {
         for (T o : entites) {

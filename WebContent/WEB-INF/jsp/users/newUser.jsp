@@ -218,7 +218,7 @@
 	        	lastName: "Last name is missing!",
 	        	userName: "Username is missing!",
 	        	password: "Password is missing!",
-		        newpassword: "Password confirmation is missing!"
+		        newpassword: "Confirmation is missing!"
 	        },        
 	        
 	        submitHandler: function(form) {

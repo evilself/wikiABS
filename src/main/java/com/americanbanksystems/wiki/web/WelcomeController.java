@@ -1,14 +1,18 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -27,12 +31,11 @@ import com.americanbanksystems.wiki.domain.Product;
 import com.americanbanksystems.wiki.web.helpers.EntityGenerator;
 import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
  
+//Using @Controller gives your class access to a lot of useful classes like Security classes, RequestParam, HttpServletRequest, HttpServletResponse etc...DI at its best!
 @Controller
 @RequestMapping(value={"/", "/welcome"})
-public class WelcomeController {
-	
-	private static final Logger logger = Logger.getLogger(WelcomeController.class);
-	
+public class WelcomeController implements BaseController {	
+
 	@Autowired
     private EntityGenerator entityGenerator;
 	
@@ -48,42 +51,34 @@ public class WelcomeController {
 	@Autowired
     private SecurityServiceBean security;
  
- 
+	final private int ARTICLE_SIZE = 5;
+	 
     @RequestMapping(method = RequestMethod.GET)
-    public String showMenu(Model model) {   	
-    	if(logger.isDebugEnabled()){
-			logger.debug("getWelcome is executed!");
-		}
+    public String showMenu(Model model) {
     	
     	//Security information
     	model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
     	
-    	List<Product> prodList = productDao.list();
-    	int size = 5;
+    	//Here i am getting the latest 5 articles for each product to display.
+    	List<Product> prodList = productDao.list();    	
     	for(Product prod : prodList) {
-    		List<Article> articles = articleDao.findArticleByProduct(prod, size);
+    		List<Article> articles = articleDao.findArticleByProduct(prod, ARTICLE_SIZE);
             model.addAttribute((prod.getProductIdentity()+"_Articles"), articles);    		
-    	}
-    	
-    	//List<Article> cproArticles = articleDao.findArticleByProduct(product);
-        //model.addAttribute("cproArticles", cproArticles);
+    	}   	
         
-        //List<Article> eliteArticles = articleDao.list();
-        //model.addAttribute("eliteArticles", eliteArticles);
-        
-        //List<Article> cplArticles = articleDao.list();
-        //model.addAttribute("cplArticles", cplArticles);       
-        
-        model.addAttribute("searchCriteria","");
-    	
-        model.addAttribute("today", new Date());
+    	//Before Spring 3, we had to send view and model from a controller, but now only view, which resolved to a .jsp file.
         return "index";
     }
     
+    
+    //This web method is invoked when we request a restricted resource and it redirects to a login page. NOT an AJAX login though.
+    //If we pass an optional 'error' URL parameter then the login attempt has failed and prints an error message
     @RequestMapping(value="/loginFull")
     public String loginFull(HttpServletRequest request, Model model, @RequestParam(value = "error", required = false) String error,
     		@RequestParam(value = "logout", required = false) String logout){
+    	
+    		//Set the error message in the model
 	    	if (error != null) {
 				model.addAttribute("error", "Invalid username and password!");
 			}    	
@@ -91,20 +86,25 @@ public class WelcomeController {
         return "loginFull";
     }
     
+    //This is invoked with AJAX login! 
     @RequestMapping(value="/login")
     public String login(HttpServletRequest request, Model model){
         return "login";
     }
     
+    //This is invoked with AJAX register!
     @RequestMapping(value="/register")
     public String register(HttpServletRequest request, Model model){
         return "register";
     } 
      
-    //Custom Logout method. I am using this instead of j_spring_logout
+    //Custom Logout method. I am using this instead of /j_spring_security_logout
     @RequestMapping(value="/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
+    	//I dont actually have to invalidate here, because i changed this bean to resolve security data dynamically! Had problems with storing security data when session expires
     	security.invalidate();
+    	
+    	//To manually logout use these two Handlers-Remember_Me option and context as well.Note in the logout() methods the'null' is the Authentication object.
     	CookieClearingLogoutHandler cookieClearingLogoutHandler = new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY);
 	    SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
 	    cookieClearingLogoutHandler.logout(request, response, null);
@@ -112,14 +112,16 @@ public class WelcomeController {
         return "redirect:/";
     }
      
+    //This is invoked when authorization fails
     @RequestMapping(value="/denied")
     public String denied(){
         return "denied";
     }
     
+    //I used this PostConstruct to insert some test data initially.
     @PostConstruct
     public void prepareFakeDomain() {
-      //  entityGenerator.deleteDomain();
+      //entityGenerator.deleteDomain();
       //entityGenerator.generateDomain();
     }
 }

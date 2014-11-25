@@ -1,5 +1,12 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,135 +33,137 @@ import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
 import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
+import com.americanbanksystems.wiki.web.helpers.UserUtils;
 
 @Controller
 @RequestMapping("/users")
-public class UserController {
+public class UserController implements BaseController {
 	
 	@Autowired
     private SecurityServiceBean security;
 	
+	@Autowired
 	private ArticleDao articleDao;
 	
+	@Autowired
 	private UserRoleDao userRoleDao;
-	
-	@Autowired
-	public void setUserRoleDao(UserRoleDao userRoleDao) {
-	    this.userRoleDao = userRoleDao;
-	}
-	
-	@Autowired
-	public void setArticleDao(ArticleDao articleDao) {
-	    this.articleDao = articleDao;
-	}
-	
-	private UserDao userDao;
-	 
-	@Autowired
-	public void setUserDao(UserDao userDao) {
-	    this.userDao = userDao;
-	}
 
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	UserUtils utils;
+
+	//LIST ALL USERS
 	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN')")
     public String showUsers(Model model) {
-        List<User> users = userDao.list();    
-        
-        //Security information
+		
+		//Security information
     	model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
     	
+        List<User> users = userDao.list();
         model.addAttribute("users", users);
  
         return "users/listUsers";
     }
 	
+	//SHOW DETAILS FOR ONE USER - GET
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String getUser(@PathVariable("id") long id, Model model) {
-		
 		
 		//Security information
 		model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
 		    	
 	    User user = userDao.findUser(id);
-	    //we dont want to see password characters for editing a user. If we type in a new password then change it
+	    
+	    //We dont want to see password characters for editing a user. If we type in a new password then we will change it.
+	    //A good practice would be NOT to include the PASSWORD field in our ENTITY, but only on low, database level
 	    user.setPassword("");
 	    
-	    model.addAttribute("user", user);
-	 
+	    model.addAttribute("user", user);	 
 	    return "users/viewUser";
 	}
 	
+	//CHANGES DATA ON A USER - POST
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String updateEmployee(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors, Model model) {		
-		if(errors.hasErrors() && !errors.hasFieldErrors("password")) {
-					
+	public String updateUser(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors, Model model) {	
+		
+		//This method is validated with JSR303 and Hibernate Validator implementation. In case JavaScript on the front end is disabled -NOT LIKELY
+		//@Valid validates the data, BindingResults hold any errors
+		if(errors.hasErrors() && !errors.hasFieldErrors("password")) {					
 			return "users/viewUser";
 		}
 		
 		User existing = userDao.findUser(id);
-		User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
-		//Check if another username exists
-		if (checkUsernameUser != null && (existing.getId() != checkUsernameUser.getId())) {
-			model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
-			return "users/viewUser";
+		
+		try {
+			if(!utils.checkUsernameUniqueness(user.getUserName())) {				
+				User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
+				//We might be dealing with the same user 
+				if (existing.getId() != checkUsernameUser.getId()) {
+					model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
+					return "users/viewUser";
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Password was null or empty while checking for uniqueness!");			
+			e.printStackTrace();
 		}
 				
-		user.setId(id);		
+		user.setId(id);
 		
-		
-		if(user.getPassword().trim() != "") {
-			String password = user.getPassword();
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hashedPassword = passwordEncoder.encode(password);
-			user.setPassword(hashedPassword);
+		//If password is not emtpy i.e WE HAVE TYPED IN A NEW PASSWORD
+		if(user.getPassword().trim() != "") {			
+			try {
+				user.setPassword(utils.generateHashedPassword(user.getPassword()));
+			} catch (Exception e) {
+				logger.error("Password was null or empty while being hashed!");	
+				e.printStackTrace();
+			}
 		} else {
 			user.setPassword(existing.getPassword());
 		}
-		
+				
 		UserRole ur = existing.getRole();
-		ur.setUserName(user.getUserName());
-		
-		
 		user.setRole(ur);
-		
-		//user.setPassword(hashedPassword);
-		
+		ur.setUserName(user.getUserName());
 		userDao.updateEntity(user);
-		userRoleDao.updateEntity(ur);
-	 
+		userRoleDao.updateEntity(ur);	 
 	    return "redirect:/users";
 	}
 	
+	//DELETE USER - DELETE
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteUser(@PathVariable("id") long id)
 	        throws UserDeleteException {
 	 
+		//If the user has asspcoated articles, WE CANNO DELETE it
 		User toDelete = userDao.findUser(id);
-	    List<Article> createdArticles = articleDao.findArticleByCreator(toDelete);
-		
-	    if (createdArticles.size() > 0) {
-	    	System.out.println("User cannot be deleted, because it has associated articles!");
-		   
+	   		
+	    if (utils.userDeletable(toDelete)) {
+	    	 UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());			    
+			 userRoleDao.removeEntity(role);			    	    
+			 boolean wasDeleted = userDao.removeUser(toDelete);			 
+		     if (!wasDeleted) {
+		    	 //throw new UserDeleteException(toDelete);
+		    	 logger.error("User ["+toDelete.getUserName()+"] was not deleted!");
+		     }		   
 	    } else {
 	    	
-	    	 UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());
-			    
-		    userRoleDao.removeEntity(role);
-		    	    
-		    boolean wasDeleted = userDao.removeUser(toDelete);
-		 
-		    if (!wasDeleted) {
-		    //    throw new UserDeleteException(toDelete);
-		    }
+	    	//TODO implement this
 	    }
 	    // everything OK, see remaining employees
 	    return "redirect:/users";
 	}
 	
+	
+	//CREATE A NEW USER - GET
 	@RequestMapping(params = "new", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String createUserForm(Model model) {
@@ -199,14 +208,12 @@ public class UserController {
 		userDao.addEntity(user);
 	 
 	    return "redirect:/users";
-	}
-	
+	}	
 	
 	@ExceptionHandler(UserDeleteException.class)
 	public ModelAndView handleDeleteException(UserDeleteException e) {
 	    ModelMap model = new ModelMap();
 	    model.put("user", e.getUser());
 	    return new ModelAndView("users/delete-error", model);
-	}
-	
+	}	
 }
