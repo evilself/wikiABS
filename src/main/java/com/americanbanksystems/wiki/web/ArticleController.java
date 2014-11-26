@@ -1,5 +1,12 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,39 +41,24 @@ import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 @RequestMapping("/articles")
 public class ArticleController {
 	
+	@Autowired
 	private ArticleDao articleDao;
 	
+	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
 	private AttachmentDao attachmentDao;
 	
+	@Autowired
 	private ProductDao productDao;
 	
 	@Autowired
-    private SecurityServiceBean security;
+    private SecurityServiceBean security;	
 	
-	@Autowired
-	public void setProductDao(ProductDao productDao) {
-		this.productDao = productDao;
-	}
-	
-	@Autowired
-	public void setAttachmentDao(AttachmentDao attachmentDao) {
-		this.attachmentDao = attachmentDao;
-	}
-	
-	@Autowired
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
-	@Autowired
-	public void setArticleDao(ArticleDao articleDao) {
-	    this.articleDao = articleDao;
-	}
-	
+	//GET ALL ARTICLES - GET
 	@RequestMapping(method = RequestMethod.GET)
-    public String showArticles(Model model) {		
+    public String showArticles(Model model) {
     	
     	//Security information
     	model.addAttribute("admin",security.isAdmin()); 
@@ -78,20 +70,20 @@ public class ArticleController {
         return "articles/listArticles";
     }
 	
+	//
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String getArticle(@PathVariable("id") long id, Model model) {
 		
 		//Security information
-		User loggedInUser = security.getLoggedInUser();
-    	model.addAttribute("admin",security.isAdmin()); 
-    	model.addAttribute("loggedUser", loggedInUser);
+		model.addAttribute("admin",security.isAdmin()); 
+		model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 	    Article article = articleDao.findArticle(id);
 	    model.addAttribute("art", article);
 	    
 	    //Editable
-	    if(null != loggedInUser) {
-		    if(loggedInUser.getUserName().equalsIgnoreCase(article.getCreatedByUser().getUserName()) || security.isAdmin())
+	    if(null != security.getLoggedInUser()) {
+		    if(security.getLoggedInUser().getUserName().equalsIgnoreCase(article.getCreatedByUser().getUserName()) || security.isAdmin())
 		    	model.addAttribute("editable", true );
 		    else model.addAttribute("editable", false );
 	    } else model.addAttribute("editable", false );
@@ -109,8 +101,7 @@ public class ArticleController {
 	    	atts.add(map);
 	    }
 	    
-	    model.addAttribute("attachments", atts);
-	 
+	    model.addAttribute("attachments", atts);	 
 	    return "articles/viewArticle";
 	}
 	

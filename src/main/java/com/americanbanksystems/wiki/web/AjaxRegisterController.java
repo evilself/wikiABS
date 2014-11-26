@@ -1,12 +1,15 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,10 +42,7 @@ public class AjaxRegisterController {
   
   @RequestMapping(method = RequestMethod.POST)
   public @ResponseBody String login(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("userName") String userName,
-                           @RequestParam("password") String password, @RequestParam("newPassword") String newPassword) { 
-	  
-	//System.out.println("username "+username);
-	//System.out.println("password "+password);
+                           @RequestParam("password") String password, @RequestParam("newPassword") String newPassword) { 	
 	  
 	User checkUsernameUser = userDao.findUserByUsername(userName);
 	//Check if another username exists

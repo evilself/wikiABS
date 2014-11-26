@@ -107,10 +107,7 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
-                        <h2><spring:message code="user.listUsers"/></h2>${deleteFail}
-                        <c:if test="${not empty deleteFail}" >  
-                        	<div>${deleteFail}</div>          
-                        </c:if>              
+                        <h2><spring:message code="user.listUsers"/></h2>                                   
 					   	  <a class="btn btn-default commonButton btn-sm" href="${pageContext.request.contextPath}/users?new"><spring:message code="user.addUser"/></a>					     
 						    <table id="userTable" class="table" >
 						    	<thead>

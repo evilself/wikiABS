@@ -13,7 +13,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -28,7 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.dao.UserRoleDao;
-import com.americanbanksystems.wiki.domain.Article;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
@@ -111,7 +109,7 @@ public class UserController implements BaseController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Password was null or empty while checking for uniqueness!");			
+			logger.error("Username was null or empty while checking for uniqueness!");			
 			e.printStackTrace();
 		}
 				
@@ -133,6 +131,7 @@ public class UserController implements BaseController {
 		user.setRole(ur);
 		ur.setUserName(user.getUserName());
 		userDao.updateEntity(user);
+		logger.info("User ["+user.getUserName()+"] updated!");
 		userRoleDao.updateEntity(ur);	 
 	    return "redirect:/users";
 	}
@@ -145,6 +144,7 @@ public class UserController implements BaseController {
 	 
 		//If the user has asspcoated articles, WE CANNO DELETE it
 		User toDelete = userDao.findUser(id);
+		String username = toDelete.getUserName();
 	   		
 	    if (utils.userDeletable(toDelete)) {
 	    	 UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());			    
@@ -157,6 +157,8 @@ public class UserController implements BaseController {
 	    } else {
 	    	
 	    	//TODO implement this
+	    	//SHOW info to users
+	    	logger.info("User ["+username+"] was deleted!");
 	    }
 	    // everything OK, see remaining employees
 	    return "redirect:/users";
@@ -185,31 +187,36 @@ public class UserController implements BaseController {
 		if(errors.hasErrors()) {
 			return "users/newUser";
 		}		
-		
-		User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
+				
 		//Check if another username exists
-		if (checkUsernameUser != null) {
-			model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
-			return "users/newUser";
+		try {
+			if (utils.checkUsernameUniqueness(user.getUserName())) {
+				model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
+				return "users/newUser";
+			}
+		} catch (Exception e1) {
+			logger.error("Username was null or empty while checking for uniqueness!");	
+			e1.printStackTrace();
 		}
 		
-		
-		UserRole role = new UserRole("USER",user.getUserName());
+		String USER_ROLE = "USER";		
+		UserRole role = new UserRole(USER_ROLE,user.getUserName());
 		user.setRole(role);
 		
-		userRoleDao.addEntity(role);
+		userRoleDao.addEntity(role);		
 		
-		String password = user.getPassword();
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(password);
-		
-		user.setPassword(hashedPassword);
-		
+		try {
+			user.setPassword(utils.generateHashedPassword(user.getPassword()));
+		} catch (Exception e) {
+			logger.error("Password was null or empty while hashing!");		
+			e.printStackTrace();
+		}		
 		userDao.addEntity(user);
-	 
+		logger.info("User ["+user.getUserName()+"] created!");
 	    return "redirect:/users";
 	}	
 	
+	//This is not used but left here so i know how it is done next time.
 	@ExceptionHandler(UserDeleteException.class)
 	public ModelAndView handleDeleteException(UserDeleteException e) {
 	    ModelMap model = new ModelMap();

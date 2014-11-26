@@ -35,7 +35,7 @@ import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 @Controller
 @RequestMapping(value={"/", "/welcome"})
 public class WelcomeController implements BaseController {	
-
+	
 	@Autowired
     private EntityGenerator entityGenerator;
 	

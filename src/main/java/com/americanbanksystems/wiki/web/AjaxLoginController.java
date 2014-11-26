@@ -1,5 +1,12 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,16 +39,12 @@ public class AjaxLoginController {
   SecurityServiceBean security;
   
   @RequestMapping(method = RequestMethod.POST)
-  public @ResponseBody String login(@RequestParam("username") String username,
-                           @RequestParam("password") String password) { 
-	  
-	//System.out.println("username "+username);
-	//System.out.println("password "+password);
+  public @ResponseBody String login(@RequestParam("username") String username, @RequestParam("password") String password) { 	  
+	
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
     User details = userDao.findUserByUsername(username);
     token.setDetails(details);
-    //System.out.println("Hit the ajax servlet");
-    
+   
     try {
       Authentication auth = authenticationManager.authenticate(token);
       SecurityContextHolder.getContext().setAuthentication(auth);

@@ -1,9 +1,15 @@
 package com.americanbanksystems.wiki.web;
 
+/**
+ * 
+ * @Author BorisM
+ * @Date 10.25.2014
+ * 
+ * */
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +24,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -31,71 +36,57 @@ import com.americanbanksystems.wiki.web.helpers.FileUpload;
  
 @Controller
 @RequestMapping("/upload")
-public class FileUploadController {
-     
-    @RequestMapping(method = RequestMethod.GET)
-    public String displayForm() {
-        return "upload/commonsUploadForm";
-    }
-    
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String displayExistingForm(@PathVariable("id") Long id, Model model) {
-    	
-    	Article art = articleDao.findArticle(id);
-    	model.addAttribute("article", art);
-        return "upload/commonsUploadForm";
-    }
-    
-    @Autowired
+public class FileUploadController implements BaseController {
+	
+	@Autowired
     AttachmentDao attDao;
     
     @Autowired
     ArticleDao articleDao;
      
+    //Get the upload form	
+	@RequestMapping(method = RequestMethod.GET)
+    public String displayForm() {
+        return "upload/commonsUploadForm";
+    }
+    
+	//Get the upload form, BUT also get the associated article
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String displayExistingForm(@PathVariable("id") Long id, Model model) {    	
+    	Article art = articleDao.findArticle(id);
+    	model.addAttribute("article", art);
+        return "upload/commonsUploadForm";
+    }
+    
+    //NON AJAX METHOD. SAVE THE ATTACHMENTS - POST
     @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
     public String save(@ModelAttribute("uploadForm") FileUpload uploadForm,
                     Model map) {
          
-       // List<MultipartFile> files = uploadForm.getUploadFiles();
-    	MultipartFile file = uploadForm.getFile();
+        MultipartFile file = uploadForm.getFile();
     	
     	Attachment newatt = new Attachment();
     	newatt.setActualFilename(file.getOriginalFilename());
     	try {
 			newatt.setAttachment(file.getBytes());
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			logger.error("Attachment ["+newatt.getActualFilename()+"] was corrupt!");
 			e1.printStackTrace();
 		}
     	newatt.setAttachmentTitle("new attachment");
     	newatt.setAttachmentType("type");
     	
     	attDao.addEntity(newatt);
-    	
-        
-       /* System.out.println(files.size() + " is the size of files");
- 
-        List<String> fileNames = new ArrayList<String>();
-         
-        if(null != files && files.size() > 0) {
-            for (MultipartFile multipartFile : files) {
- 
-                String fileName = multipartFile.getOriginalFilename();
-                fileNames.add(fileName);
-                //Handle file content - multipartFile.getInputStream()
- 
-            }
-        }*/
-    	
-    	System.out.println("file " + file.getOriginalFilename());
+    	logger.info("Attachment ["+newatt.getActualFilename()+"] added!");    	
     	map.addAttribute("files", newatt);
        
         return "upload/uploadSuccess";
     }
     
+    //This returns the attachment
     @RequestMapping("/display/{id}")
-    public String download(@PathVariable("id")
-            Long id, HttpServletResponse response) {
+    public String download(@PathVariable("id") Long id, HttpServletResponse response) {
          
         Attachment att = attDao.findAttachment(id);
         try {
@@ -105,117 +96,83 @@ public class FileUploadController {
             ByteArrayInputStream bis = new ByteArrayInputStream(att.getAttachment());
             IOUtils.copy(bis, out);
             out.flush();
-            out.close();
-         
+            out.close();         
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-         
-         
         return null;
     }
     
+    //DELETE AN ATTACHMENT - DELETE
+    //RETURN JSON STRING
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN')")
-	public @ResponseBody String deleteAttachment(@PathVariable("id") long id) {
-         
-        Attachment att = attDao.findAttachment(id);
-        
-        Article art = articleDao.findArticle(att.getArticle().getId());
-                
-        boolean isDeleted = attDao.removeEntity(att);     
-        
+	public @ResponseBody String deleteAttachment(@PathVariable("id") long id) {         
+        Attachment att = attDao.findAttachment(id); 
+        String fileName = att.getActualFilename();        
+        Article art = articleDao.findArticle(att.getArticle().getId());                
+        boolean isDeleted = attDao.removeEntity(att);
+        logger.info("Attachment ["+fileName+"] deleted!");
         if(!isDeleted) return "Error"; 
         String jsonResult = "{\"identity\":"+att.getId()+", \"count\":"+ (art.getAttachments().size()-1)+"}";
         return jsonResult;
     }
     
-    //*************************TEST AJAX******************************************************************
+    //************************* AJAX METHODS ******************************************************************
+    
     @RequestMapping(value = "/ajax", method = RequestMethod.POST)
     public @ResponseBody String upload(MultipartHttpServletRequest request, HttpServletResponse response) {                
   
-      //0. notice, we have used MultipartHttpServletRequest
+      //NOTE, we have used MultipartHttpServletRequest
   
-      //1. get the files from the request object
-      Iterator<String> itr =  request.getFileNames();
-  
+      //get the files from the request object
+      Iterator<String> itr =  request.getFileNames();  
       MultipartFile mpf = request.getFile(itr.next());
       
-        Attachment newatt = new Attachment();
-	  	newatt.setActualFilename(mpf.getOriginalFilename());
-	  	try {
-				newatt.setAttachment(mpf.getBytes());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	  	newatt.setAttachmentTitle("new attachment");
-	  	newatt.setAttachmentType("type");
-	  	newatt.setContentType(mpf.getContentType());
+      Attachment newatt = new Attachment();
+	  newatt.setActualFilename(mpf.getOriginalFilename());
+	  try {
+		newatt.setAttachment(mpf.getBytes());
+	  } catch (IOException e1) {
+		logger.error("Attachment ["+newatt.getActualFilename()+"] was corrupted!");
+		e1.printStackTrace();
+	  }
+	  
+	  newatt.setAttachmentTitle("new attachment");
+	  newatt.setAttachmentType("type");
+	  newatt.setContentType(mpf.getContentType());
 	  	
-	  	//attDao.addEntity(newatt);
-	  	attDao.saveInMemory(newatt);
-	  	
-	      
-	     /* System.out.println(files.size() + " is the size of files");
-	
-	      List<String> fileNames = new ArrayList<String>();
-	       
-	      if(null != files && files.size() > 0) {
-	          for (MultipartFile multipartFile : files) {
-	
-	              String fileName = multipartFile.getOriginalFilename();
-	              fileNames.add(fileName);
-	              //Handle file content - multipartFile.getInputStream()
-	
-	          }
-	      }*/	  	
-      
-      System.out.println(mpf.getOriginalFilename() +" uploaded!");
-  
-   /*   try {
-                 //just temporary save file info into ufile
-         ufile.length = mpf.getBytes().length;
-         ufile.bytes= mpf.getBytes();
-         ufile.type = mpf.getContentType();
-         ufile.name = mpf.getOriginalFilename();
-  
-     } catch (IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-     }*/
-  
-      //2. send it back to the client as <img> that calls get method
-      //we are using getTimeInMillis to avoid server cached image
-  
-      //return "<img src='http://localhost:8080/spring-mvc-file-upload/rest/cont/get/"+Calendar.getInstance().getTimeInMillis()+"' />";
-      return mpf.getOriginalFilename();
-  
+	  //attDao.addEntity(newatt);
+	  //SAVES IN MEMORY
+	  attDao.saveInMemory(newatt);	  
+	  logger.info("Attachment ["+newatt.getActualFilename()+"] was saved successfully!");
+      //System.out.println(mpf.getOriginalFilename() +" uploaded!");
+   
+      return mpf.getOriginalFilename();  
    }
-    
  
+    //AJAX UPLOAD TO EXISTING ARTICLE
+    //RETURNS JSON
     @RequestMapping(value = "/ajaxUpload/{id}", method = RequestMethod.POST)
     public @ResponseBody String uploadFromEdit(@PathVariable("id") Long id, MultipartHttpServletRequest request, HttpServletResponse response) {                
   
-      //0. notice, we have used MultipartHttpServletRequest
+        //Notice, we have used MultipartHttpServletRequest
     	
-    	Article article = articleDao.findArticle(id);
+        Article article = articleDao.findArticle(id);
   
-      //1. get the files from the request object
-      Iterator<String> itr =  request.getFileNames();
-  
-      MultipartFile mpf = request.getFile(itr.next());
-      
+        //1. get the files from the request object
+        Iterator<String> itr =  request.getFileNames();  
+        MultipartFile mpf = request.getFile(itr.next());      
         Attachment newatt = new Attachment();
 	  	newatt.setActualFilename(mpf.getOriginalFilename());
 	  	try {
-				newatt.setAttachment(mpf.getBytes());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			newatt.setAttachment(mpf.getBytes());
+		} catch (IOException e1) {
+			logger.error("Attachment ["+newatt.getActualFilename()+"] was corrupted!");
+			e1.printStackTrace();
+		}
 	  	newatt.setAttachmentTitle("new attachment");
 	  	newatt.setAttachmentType("type");
 	  	newatt.setContentType(mpf.getContentType());
@@ -223,9 +180,9 @@ public class FileUploadController {
 	  	newatt.setArticle(article);
 	  	
 	  	attDao.addEntity(newatt);	  	
-	  	
-	  	Article newInstane  = articleDao.findArticle(id);
-	  	//attDao.saveInMemory(newatt);	  	
+	  	logger.info("Attachment ["+newatt.getActualFilename()+"] deleted!");
+	  	//NOTE!!! Here I am retrieving the same article again, because the size of attachments has changed since i uploaded a new one above
+	  	Article newInstane  = articleDao.findArticle(id);	  	 	
 	  	
 	  	List<Attachment> listAttachment = newInstane.getAttachments();  
 	  	
@@ -245,14 +202,9 @@ public class FileUploadController {
 	  				responseData +=		        " </div> ";
 	  				responseData +=		        " </div>	";	  	           			        		
 	    }	  	
-      responseData += "</div>";
-      
-      System.out.println(mpf.getOriginalFilename() +" uploaded!");
-  
-      System.out.println(responseData);
-      
-      return responseData;
-  
-   }
-    
+      responseData += "</div>";      
+      //System.out.println(mpf.getOriginalFilename() +" uploaded!");  
+      //System.out.println(responseData);      
+      return responseData;  
+   }    
 }
