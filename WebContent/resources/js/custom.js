@@ -96,11 +96,11 @@ function ajaxRegister(){
 }
 
 function ajaxWebFlowRegister(url){
-	var modurl = url + '&_eventId_find';
-	alert(modurl);
+	var modurl = url;
+	//alert(modurl);
     $('#result').html('');
     if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "")) {
-        if(match) {	          
+      //  if(match) {	          
 	        $.ajax({
 	        	url:  modurl,
 		        type: "POST",
@@ -122,9 +122,9 @@ function ajaxWebFlowRegister(url){
 		            }		*/                       
 		        }		       
 		    });	
-        } else {	        	
-        	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
-        }
+     //   } else {	        	
+     //   	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
+     //   }
     } else {
     	$('#result').html('Please provide all information!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
     }

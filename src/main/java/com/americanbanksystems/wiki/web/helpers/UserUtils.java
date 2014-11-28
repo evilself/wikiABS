@@ -48,9 +48,9 @@ public class UserUtils {
 		// The bcrypt function is the default password hash algorithm for BSD and many other systems
 	}
 	
-	//This method check to see if we have an existing user with the provided password
-	public boolean checkUsernameUniqueness(String password) throws Exception {		
-		User checkUsernameUser = userDao.findUserByUsername(password);		
+	//This method check to see if we have an existing user with the provided username
+	public boolean checkUsernameUniqueness(String username) throws Exception {		
+		User checkUsernameUser = userDao.findUserByUsername(username);		
 		//Check if another username exists
 		if (checkUsernameUser != null) {
 			return false;

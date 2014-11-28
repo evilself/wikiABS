@@ -42,29 +42,27 @@
 </head>
 
 <body>
-	<div class="col-lg-12 col-sm-12">
-		<div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-	        <h4 class="modal-title" id="myModalLabel"><spring:message code="newUserRegistration.pageTitle"/></h4>
-	    </div>
+	<div class="col-lg-12 col-sm-12">	
 	    <div class="modal-body">
-	        <h4 class="modal-title" id="myModalLabel">Step 1: Pick a Username</h4>        
-	 		<sf:form id="registerForm" modelAttribute="user" action="${flowExecutionUrl}">
-	 			<div class="form-group col-lg-offset-2">	 				
-		        	<label><spring:message code="newUserRegistration.username"/></label>		        	 
-		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />		            
-		        	<input type='hidden' id="url" value="${flowExecutionUrl}"/>
+	    	<h4 class="modal-title" id="myModalLabel">Step 2: Complete Account Information</h4>		        
+	 		<sf:form id="registerForm" modelAttribute="user" method="POST">
+	 			<div class="form-group col-lg-offset-2">
+	 				<label><spring:message code="newUserRegistration.firstname"/></label>
+		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="firstName" name='firstName' />
+		            <label><spring:message code="newUserRegistration.lastname"/></label>
+		            <input class="form-control" style="width:80%" type='text' placeholder="Last Name" id="lastName" name='lastName' />		        	
+		            <label><spring:message code="newUserRegistration.password"/></label>
+		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="password" name='password' />
+		            <label><spring:message code="newUserRegistration.confirmpassword"/></label>
+		            <input class="form-control" style="width:80%" type='password' onKeyUp="checkPass(); return false;" placeholder="Password" id="newPassword" name='newPassword' />		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
-          		</div-->
-          		<!-- button class="btn btn-default ajaxRegisterButton pull-right" id="findBtn" type="submit" name="_eventId_find">find</button-->
+          		</div--><input type='hidden' id="url" value="${flowExecutionUrl}"/>
 	       </sf:form>
 	       <c:set var="url" value="${flowExecutionUrl}" />
-	       
-	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step1')"><spring:message code="newUserRegistration.registerbutton"/></button>	           	   
-	       
-	       <div id="result">${error}</div>  	      
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step2')"><spring:message code="newUserRegistration.registerbutton"/></button>	           	   
+	       <div id="result"></div>  	      
 	     </div>	     
      </div>
     <!-- jQuery Version 1.11.0 -->
