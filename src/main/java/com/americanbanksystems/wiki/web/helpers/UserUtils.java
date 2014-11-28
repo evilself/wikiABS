@@ -16,9 +16,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
+import com.americanbanksystems.wiki.dao.SecurityInfoDao;
 import com.americanbanksystems.wiki.dao.UserDao;
+import com.americanbanksystems.wiki.dao.UserRoleDao;
 import com.americanbanksystems.wiki.domain.Article;
+import com.americanbanksystems.wiki.domain.SecurityInfo;
 import com.americanbanksystems.wiki.domain.User;
+import com.americanbanksystems.wiki.domain.UserRole;
 
 //User-centric utility methods
 @Service
@@ -29,7 +33,13 @@ public class UserUtils {
 	private UserDao userDao;
 	
 	@Autowired
+	private UserRoleDao userRoleDao;
+	
+	@Autowired
 	private ArticleDao articleDao;
+	
+	@Autowired
+	private SecurityInfoDao securityInfoDao;
 	
 	//This method returns a hashed password for a User
 	public String generateHashedPassword(String password) throws Exception {		
@@ -67,5 +77,61 @@ public class UserUtils {
 	    	return true;
 	    }
 	}
+	
+	//********************************** THESE METHODS ARE USED IN REGISTRATION WEB FLOW******************************
+	
+	//Move this to a User account service
+    public String checkUsernameAvailability(User user) {
+    
+    	System.out.println(user.getUserName() + " is the username in web flow");
+    	try {
+			if(checkUsernameUniqueness(user.getUserName())) return "success";
+			else return "failure";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    	
+    	return "failure";      
+    }
+    
+    //Move this to a User account service
+    public String hashUserPassword(User user) {
+    
+    	if(user != null) {    		
+    		try {
+				user.setPassword(generateHashedPassword(user.getPassword().trim()));
+				return "success";
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}    		
+    	}
+    	
+    	return "failure";      
+    }
+    
+  //Move this to a User account service
+    public String registerUser(User user, SecurityInfo securityInfo) {
+    
+    	if(user != null && securityInfo != null) {   
+    		System.out.println("GOOD DATA");  
 
+    		String USER_ROLE = "USER";		
+    		UserRole role = new UserRole(USER_ROLE,user.getUserName());
+    		user.setRole(role);    		
+    		userRoleDao.addEntity(role);
+    		
+    		//userDao.addEntity(user);
+    		
+    		securityInfo.setUsername(user.getUserName().trim());
+    		securityInfoDao.addEntity(securityInfo); 
+    		user.setSecurityInfo(securityInfo);
+    		
+    		userDao.addEntity(user);
+    		
+    		return "success";
+    	}
+    	
+    	return "failure";      
+    }
 }

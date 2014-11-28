@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.webflow.execution.RequestContextHolder;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
+import com.americanbanksystems.wiki.dao.SecurityInfoDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.dao.UserRoleDao;
 import com.americanbanksystems.wiki.domain.Article;
@@ -32,6 +32,9 @@ public final class EntityGenerator {
     
     @Autowired
     UserUtils utils;
+    
+    @Autowired
+    private SecurityInfoDao securityInfoDao;
   
     public void generateDomain() {
     	
@@ -89,41 +92,6 @@ public final class EntityGenerator {
         for (UserRole role : userRoleList) {
         	userRoleDao.removeEntity(role);
         }
-    }
-    
-    //test for webflow...erase later on
-    public String returnSuccess() {   	
-    	
-       return "success";
-    }
-    
-   //Move this to a User account service
-    public String checkUsernameAvailability(User user) {
-    
-    	System.out.println(user.getUserName() + " is the username in web flow");
-    	try {
-			if(utils.checkUsernameUniqueness(user.getUserName())) return "success";
-			else return "failure";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    	
-    	return "failure";      
-    }
-    
-  //Move this to a User account service
-    public String registerUser(User user) {
-    
-    	System.out.println(user.getUserName() + " is the username in web flow");
-    	System.out.println(user.toString() + " is the user in web flow");
-    	try {
-			if(utils.checkUsernameUniqueness(user.getUserName())) return "success";
-			else return "failure";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    	
-    	return "failure";      
     }
      
     private <T> void addAll(GenericDAO<T, Long> dao, T... entites) {

@@ -25,7 +25,7 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 			if (user.getCreatedArticles().size() > 0) {
 				System.out.println("User has associated articles! Cannot delete!");
 				return false;
-			} else {
+			} else {				
 				removeEntity(user);	
 				return true;
 			}
@@ -54,6 +54,7 @@ public class UserDaoImpl extends HibernateDao<User, Long> implements UserDao {
 			User u =  (User) userQuery.list().get(0);
 			Hibernate.initialize(u.getCreatedArticles());
 			Hibernate.initialize(u.getRole());
+			Hibernate.initialize(u.getSecurityInfo());
 			return u;
 		} else {
 			return null;

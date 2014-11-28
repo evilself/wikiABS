@@ -42,25 +42,22 @@
 </head>
 
 <body>
-	<div class="col-lg-12 col-sm-12">	
+	
 	    <div class="modal-body">
 	    	<h4 class="modal-title" id="myModalLabel">Step 3: Security Hint</h4>		        
-	 		<sf:form id="registerForm" modelAttribute="user" method="POST">
+	 		<sf:form id="registerForm" modelAttribute="securityInfo" method="POST">
 	 			<div class="form-group col-lg-offset-2">
-	 				<label>Security Question</label>
-		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="securityQuestion" name='securityQuestion' />	
-		            <label>Security Answer</label>
-		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="securityAnswer" name='securityAnswer' />		            		            
+	 				<br/>
+		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security question" id="securityQuestion" name='securityQuestion' />	
+		         	<br/>
+		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security answer" id="securityAnswer" name='securityAnswer' />		            		            
 	            </div>
-	            <!-- div class="text-center" style="margin-top:5px;">	            	
-          			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
-          		</div--><input type='hidden' id="url" value="${flowExecutionUrl}"/>
-	       </sf:form>
-	       <c:set var="url" value="${flowExecutionUrl}" />
-	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step3')"><spring:message code="newUserRegistration.registerbutton"/></button>	           	   
-	       <div id="result"></div>  	      
+	           <input type='hidden' id="url" value="${flowExecutionUrl}"/>
+	       </sf:form>	       
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step3')">Register!</button>	             
+	     	<div id="result"></div>
 	     </div>	     
-     </div>
+   
     <!-- jQuery Version 1.11.0 -->
     <script src="<spring:url value="/resources/js/jquery-1.11.0.js"/> "></script>
 

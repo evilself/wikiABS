@@ -53,6 +53,7 @@ public class JPADao<E, K extends Serializable> implements GenericDAO<E, K> {
 	}
 
 	public boolean removeEntity(E entity) {
+		//Here this entity might not be managed by the EM so we check and if it is not then make it managed
 		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
 		return true;
 		

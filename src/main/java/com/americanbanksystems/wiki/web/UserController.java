@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
+import com.americanbanksystems.wiki.dao.SecurityInfoDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.dao.UserRoleDao;
+import com.americanbanksystems.wiki.domain.SecurityInfo;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
@@ -48,6 +50,9 @@ public class UserController implements BaseController {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private SecurityInfoDao securityInfoDao;
 	
 	@Autowired
 	UserUtils utils;
@@ -148,7 +153,11 @@ public class UserController implements BaseController {
 	   		
 	    if (utils.userDeletable(toDelete)) {
 	    	 UserRole role = userRoleDao.findUserRole(toDelete.getRole().getId());			    
-			 userRoleDao.removeEntity(role);			    	    
+			 userRoleDao.removeEntity(role);
+			 
+			// SecurityInfo info = securityInfoDao.findSecurityInfo(toDelete.getSecurityInfo().getId());
+			 securityInfoDao.removeSecurityInfo(toDelete.getSecurityInfo());
+			 
 			 boolean wasDeleted = userDao.removeUser(toDelete);			 
 		     if (!wasDeleted) {
 		    	 //throw new UserDeleteException(toDelete);

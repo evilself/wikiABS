@@ -62,6 +62,10 @@ public class User extends BaseEntity implements Serializable {
 	protected String email;
 	protected boolean enabled = true;	
 	protected UserRole role;
+	
+	protected SecurityInfo securityInfo;	
+	
+
 	protected List<Article> createdArticles;	
 
 	public User() {
@@ -74,7 +78,16 @@ public class User extends BaseEntity implements Serializable {
 		this.userName = un;
 		this.password = pass;
 		this.role = role;
-	}	
+	}
+	
+	public User(String fn, String ln, String un, String pass, UserRole role, SecurityInfo securityInfo) {
+		this.firstName = fn;
+		this.lastName = ln;
+		this.userName = un;
+		this.password = pass;
+		this.role = role;
+		this.securityInfo=securityInfo;
+	}
 	
 	@OneToMany(mappedBy="createdByUser")
 	public List<Article> getCreatedArticles() {
@@ -148,6 +161,16 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="SECURITY_INFO_ID")
+	public SecurityInfo getSecurityInfo() {
+		return securityInfo;
+	}
+
+	public void setSecurityInfo(SecurityInfo securityInfo) {
+		this.securityInfo = securityInfo;
 	}
 
 	@Override

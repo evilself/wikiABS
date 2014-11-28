@@ -42,12 +42,22 @@
 </head>
 
 <body>
-	<div class="col-lg-12 col-sm-12">	
-	     <div class="modal-body">
-	    	<h4 class="modal-title" id="myModalLabel">You have been registered!</h4>
-	    	<br/>
-	        <div id="result" class="successOutput">Please login with your new account credentials...</div>  
-	        <br/>	        		      
+	<div class="col-lg-12 col-sm-12">
+		<div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+	        <h4 class="modal-title" id="myModalLabel"><spring:message code="newUserRegistration.pageTitle"/></h4>
+	    </div>
+	    <div class="modal-body">
+	        <h4 class="modal-title" id="myModalLabel">Step 1: Pick a Username</h4>
+	        <br/><br/><br/><br/>
+	 		<sf:form id="registerForm" modelAttribute="user" action="${flowExecutionUrl}">
+	 			<div class="form-group col-lg-offset-2">		        			        	 
+		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />		            
+		        	<input type='hidden' id="url" value="${flowExecutionUrl}"/>
+	            </div>
+	       </sf:form>	       
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step1')">Next</button>	        	      
+	       <div id="result"></div>
 	     </div>	     
      </div>
     <!-- jQuery Version 1.11.0 -->
@@ -60,8 +70,6 @@
     <script src="<spring:url value="/resources/js/jquery.validate.min.js"/> "></script>
     
     <!-- Custom JavaScript -->
-    <script src="<spring:url value="/resources/js/custom.js"/> "></script>
-    <!-- After we see the successful registration message, redirect to home -->
-	<script>$(document).ready(function() { setTimeout(function() { window.location.reload(true); }, 2000); });</script>
+    <script src="<spring:url value="/resources/js/custom.js"/> "></script>   
 </body>
 </html>

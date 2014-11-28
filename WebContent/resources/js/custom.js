@@ -57,6 +57,7 @@ function checkPass()
 $('#registerForm').keypress(function(event){			 
 	var keycode = (event.keyCode ? event.keyCode : event.which);
 	if(keycode == '13'){
+		event.preventDefault();
 		$('#ajaxSubmitBtn').click();
 	}		 
 });		
@@ -96,11 +97,10 @@ function ajaxRegister(){
 }
 
 function ajaxWebFlowRegister(url){
-	var modurl = url;
-	//alert(modurl);
+	var modurl = url;	
     $('#result').html('');
-    if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "")) {
-      //  if(match) {	          
+    if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "") && ($('#securityQuestion').val() != "") && ($('#securityAnswer').val() != "")) {    	
+        if((!match && $('#password')[0]==undefined) || match) {    		
 	        $.ajax({
 	        	url:  modurl,
 		        type: "POST",
@@ -122,9 +122,9 @@ function ajaxWebFlowRegister(url){
 		            }		*/                       
 		        }		       
 		    });	
-     //   } else {	        	
-     //   	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
-     //   }
+        } else {	        	
+        	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
+        }
     } else {
     	$('#result').html('Please provide all information!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
     }
