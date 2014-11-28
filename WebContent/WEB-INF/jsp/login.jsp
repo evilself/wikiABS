@@ -60,7 +60,8 @@
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
           		</div-->
 	       </form>
-	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxLogin()"><spring:message code="login.loginButton"/></button>	           	   
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxLogin()"><spring:message code="login.loginButton"/></button>
+	       <button class="btn btn-sm cancelButton pull-right" style="margin-right:5px" id="ajaxForgotPassBtn" onclick="ajaxLogin()">?</button>	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
      </div>
