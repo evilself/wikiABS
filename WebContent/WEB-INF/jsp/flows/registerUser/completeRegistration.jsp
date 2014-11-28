@@ -44,13 +44,10 @@
 <body>
 	<div class="col-lg-12 col-sm-12">	
 	    <div class="modal-body">
-	    	<h4 class="modal-title" id="myModalLabel">Step 3: Security Hint</h4>		        
+	    	<h4 class="modal-title" id="myModalLabel">Success!</h4>		        
 	 		<sf:form id="registerForm" modelAttribute="user" method="POST">
 	 			<div class="form-group col-lg-offset-2">
-	 				<label>Security Question</label>
-		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="securityQuestion" name='securityQuestion' />	
-		            <label>Security Answer</label>
-		            <input class="form-control" style="width:80%" type='text' placeholder="First Name" id="securityAnswer" name='securityAnswer' />		            		            
+	 				        		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
           			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
