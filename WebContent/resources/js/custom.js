@@ -130,6 +130,40 @@ function ajaxWebFlowRegister(url){
     }
 }
 
+function ajaxPassReset(url){
+	var modurl = url;	
+    $('#result').html('');
+    if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "") && ($('#securityQuestion').val() != "") && ($('#securityAnswer').val() != "")) {    	
+        if((!match && $('#password')[0]==undefined) || match) {    		
+	        $.ajax({
+	        	url:  modurl,
+		        type: "POST",
+		        data: $("#registerForm").serialize(),
+		        success: function(data){
+		        	$('div.modal-body').replaceWith(data);	
+		        	/*if (data.indexOf("Success") < 0) {
+		        		if(data.indexOf("Username") > 0) {
+		        			$('#result').html("Username already taken!!!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+			        		$('#userName').val("").css({"border-color":"red"});
+		        		} else {
+			        		$('#result').html("Register failed, please try again!").css({"color":"#FFE6E6", "font-size":"1.5em"});
+			        		$('#firstName, #lastName , #userName , #password , #newPassword').val("").css({"border-color":"red"});		        		
+		        		}
+		            } else {		            	
+		            	$('#result').html("Registered! Please log in with your credentials!").css({"color":"#CCFF99", "font-size":"1.5em"});
+		            	$('#username, #password').css({"border-color":""});
+		            	setTimeout(function() { window.location.reload(true); }, 1000);
+		            }		*/                       
+		        }		       
+		    });	
+        } else {	        	
+        	$('#result').html('Passwords do not match!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
+        }
+    } else {
+    	$('#result').html('Please provide all information!').css({"color":"#FFE6E6", "font-size":"1.2em"});	        	
+    }
+}
+
 
 function ajaxLogin(){
     $('#result').html('');

@@ -61,7 +61,7 @@
           		</div-->
 	       </form>
 	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxLogin()"><spring:message code="login.loginButton"/></button>
-	       <button class="btn btn-sm cancelButton pull-right" style="margin-right:5px" id="ajaxForgotPassBtn" onclick="ajaxLogin()">?</button>	           	   
+	       <a class="btn btn-sm cancelButton pull-right" style="margin-right:5px" id="ajaxForgotPassBtn" href="${pageContext.request.contextPath}/passwordReset">?</a>	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
      </div>
