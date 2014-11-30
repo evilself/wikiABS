@@ -44,7 +44,7 @@
 <body>
 	<div class="col-lg-12 col-sm-12">	
 	     <div class="modal-body">
-	    	<h4 class="modal-title" id="myModalLabel">You have been registered!</h4>
+	    	<h4 class="modal-title" id="myModalLabel">Your password has been changed!</h4>
 	    	<br/>
 	        <div id="result" class="successOutput">Please login with your new account credentials...</div>  
 	        <br/>	        		      

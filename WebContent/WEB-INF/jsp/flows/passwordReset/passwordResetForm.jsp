@@ -44,15 +44,17 @@
 <body>
 	
 	    <div class="modal-body">
-	        <h4 class="modal-title" id="myModalLabel">What is your username?</h4>
+	        <h4 class="modal-title" id="myModalLabel">Enter new password</h4>
 	        <br/><br/>
 	 		<sf:form id="registerForm" modelAttribute="user" action="${flowExecutionUrl}">
-	 			<div class="form-group col-lg-offset-2">		        			        	 
-		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />		            
+	 			<div class="form-group col-lg-offset-2">	 			
+	 			    <input class="form-control" style="width:80%" type='password' placeholder="Password" id="password" name='password' />
+	 			    <br/>
+		            <input class="form-control" style="width:80%" type='password' onKeyUp="checkPass(); return false;" placeholder="Confirm Password" id="newPassword" name='newPassword' />		            
 		        	<input type='hidden' id="url" value="${flowExecutionUrl}"/>
 	            </div>
 	       </sf:form>	       
-	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxPassReset($('#url').val()+'&_eventId_step1')">Next</button>	        	      
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxPassReset($('#url').val()+'&_eventId_step4')">Done!</button>	        	      
 	       <div id="result"></div>
 	     </div>	     
    

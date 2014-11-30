@@ -57,11 +57,11 @@
 		            <input class="form-control" style="width:80%" type='password' placeholder="Password" id="password" name='password' />		            
 	            </div>
 	            <!-- div class="text-center" style="margin-top:5px;">	            	
-          			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>
-          		</div-->
+          			<button name="submit" class="btn btn-default" type="submit" value="Login">Submit</button>${pageContext.request.contextPath}/passwordReset
+          		</div--><input type="hidden" id="url" value="${pageContext.request.contextPath}" />
 	       </form>
 	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxLogin()"><spring:message code="login.loginButton"/></button>
-	       <a class="btn btn-sm cancelButton pull-right" style="margin-right:5px" id="ajaxForgotPassBtn" href="${pageContext.request.contextPath}/passwordReset">?</a>	           	   
+	       <a class="btn btn-sm cancelButton pull-right" title="Did you forget your password?" style="padding:4px; margin-right:5px" id="ajaxForgotPassBtn" onclick="ajaxPassReset($('#url').val()+'/passwordReset')">?</a>	           	   
 	       <div id="result"></div>  	      
 	     </div>	     
      </div>

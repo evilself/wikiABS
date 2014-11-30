@@ -44,8 +44,8 @@
 <body>
 			
 	    <div class="modal-body">
-	        <h4 class="modal-title" id="myModalLabel">Step 1: Pick a Username</h4>
-	        <br/><br/><br/><br/>
+	        <h4 class="modal-title" id="myModalLabel">What is your username?</h4>
+	        <br/><br/>
 	 		<sf:form id="registerForm" modelAttribute="user" action="${flowExecutionUrl}">
 	 			<div class="form-group col-lg-offset-2">		        		        	 
 		            <input class="form-control" style="width:80%" type='text' placeholder="Username" id="userName" name='userName' />		            

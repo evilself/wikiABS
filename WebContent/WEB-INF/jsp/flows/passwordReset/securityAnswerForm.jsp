@@ -44,18 +44,16 @@
 <body>
 	
 	    <div class="modal-body">
-	    	<h4 class="modal-title" id="myModalLabel">Step 3: Security Hint</h4>		        
+	    	<h4 class="modal-title" id="myModalLabel">Security Question</h4>		        
 	 		<sf:form id="registerForm" modelAttribute="securityInfo" method="POST">
-	 			<div class="form-group col-lg-offset-2">
-	 				<br/>
-		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security question" id="securityQuestion" name='securityQuestion' />	
-		         	<br/>
-		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security answer" id="securityAnswer" name='securityAnswer' />		            		            
+	 			<div class="form-group col-lg-offset-2">	 					
+		         	<h4 class="successOutput">${question}</h4>
+		            <input class="form-control" style="width:80%" type='password' placeholder="Type your security answer" id="securityAnswer" name='securityAnswer' />		            		            
 	            </div>
 	           <input type='hidden' id="url" value="${flowExecutionUrl}"/>
 	       </sf:form>	       
-	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxWebFlowRegister($('#url').val()+'&_eventId_step3')">Register!</button>	             
-	     	<div id="result"></div>
+	       <button class="btn btn-default ajaxRegisterButton pull-right" id="ajaxSubmitBtn" onclick="ajaxPassReset($('#url').val()+'&_eventId_step3')">Next</button>	             
+	     	<div id="result" class="invalid">${error}</div>
 	     </div>	     
    
     <!-- jQuery Version 1.11.0 -->

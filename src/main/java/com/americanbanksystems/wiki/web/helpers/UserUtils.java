@@ -134,4 +134,73 @@ public class UserUtils {
     	
     	return "failure";      
     }
+    
+    //*****************************THESE METHODS ARE USED IN PASSWORD RESET WEBFLOW*****************************
+  //Move this to a User account service
+    public String findUserByUsername(User user) {
+    
+    	System.out.println(user.getUserName() + " is the username in web flow");
+    	try {
+			User realUser = userDao.findUserByUsername(user.getUserName());
+			if (realUser != null) return "success";
+			else return "failure";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    	
+    	return "failure";      
+    }
+    
+    public String getSecurityQuestionForUser(User user) {
+        
+    	System.out.println(user.getUserName() + " is the username in web flow");
+    	try {
+			User realUser = userDao.findUserByUsername(user.getUserName());
+			if (realUser != null) {
+				User u = userDao.findUser(realUser.getId());
+				return u.getSecurityInfo().getSecurityQuestion();
+			}
+			else return null;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    	
+    	return null;      
+    }
+    
+    public String checkSecurityAnswer(User user, SecurityInfo securityInfo) {
+        
+    	try {
+			User realUser = userDao.findUserByUsername(user.getUserName());
+			if (realUser != null) {
+				User u = userDao.findUser(realUser.getId());
+				if(securityInfo.getSecurityAnswer().equalsIgnoreCase(u.getSecurityInfo().getSecurityAnswer())) {
+					return "success";
+				} else return "failure";
+			}
+			else return "failure";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return "failure";      
+    }
+    
+  //Move this to a User account service
+    public String changePassword(User user) {
+    
+    	if(user != null) {
+    		User existingUser = userDao.findUserByUsername(user.getUserName());
+    		try {
+				existingUser.setPassword(generateHashedPassword(user.getPassword()));
+				if (userDao.updateEntity(existingUser)) return "success";
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return "failure";      
+    }
 }

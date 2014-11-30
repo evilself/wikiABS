@@ -162,7 +162,7 @@
 									    </c:forEach>
 								    </select>
 							    </div>
-							    <div id="ajaxResponse">
+							    <div id="ajaxResponse" class="col-lg-10 col-sm-10 pull-left">
 								    <div class="form-group">
 					                   <label class="pull-left" id="attachmentCount" for="tag"><spring:message code="article.attachments"/> [<span id="count">${fn:length(attachments)}</span>]</label>					                  
 					                   <c:forEach items="${attachments}" var="att">							            
@@ -180,9 +180,11 @@
 								                </div>					             
 							        	</c:forEach>							        						              
 					                </div>
-							   	</div>	                
-				                <a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/articles/${article.id}"><spring:message code="general.cancelButton"/></a> 				                
-				           		<input style="margin-right:5px;" class="btn btn-info commonButton pull-right" type="submit" value="Save" id="save" />
+							   	</div>
+							   	<div clas="col-lg-2 col-sm-2 pull-righ">
+					                <a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/articles/${article.id}"><spring:message code="general.cancelButton"/></a> 				                
+					           		<input style="margin-right:5px;" class="btn btn-info commonButton pull-right" type="submit" value="Save" id="save" />
+				           		</div>
 				           </div>
 				        </sf:form>
 				        	

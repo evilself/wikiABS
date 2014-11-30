@@ -50,7 +50,7 @@
 	 				<br/>
 		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security question" id="securityQuestion" name='securityQuestion' />	
 		         	<br/>
-		            <input class="form-control" style="width:80%" type='text' placeholder="Type your security answer" id="securityAnswer" name='securityAnswer' />		            		            
+		            <input class="form-control" style="width:80%" type='password' placeholder="Type your security answer" id="securityAnswer" name='securityAnswer' />		            		            
 	            </div>
 	           <input type='hidden' id="url" value="${flowExecutionUrl}"/>
 	       </sf:form>	       

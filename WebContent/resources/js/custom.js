@@ -132,9 +132,10 @@ function ajaxWebFlowRegister(url){
 
 function ajaxPassReset(url){
 	var modurl = url;	
+	//alert(url);
     $('#result').html('');
-    if( ($('#firstName').val() != "") && ($('#lastName').val() != "") && ($('#userName').val() != "") && ($('#password').val() != "") && ($('#newPassword').val() != "") && ($('#securityQuestion').val() != "") && ($('#securityAnswer').val() != "")) {    	
-        if((!match && $('#password')[0]==undefined) || match) {    		
+    if( ($('#userName').val() != "") && ($('#securityAnswer').val() != "")) {    	
+        if(($('#newPassword')[0]==undefined) || match) {    		
 	        $.ajax({
 	        	url:  modurl,
 		        type: "POST",
