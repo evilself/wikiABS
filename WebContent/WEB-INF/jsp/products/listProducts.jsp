@@ -171,7 +171,7 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#about"><spring:message code="menu.about"/></a>
+                            <a href="${pageContext.request.contextPath}/about"><spring:message code="menu.about"/></a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>

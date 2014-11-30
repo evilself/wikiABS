@@ -118,6 +118,12 @@ public class WelcomeController implements BaseController {
         return "denied";
     }
     
+   //This is invoked when ABOUT page is requested
+    @RequestMapping(value="/about")
+    public String about(){
+        return "about";
+    }
+    
     //I used this PostConstruct to insert some test data initially.
     @PostConstruct
     public void prepareFakeDomain() {

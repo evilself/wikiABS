@@ -95,8 +95,11 @@
 	                    <li>
 	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
 	                    </li>
-	                    <li>
+	                    <!-- li>
 	                        <a href="${pageContext.request.contextPath}/register" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
+	                    </li-->
+	                    <li>
+	                        <a href="${pageContext.request.contextPath}/registerUser" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
 	                    </li>
                     </c:if>
                     <c:if test="${loggedUser != null}">
@@ -174,7 +177,7 @@
                     </li>
                     <li class="footer-menu-divider">&sdot;</li>
                     <li>
-                        <a href="#about"><spring:message code="menu.about"/></a>
+                        <a href="${pageContext.request.contextPath}/about"><spring:message code="menu.about"/></a>
                     </li>
                 </ul>
                 <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>
