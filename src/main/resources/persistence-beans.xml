@@ -41,6 +41,9 @@
     <!-- The above code is my datasource but managed from my Spring container, below is a ref to my dataSource defined and managed by Tomcat container and ref'ed by JNDI -->
     <!-- jee:jndi-lookup id="dataSource" jndi-name="jdbc/wikiabs" resource-ref="true" ></jee:jndi-lookup-->
     
+    <jee:jndi-lookup id="mailSession" jndi-name="mail/wikiABS" resource-ref="true" ></jee:jndi-lookup>
+     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" p:session-ref="mailSession" />
+    
      
      <bean id="entityManagerFactory"
         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" p:packagesToScan="com.americanbanksystems.wiki.domain">

@@ -28,6 +28,7 @@ import com.americanbanksystems.wiki.dao.ProductDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.domain.Article;
 import com.americanbanksystems.wiki.domain.Product;
+import com.americanbanksystems.wiki.web.helpers.EmailSenderService;
 import com.americanbanksystems.wiki.web.helpers.EntityGenerator;
 import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
  
@@ -38,6 +39,9 @@ public class WelcomeController implements BaseController {
 	
 	@Autowired
     private EntityGenerator entityGenerator;
+	
+	@Autowired
+    private EmailSenderService emailSenderService;
 	
 	@Autowired
     private UserDao userDao;
@@ -127,6 +131,7 @@ public class WelcomeController implements BaseController {
     //I used this PostConstruct to insert some test data initially.
     @PostConstruct
     public void prepareFakeDomain() {
+    	//emailSenderService.createEmail();
       //entityGenerator.deleteDomain();
       //entityGenerator.generateDomain();
     }
