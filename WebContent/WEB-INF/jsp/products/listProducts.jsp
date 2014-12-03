@@ -127,13 +127,13 @@
 						                <td class="text-left" style="width:60%">${prod.description}</td>						                					                                
 						                <td class="text-center" style="width:5%">
 						                	<c:if test="${prod.custom}">
-						                    	<a class="btn btn-info commonButton" href="${pageContext.request.contextPath}/products/${prod.id}"><spring:message code="product.editButton"/></a>
+						                    	<a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/products/${prod.id}"><spring:message code="product.editButton"/></a>
 						                	</c:if>
 						                </td>
 						                <c:if test="${prod.custom}">
 						                <td class="text-center" style="width:5%">
 						                    <sf:form id="deleteProductForm_${prod.id}" action="${pageContext.request.contextPath}/products/${prod.id}" method="delete" >
-						                        <button class="btn btn-info commonButton" type="submit" onclick="confirmProductDel(event)" ><spring:message code="product.deleteButton"/></button>
+						                        <button class="btn btn-info cancelButton" type="submit" onclick="confirmProductDel(event)" ><spring:message code="product.deleteButton"/></button>
 						                    </sf:form>
 						                </td>
 						                </c:if>

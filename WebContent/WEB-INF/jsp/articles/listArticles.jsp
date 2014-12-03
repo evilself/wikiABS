@@ -55,7 +55,7 @@
 	</div>
 	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:450px;">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:400px;">
            
     	</div>
     </div>
@@ -149,12 +149,12 @@
 						                <td class="text-center" style="width:5%">${art.product.productName}</td>
 						                <td class="text-center" style="width:20%">${art.createdByUser.firstName} ${art.createdByUser.lastName}</td>						                                
 						                <td class="text-center" style="width:5%">
-						                    <a class="btn btn-info commonButton" href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
+						                    <a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 						                </td>
 						                <c:if test="${admin == 'true'}">
 							                <td class="text-center" style="width:5%">
 							                    <sf:form id="deleteForm_${art.id}" action="${pageContext.request.contextPath}/articles/${art.id}" method="delete" >
-							                        <input class="btn btn-info commonButton" type="submit" onclick="confirmDel(event)" value="Delete"></input>
+							                        <input class="btn btn-info cancelButton" type="submit" onclick="confirmDel(event)" value="Delete"></input>
 							                    </sf:form>
 							                </td>
 						                </c:if>
@@ -198,7 +198,7 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href=${pageContext.request.contextPath}/about"><spring:message code="menu.about"/></a>
+                            <a href="${pageContext.request.contextPath}/about"><spring:message code="menu.about"/></a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; American Bank Systems Inc 2015. All Rights Reserved</p>

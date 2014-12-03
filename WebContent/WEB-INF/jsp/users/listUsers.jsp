@@ -132,12 +132,12 @@
 					                <td class="text-center" style="width:20%">Password hashed</td>
 					                <th class="text-center" style="width:10%">${usr.role.role}</th>	                                
 					                <td class="text-center" style="width:5%">
-					                    <a class="btn btn-info commonButton" href="${pageContext.request.contextPath}/users/${usr.id}"><spring:message code="user.editButton"/></a>
+					                    <a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/users/${usr.id}"><spring:message code="user.editButton"/></a>
 					                </td>
 					                <c:if test="${admin == 'true'}">
 						                <td class="text-center" style="width:5%"">
 						                    <sf:form id="deleteForm_${usr.id}" action="${pageContext.request.contextPath}/users/${usr.id}" method="delete" >
-						                        <input class="btn btn-info commonButton" type="submit" onclick="confirmUserDel(event)" value="Delete"></input>
+						                        <input class="btn btn-info cancelButton" type="submit" onclick="confirmUserDel(event)" value="Delete"></input>
 						                    </sf:form>
 						                </td>					                
 				                	</c:if>

@@ -156,7 +156,7 @@
 					            <tr>
 					                <td><li>${art.title}</li></td>					                
 					                <td>
-					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
+					                    <a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -191,7 +191,7 @@
 					            <tr>
 					                <td><li>${art.title}</li></td>						                
 					                <td>
-					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
+					                    <a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>
@@ -227,7 +227,7 @@
 					            <tr>
 					                <td><li>${art.title}</li></td>	
 					                <td>
-					                    <a href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
+					                    <a class="btn btn-info viewButton" href="${pageContext.request.contextPath}/articles/${art.id}"><spring:message code="article.view"/></a>
 					                </td>					                
 					            </tr>
 					        </c:forEach>

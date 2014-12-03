@@ -26,6 +26,21 @@
 	border-color:#C9C9D5" !important;
 }
 
+.viewButton {
+	margin-bottom:5px !important;
+	padding-top:1px !important;
+	padding-bottom: 1px !important;
+	background-color:#CCFF99 !important;
+	color:#0066CC !important;
+	border-color:#CCFF99 !important;
+}
+
+.wikiButton {
+	margin-bottom:5px !important;
+	padding-top:1px !important;
+	padding-bottom: 1px !important;
+}
+
 .cancelButton {
 	padding-top:1px !important;
 	padding-bottom: 1px !important; 

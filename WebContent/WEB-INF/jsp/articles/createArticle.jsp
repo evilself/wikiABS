@@ -170,10 +170,10 @@
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
 							                	<div class="col-lg-8 col-sm-8">
 							                		<div class="col-lg-2 col-sm-2 text-right">
-								                    	<a target="_blank" class="btn btn-info commonButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
+								                    	<a target="_blank" class="btn btn-info viewButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
 								               		</div>
 								               		 <div class="col-lg-2 col-sm-2 text-left">								                    
-									                    <button type="button" class="btn commonButton btn-warning" onclick="deleteAttachment(${att.id});"><spring:message code="attachment.deletebutton"/></button>
+									                    <button type="button" class="btn btn-warning wikiButton" onclick="deleteAttachment(${att.id});"><spring:message code="attachment.deletebutton"/></button>
 									                </div>
 									                <div id="result"></div>									               		
 								                </div>

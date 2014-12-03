@@ -55,7 +55,7 @@
 	</div>
 	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:450px;">
+        <div class="modal-content" style="background: url(<spring:url value="/resources/img/wall_two.jpg"/>) no-repeat center center;height:400px;">
            
     	</div>
     </div>
@@ -138,7 +138,7 @@
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
 							                	<div class="col-lg-8 col-sm-8">
 							                		<div class="col-lg-2 col-sm-2 text-right">
-								                    	<a target="_blank" class="btn btn-info commonButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
+								                    	<a target="_blank" class="btn btn-info viewButton" href="${pageContext.request.contextPath}/upload/display/${att.id}"><spring:message code="attachment.viewbutton"/></a>
 								               		</div>								               		
 								                </div>
 								                </div>					             
@@ -148,7 +148,7 @@
 						    </div>						 
 						    <br />
 						    <div class="col-lg-12 col-sm-12">
-							    <a class="btn btn-info commonButton pull-right" href="${pageContext.request.contextPath}/articles"><spring:message code="navigation.toArticles"/></a> 
+							    <a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/articles"><spring:message code="navigation.toArticles"/></a> 
 	                          	<c:if test="${editable}">
 	                          		<a class="btn btn-info commonButton pull-right" style="margin-right:5px;" href="${pageContext.request.contextPath}/articles/edit/${art.id}"><spring:message code="article.editButton"/></a>
                         		</c:if>
