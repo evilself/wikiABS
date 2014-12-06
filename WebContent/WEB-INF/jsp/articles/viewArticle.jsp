@@ -36,6 +36,8 @@
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    
+    <link href="<spring:url value="/resources/js/pagedown/wmd.css"/>" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -125,11 +127,15 @@
 						         <div class="col-lg-12 col-sm-12">					           		
 					                <div class="form-group">
 					                   <label class="pull-left" for="description"><spring:message code="article.description"/></label>
-						               <textarea class="form-control" style="opacity:0.5;height:550px" name="description" id="description" disabled="true">${art.description}</textarea>
+					                   <div class="wmd-panel">
+						                	<!-- div id="wmd-button-bar" class="row"></div-->	
+						                	<textarea class="form-control" style="opacity:0.5;height:1px;display:none;" name="description" id="wmd-input" disabled="true">${art.description}</textarea>
+					                	</div>
+					                	<div id="wmd-preview" style="opacity:0.7;height:550px;overflow:auto;" class="wmd-panel wmd-preview form-control text-left"></div>						               
 					                </div>
 					                <div class="form-group">
 					                   <label class="pull-left" for="tag"><spring:message code="article.tags"/></label>
-						               <input class="form-control" style="opacity:0.5;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
+						               <input class="form-control" style="opacity:0.7;" name="tag" id="tag" value="${art.tag}" disabled="true"/>
 					                </div>
 					                <div class="form-group">
 					                   <label class="pull-left" for="tag"><spring:message code="article.attachments"/> [${fn:length(attachments)}]</label>					                  
@@ -196,5 +202,16 @@
     
      <!-- Custom JavaScript -->
     <script src="<spring:url value="/resources/js/custom.js"/> "></script>
+    
+    <script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Converter.js"/> "></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Editor.js"/> "></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Sanitizer.js"/> "></script>
+	<script type="text/javascript">
+		$(function () {						
+			var converter = Markdown.getSanitizingConverter();
+			var editor = new Markdown.Editor(converter);
+			editor.run();
+		});
+	</script>
 </body>
 </html>

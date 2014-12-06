@@ -36,6 +36,7 @@
     <!-- Custom Fonts -->
     <link href="<spring:url value="/resources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="<spring:url value="/resources/js/pagedown/wmd.css"/>" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -139,15 +140,22 @@
 				                    <input class="form-control form-inline pull-right" name="title" id="title" type="text" value="${article.title}"/>
 				                </div>
 				                <div class="form-group" style="padding:1px;">				                	
+					                <div class="col-lg-12 col-sm-12" style="padding-left:0px;padding-right:0px;padding-bottom:0px;">
 					                <label class="pull-left" for="description"><spring:message code="article.description"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="description" htmlEscape="false"></sf:errors></label>
-					                <label style="margin-top:6px" class=" pull-right">
+					                </div>
+				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
+				                	
+				                	<div class="wmd-panel">
+					                	<div id="wmd-button-bar" class="col-lg-5 col-sm-5"></div><label style="margin-top:15px" class=" pull-right">
 					                    <a class="btn btn-sm btn-default" style="background-color: #CCFF99" href="${upload}"
 										   data-toggle="modal"
 										   data-target="#uploadModal"><spring:message code="article.uploadButton"/>
 										 </a>
-					                    </label>
-				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
-				                	<textarea id="description" name="description" value="${article.description}" style="height:400px" class="form-control">${article.description}</textarea>
+				                    </label>	
+					                	<textarea id="wmd-input" name="description" value="${article.description}" style="height:400px" class="form-control wmd-input resizable">${article.description}</textarea>
+				                	</div>
+				                	<label class="pull-left" for="Preview">Preview</label>
+				                	<div id="wmd-preview" style="height:400px;overflow:auto;opacity:0.7" class="wmd-panel wmd-preview form-control text-left"></div>
 				                </div>
 				                <div class="form-group pull-left" style="width:58%">
 				                    <label class="pull-left" for="tag"><spring:message code="article.tags"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="tag" htmlEscape="false"></sf:errors></label>
@@ -162,9 +170,10 @@
 									    </c:forEach>
 								    </select>
 							    </div>
-							    <div id="ajaxResponse" class="col-lg-10 col-sm-10 pull-left">
+							    <div id="ajaxResponses" class="col-lg-10 col-sm-10 pull-left">
 								    <div class="form-group">
-					                   <label class="pull-left" id="attachmentCount" for="tag"><spring:message code="article.attachments"/> [<span id="count">${fn:length(attachments)}</span>]</label>					                  
+					                   <label class="pull-left" id="attachmentCount" ><spring:message code="article.attachments"/></label>
+					                   <div id="ajaxResponse" class="text-right">					                  
 					                   <c:forEach items="${attachments}" var="att">							            
 							            	<div id="${att.id }" class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
@@ -177,8 +186,8 @@
 									                </div>
 									                <div id="result"></div>									               		
 								                </div>
-								                </div>					             
-							        	</c:forEach>							        						              
+							                </div>					             
+							        	</c:forEach></div>						        						              
 					                </div>
 							   	</div>
 							   	<div clas="col-lg-2 col-sm-2 pull-righ">
@@ -239,6 +248,17 @@
     
     <!-- Custom JavaScript -->
     <script src="<spring:url value="/resources/js/custom.js"/> "></script>    
+    
+    <script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Converter.js"/> "></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Editor.js"/> "></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagedown/Markdown.Sanitizer.js"/> "></script>
+	<script type="text/javascript">
+		$(function () {						
+			var converter = Markdown.getSanitizingConverter();
+			var editor = new Markdown.Editor(converter);
+			editor.run();
+		});
+	</script>
     
 	 <script>
 	      $(document).ready(function(){

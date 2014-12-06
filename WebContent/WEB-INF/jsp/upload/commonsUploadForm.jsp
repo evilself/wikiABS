@@ -106,7 +106,7 @@
 		        	  $('#file').val('');
 		        	 // swal("Good job!", data+" uploaded!", "success");
 		        	 //alert(data);
-		        	  $('#ajaxResponse').html(data);
+		        	  $('#ajaxResponse').append('<li>'+data+'</li>');
 		              $('#result').html('Attachment uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
 		         },
 		         dataType:"text"

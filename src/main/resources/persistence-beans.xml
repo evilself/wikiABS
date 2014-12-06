@@ -111,6 +111,8 @@
     <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
 </bean>
 
-<!-- **************************************SPRING SECURITY CONFIG*********************************************** -->
+<!-- **************************************RICH TEXT ENGINE - Require JS*********************************************** -->
+
+<bean class="com.americanbanksystems.wiki.web.helpers.RichTextFilter" p:r="classpath:requirejs/r.js" p:convert="classpath:/convert.js" />
 
 </beans>
