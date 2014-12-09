@@ -250,7 +250,8 @@ public class ArticleController {
     	//model.addAttribute("loggedUser", security.getLoggedInUser());
 		
 		String desc = article.getDescription();
-		article.setDescription(filter.filter(desc));
+		//article.setDescription(filter.filter(desc));
+		article.setDescription(desc);
 		
 		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
 		//System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");

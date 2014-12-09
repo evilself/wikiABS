@@ -170,10 +170,9 @@
 									    </c:forEach>
 								    </select>
 							    </div>
-							    <div id="ajaxResponses" class="col-lg-10 col-sm-10 pull-left">
+							    <div id="ajaxResponse" class="col-lg-10 col-sm-10 pull-left">
 								    <div class="form-group">
-					                   <label class="pull-left" id="attachmentCount" ><spring:message code="article.attachments"/></label>
-					                   <div id="ajaxResponse" class="text-right">					                  
+					                   <label class="pull-left" id="attachmentCount" ><spring:message code="article.attachments"/> [<span id="count">${fn:length(attachments)}</span>]</label>					                  
 					                   <c:forEach items="${attachments}" var="att">							            
 							            	<div id="${att.id }" class="col-lg-12 col-sm-12 " style="overflow:auto; margin-bottom:5px;">
 							            		<div class="col-lg-4 text-right"><label>${att.name}</label>	</div>		                
@@ -187,7 +186,7 @@
 									                <div id="result"></div>									               		
 								                </div>
 							                </div>					             
-							        	</c:forEach></div>						        						              
+							        	</c:forEach>							        						              
 					                </div>
 							   	</div>
 							   	<div clas="col-lg-2 col-sm-2 pull-righ">
