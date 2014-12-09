@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.americanbanksystems.wiki.dao.ArticleDao;
 import com.americanbanksystems.wiki.dao.SecurityInfoDao;
 import com.americanbanksystems.wiki.dao.UserDao;
 import com.americanbanksystems.wiki.dao.UserRoleDao;
-import com.americanbanksystems.wiki.domain.SecurityInfo;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.domain.UserRole;
 import com.americanbanksystems.wiki.exception.UserDeleteException;
@@ -77,24 +77,30 @@ public class UserController implements BaseController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String getUser(@PathVariable("id") long id, Model model) {
 		
+		if(!security.isAdmin() && (security.getLoggedInUser().getId() != id)) return "/denied";
+		
 		//Security information
 		model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
 		    	
 	    User user = userDao.findUser(id);
 	    
+	    //Is our user an Admin?
+	    String isAdmin = (user.getRole().getRole().equalsIgnoreCase("ADMIN"))?"checked":"";
+	    
 	    //We dont want to see password characters for editing a user. If we type in a new password then we will change it.
 	    //A good practice would be NOT to include the PASSWORD field in our ENTITY, but only on low, database level
 	    user.setPassword("");
 	    
-	    model.addAttribute("user", user);	 
+	    model.addAttribute("user", user);
+	    model.addAttribute("isAdmin", isAdmin);
 	    return "users/viewUser";
 	}
 	
 	//CHANGES DATA ON A USER - POST
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String updateUser(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors, Model model) {	
+	public String updateUser(@PathVariable("id") long id, @Valid @ModelAttribute User user, BindingResult errors, Model model,  @RequestParam(required=false, value="isAdmin") boolean isAdmin) {	
 		
 		//This method is validated with JSR303 and Hibernate Validator implementation. In case JavaScript on the front end is disabled -NOT LIKELY
 		//@Valid validates the data, BindingResults hold any errors
@@ -103,7 +109,23 @@ public class UserController implements BaseController {
 		}
 		
 		User existing = userDao.findUser(id);
+		UserRole currentRole = existing.getRole();
 		
+		//Deal with making an user a USER or an ADMIN
+		if(isAdmin) {			
+			if(currentRole.getRole().equalsIgnoreCase("ADMIN")) {
+				//do nothing
+			} else {
+				currentRole.setRole("ADMIN");				
+			}
+		} else {
+			if(currentRole.getRole().equalsIgnoreCase("USER")) {
+				//do nothing
+			} else {
+				currentRole.setRole("USER");				
+			}
+		}
+				
 		try {
 			if(!utils.checkUsernameUniqueness(user.getUserName())) {				
 				User checkUsernameUser = userDao.findUserByUsername(user.getUserName());
@@ -132,13 +154,23 @@ public class UserController implements BaseController {
 			user.setPassword(existing.getPassword());
 		}
 				
-		UserRole ur = existing.getRole();
-		user.setRole(ur);
-		ur.setUserName(user.getUserName());
+		//UserRole ur = existing.getRole();
+		user.setRole(currentRole);
+		currentRole.setUserName(user.getUserName());
 		userDao.updateEntity(user);
 		logger.info("User ["+user.getUserName()+"] updated!");
-		userRoleDao.updateEntity(ur);	 
-	    return "redirect:/users";
+		userRoleDao.updateEntity(currentRole);	 
+		if(security.isAdmin())  return "redirect:/users";
+		else {
+			model.addAttribute("success", "Profile updated!");
+			//Security information
+			model.addAttribute("admin",security.isAdmin()); 
+	    	model.addAttribute("loggedUser", security.getLoggedInUser());
+	    	user.setPassword("");
+	    	model.addAttribute("user", user);
+			return "users/viewUser";
+		}
+	    
 	}
 	
 	//DELETE USER - DELETE
@@ -181,8 +213,8 @@ public class UserController implements BaseController {
 		//Security information
 		model.addAttribute("admin",security.isAdmin()); 
     	model.addAttribute("loggedUser", security.getLoggedInUser());
-		
-	    model.addAttribute("user", new User());
+		    		    
+	    model.addAttribute("user", new User());	    
 	    return "users/newUser";
 	}
 	
@@ -190,7 +222,7 @@ public class UserController implements BaseController {
 	//CREATE A NEW USER - POST.
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String addUser(@Valid @ModelAttribute User user, BindingResult errors, Model model) {
+	public String addUser(@Valid @ModelAttribute User user, BindingResult errors, Model model, @RequestParam(required=false, value="isAdmin") boolean isAdmin) {
 		
 		//If there are any errors return the form!
 		if(errors.hasErrors()) {
@@ -199,7 +231,7 @@ public class UserController implements BaseController {
 				
 		//Check if another username exists
 		try {
-			if (utils.checkUsernameUniqueness(user.getUserName())) {
+			if (!utils.checkUsernameUniqueness(user.getUserName())) {
 				model.addAttribute("usernameCheck","USERNAME is NOT AVAILABLE!");
 				return "users/newUser";
 			}
@@ -208,8 +240,17 @@ public class UserController implements BaseController {
 			e1.printStackTrace();
 		}
 		
-		String USER_ROLE = "USER";		
-		UserRole role = new UserRole(USER_ROLE,user.getUserName());
+		String USER_ROLE = "USER";
+		String ADMIN_ROLE = "ADMIN";
+		UserRole role = null;
+		//Deal with making an user a USER or an ADMIN
+		if(isAdmin) {			
+			role = new UserRole(ADMIN_ROLE,user.getUserName());
+		} else {
+			role = new UserRole(USER_ROLE,user.getUserName());
+		}
+		
+		//UserRole role = new UserRole(USER_ROLE,user.getUserName());
 		user.setRole(role);
 		
 		userRoleDao.addEntity(role);		

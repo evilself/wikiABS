@@ -21,8 +21,8 @@
         <intercept-url pattern="\A/articles\?new*\Z" access="USER,ADMIN" />
        
         <intercept-url pattern="/articles/edit/\d*" access="ADMIN,USER" />
-        <intercept-url pattern="/users*" access="ADMIN" />
-        <intercept-url pattern="/users/\d*" access="ADMIN" />
+        <intercept-url pattern="/users/\d+" access="ADMIN,USER" />
+        <intercept-url pattern="/users/*" access="ADMIN" />       
         <intercept-url pattern="\A/users\?new*\Z" access="ADMIN" />
         <intercept-url pattern="/products*" access="ADMIN" />
         <intercept-url pattern="/products/\d*" access="ADMIN" />

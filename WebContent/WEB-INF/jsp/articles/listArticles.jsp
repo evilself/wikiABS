@@ -102,6 +102,11 @@
 	                        <a href="${pageContext.request.contextPath}/registerUser" class="registerButton" data-toggle="modal" data-target="#registerModal"><spring:message code="menu.register"/></a>                        
 	                    </li>
                     </c:if>
+                    <c:if test="${loggedUser != null && admin != true}">
+                     <li>
+                        <a id="accountLink" class="registerButton" href="${pageContext.request.contextPath}/users/${loggedUser.id}">${loggedUser.firstName}'s Account</a>
+                    </li>
+                    </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
                         <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>

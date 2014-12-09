@@ -91,6 +91,11 @@
 	                        <a href="${pageContext.request.contextPath}/login" class="loginButton" data-toggle="modal" data-target="#loginModal"><spring:message code="menu.login"/></a>                        
 	                    </li>	                    
                     </c:if>
+                    <c:if test="${loggedUser != null && admin != true}">
+                     <li>
+                        <a id="accountLink" class="registerButton" href="${pageContext.request.contextPath}/users/${loggedUser.id}">${loggedUser.firstName}'s Account</a>
+                    </li>
+                    </c:if>
                     <c:if test="${loggedUser != null}">
                      <li>
                         <a id="logoutLink" class="logoutButton" onclick="confirmLogout(event);"><spring:message code="menu.logout"/></a>
@@ -109,7 +114,8 @@
             <div class="row">
                 <div class="col-lg-12">               
                     <div class="intro-message">
-                    <h2>${user.firstName} ${user.lastName}</h2> 
+                    <h2>${user.firstName} ${user.lastName}</h2>
+                     <h3 class="successOutput">${success}</h3> 
                     	<div id="list">
 					        <sf:form id="editUserForm" method="post">
 								<sf:errors path="*">
@@ -134,11 +140,15 @@
 			                    
 			                    <label class="pull-left" for="newpassword"><spring:message code="user.confirmNewPassword"/></label><label class="pull-right" id="result"></label>
 			                    <input name="newpassword" id="newpassword" type="password" onKeyUp="checkPass(); return false;" class="form-control" />
-			             		
+			             		<c:if test="${admin == 'true'}">
+				             		<label class="pull-left" for="isAdmin">Admin</label><label class="pull-right" id="result"></label>
+				                    <input name="isAdmin" id="isAdmin" type="checkbox" ${isAdmin} style="height:10px;width:10px;"/>
+			             		</c:if>
 			             		<div style="margin-top:10px;"></div>		                   
-			                    <a class="btn btn-info commonButton pull-right" href="${pageContext.request.contextPath}/users"><spring:message code="general.cancelButton"/></a>
-			                    <input type="submit" value="Save" id="save" style="margin-right: 5px;" class="btn btn-default commonButton pull-right" />
-			                    
+			                    <c:if test="${admin == 'true'}">
+			                    	<a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/users"><spring:message code="general.cancelButton"/></a>
+			                    </c:if>
+			                    <input type="submit" value="Save" id="save" style="margin-right: 5px;" class="btn btn-default commonButton pull-right" />			                    
 			                    </div>					              
 					        </sf:form>					      
 					    </div>                        

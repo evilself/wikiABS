@@ -12,7 +12,7 @@ function confirmLogout(e) {
 	  confirmButtonText: "Yes, log me out!"
 	},
 	function(){    			  
-	  window.location="logout";
+	  window.location="/wikiABS/logout";
 	});    	 	
 }
 

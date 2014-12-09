@@ -132,9 +132,12 @@
 			                    
 			                    <label class="pull-left" for="newpassword"><spring:message code="user.confirmNewPassword"/></label><label class="pull-right" id="result"></label>
 			                    <input name="newpassword" onKeyUp="checkPass(); return false;" id="newPassword" type="password" class="form-control" />
-			             		
+			                    
+			                    <label class="pull-left" for="isAdmin">Admin</label><label class="pull-right" id="result"></label>
+			                    <input name="isAdmin" id="isAdmin" type="checkbox" $[isAdmin] style="height:10px;width:10px;"/>
+			                    			             		
 			             		<div style="margin-top:10px;"></div>		      
-				             		 <a class="btn btn-info commonButton pull-right" href="${pageContext.request.contextPath}/users"><spring:message code="general.cancelButton"/></a>             
+				             		 <a class="btn btn-info cancelButton pull-right" href="${pageContext.request.contextPath}/users"><spring:message code="general.cancelButton"/></a>             
 				                     <input type="submit" value="Save" id="save" style=" margin-right: 5px" class="btn btn-default commonButton pull-right" />
 			                    </div>					              
 					        </sf:form>					        

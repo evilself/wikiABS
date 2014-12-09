@@ -169,7 +169,12 @@
                         		<td>
                         			<h4>Sweet Alert JS</h4>
                         		</td>
-                        	</tr>                        	
+                        	</tr>  
+                        	<tr>
+                        		<td>
+                        			<h4>Pagedown (Markdown to Html Rich Text Edition)</h4>
+                        		</td>
+                        	</tr>                       	
                         </table>
                         </div>
                     </div>

@@ -35,6 +35,7 @@ import com.americanbanksystems.wiki.domain.Attachment;
 import com.americanbanksystems.wiki.domain.Product;
 import com.americanbanksystems.wiki.domain.User;
 import com.americanbanksystems.wiki.exception.ArticleDeleteException;
+import com.americanbanksystems.wiki.web.helpers.RichTextFilter;
 import com.americanbanksystems.wiki.web.helpers.SecurityServiceBean;
 
 @Controller
@@ -55,6 +56,9 @@ public class ArticleController {
 	
 	@Autowired
     private SecurityServiceBean security;	
+	
+	@Autowired
+	RichTextFilter filter;
 	
 	//GET ALL ARTICLES - GET
 	@RequestMapping(method = RequestMethod.GET)
@@ -244,6 +248,9 @@ public class ArticleController {
 		//Security information
     	//model.addAttribute("admin",security.isAdmin()); 
     	//model.addAttribute("loggedUser", security.getLoggedInUser());
+		
+		String desc = article.getDescription();
+		article.setDescription(filter.filter(desc));
 		
 		List<Attachment> attachmentListToBeSaved = attachmentDao.getSavedAttachments();
 		//System.out.println(attachmentListToBeSaved.size() + "  is the att list in CONTROLLER");
