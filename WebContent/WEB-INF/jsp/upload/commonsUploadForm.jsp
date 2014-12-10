@@ -99,18 +99,31 @@
 		
 	  //using jquery.form.js
 	    function uploadJqueryForm(){
+		  
+		  var form = $('#uploadForm');
+		  
+		  var options = {
+				    beforeSubmit:function(arr,form,options) {
+				    	//if size is bigger than roughly 25 MB dont persist
+				    	if($('#file')[0].files[0].size > 27000000) {
+				    		swal("Size is too big!","Consider files less than 25 megs!", "warning");
+				    		return false;
+				    	}
+				    	return true;				    	
+				    },
+			        success:function(data) {
+			        	  $('#file').val('');
+			        	 // swal("Good job!", data+" uploaded!", "success");
+			        	 //alert(data);
+			        	  $('#ajaxResponse').html(data);
+			              $('#result').html('Attachment uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
+			         },
+			         dataType:"text"
+		  }
+		  
 	        $('#result').html('');
 	        if ($('#file').val() != "") {
-		        $("#uploadForm").ajaxForm({
-		        success:function(data) {
-		        	  $('#file').val('');
-		        	 // swal("Good job!", data+" uploaded!", "success");
-		        	 //alert(data);
-		        	  $('#ajaxResponse').html(data);
-		              $('#result').html('Attachment uploaded!').css({"color":"#CCFF99","font-size":"1.2em"});
-		         },
-		         dataType:"text"
-		        }).submit();     
+		        $("#uploadForm").ajaxForm(options).submit();     
 	        } else {
 	        	$('#result').html('Please select a file!').css({"color":"#FFE6E6","font-size":"1.2em"});
 	        }

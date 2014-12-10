@@ -72,7 +72,7 @@ CREATE TABLE Attachment
 	ACTUAL_FILENAME varchar(256) not null,
 	ATTACHMENT longblob not null,
     ATTACHMENT_TYPE varchar(32) not null,
-    CONTENT_TYPE varchar(64) not null,
+    CONTENT_TYPE varchar(128) not null,
     ARTICLE_ID int null,
     FOREIGN KEY (ARTICLE_ID) REFERENCES Article(ARTICLE_ID),
 	PRIMARY KEY (ATTACHMENT_ID)
