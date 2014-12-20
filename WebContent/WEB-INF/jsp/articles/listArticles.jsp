@@ -124,7 +124,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">               
-                    <div class="intro-message" >                    	
+                    <div class="intro-message" style="padding-top: 10%;">                    	
                         <h2><spring:message code="article.listheader"/></h2>
                           <c:if test="${loggedUser != null}">
 					   		 <a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm commonButton"><spring:message code="article.createArticle"/></a>

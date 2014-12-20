@@ -141,7 +141,8 @@
 				                </div>
 				                <div class="form-group" style="padding:1px;">				                	
 					                <div class="col-lg-12 col-sm-12" style="padding-left:0px;padding-right:0px;padding-bottom:0px;">
-					                <label class="pull-left" for="description"><spring:message code="article.description"/></label><label class="pull-right" style="color:#FFE6E6;"><sf:errors path="description" htmlEscape="false"></sf:errors></label>
+					                	<label class="pull-left" for="description"><spring:message code="article.description"/></label>
+					                	<label class="pull-right" style="color:#FFE6E6;"><sf:errors path="description" htmlEscape="false"></sf:errors></label>
 					                </div>
 				                    <!-- textarea class="form-control" style="height:400px" name="description" class="form-control" id="description" value="${article.description}"/-->
 				                	
@@ -151,8 +152,10 @@
 										   data-toggle="modal"
 										   data-target="#uploadModal"><spring:message code="article.uploadButton"/>
 										 </a>
-				                    </label>	
+				                    </label>
+				                    <div class="col-lg-12 col-sm-12" style="padding-right:0px;padding-left:0px;">	
 					                	<textarea id="wmd-input" name="description" value="${article.description}" style="height:400px" class="form-control wmd-input resizable">${article.description}</textarea>
+					                </div>
 				                	</div>
 				                	<label class="pull-left" for="Preview">Preview</label>
 				                	<div id="wmd-preview" style="height:400px;overflow:auto;opacity:0.7" class="wmd-panel wmd-preview form-control text-left"></div>
@@ -195,9 +198,7 @@
 				           		</div>
 				           </div>
 				        </sf:form>
-				        	
-                        <!-- h3>What are you looking for?</h3 -->
-                        <hr class="intro-divider">                       
+				                                
                     </div>
                 </div>
             </div>

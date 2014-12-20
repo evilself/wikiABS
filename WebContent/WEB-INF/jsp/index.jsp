@@ -122,7 +122,7 @@
                 <div class="col-lg-12">               
                     <div class="intro-message">                    	
                         	<c:if test="${loggedUser != null}">
-		                    	<a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm commonButton pull-right" ><spring:message code="article.createArticle"/></a>
+		                    	<div class="row text-right" style="margin-right:10px;"><a href="${pageContext.request.contextPath}/articles?new" class="btn btn-default btn-sm commonButton pull-right"><spring:message code="article.createArticle"/></a></div>
 		                 	 </c:if>
                         	<sf:form action="${pageContext.request.contextPath}/articles" method="get" >
                         	   <input type="text" name="searchCriteria" id="searchCriteria" class="form-control searchFormControl" placeholder="What are you looking for?"/>
@@ -130,7 +130,7 @@
 		                    </sf:form>                      	
                         <!-- h3>What are you looking for?</h3 -->
                         <hr class="intro-divider">                       
-                        </ul>
+                    
                     </div>
                 </div>
             </div>
