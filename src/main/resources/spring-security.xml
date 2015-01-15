@@ -74,9 +74,9 @@
  
         <beans:property name="driverClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
         <beans:property name="url"
-            value="jdbc:mysql://localhost:3306/wikiabs" />
-        <beans:property name="username" value="root" />
-        <beans:property name="password" value="adminroot" />
+            value="jdbc:mysql://xx:xx/xx" />
+        <beans:property name="username" value="xx" />
+        <beans:property name="password" value="xx" />
     </beans:bean-->   
  
     <!-- If DataSource is configured in Tomcat Servlet Container -->
